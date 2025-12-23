@@ -2,6 +2,7 @@ packages:
   - codex-cli
   - docs
   - packages/*
+  - ai-games-arcade
 
 ignoredBuiltDependencies:
   - esbuild
