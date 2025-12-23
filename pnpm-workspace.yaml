@@ -2,6 +2,7 @@ packages:
   - codex-cli
   - docs
   - packages/*
+  - youtube-recs-prototype
 
 ignoredBuiltDependencies:
   - esbuild
