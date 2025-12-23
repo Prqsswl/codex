@@ -35,6 +35,13 @@ const LIST_TOOLS_TIMEOUT: Duration = Duration::from_secs(10);
 /// spawned successfully.
 pub type ClientStartErrors = HashMap<String, anyhow::Error>;
 
+fn is_valid_mcp_server_name(name: &str) -> bool {
+    !name.is_empty()
+        && name
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
+}
+
 fn fully_qualified_tool_name(server: &str, tool: &str) -> String {
     format!("{server}{MCP_TOOL_NAME_DELIMITER}{tool}")
 }
@@ -79,9 +86,17 @@ impl McpConnectionManager {
 
         // Launch all configured servers concurrently.
         let mut join_set = JoinSet::new();
+        let mut validation_errors = ClientStartErrors::new();
 
         for (server_name, cfg) in mcp_servers {
-            // TODO: Verify server name: require `^[a-zA-Z0-9_-]+$`?
+            if !is_valid_mcp_server_name(&server_name) {
+                validation_errors.insert(
+                    server_name,
+                    anyhow!("Invalid server name: must match ^[a-zA-Z0-9_-]+$"),
+                );
+                continue;
+            }
+
             join_set.spawn(async move {
                 let McpServerConfig { command, args, env } = cfg;
                 let client_res = McpClient::new_stdio_client(command, args, env).await;
@@ -118,6 +133,11 @@ impl McpConnectionManager {
         let mut clients: HashMap<String, std::sync::Arc<McpClient>> =
             HashMap::with_capacity(join_set.len());
         let mut errors = ClientStartErrors::new();
+
+        // Include any validation errors encountered before spawning.
+        for (name, err) in validation_errors {
+            errors.insert(name, err);
+        }
 
         while let Some(res) = join_set.join_next().await {
             let (server_name, client_res) = res?; // JoinError propagation
@@ -207,4 +227,37 @@ pub async fn list_all_tools(
     );
 
     Ok(aggregated)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_invalid_server_name() {
+        let mut servers = HashMap::new();
+        servers.insert(
+            "invalid name!".to_string(),
+            McpServerConfig {
+                command: "echo".to_string(),
+                args: vec![],
+                env: None,
+            },
+        );
+
+        let (manager, errors) = McpConnectionManager::new(servers).await.unwrap();
+
+        // Expect validation error
+        if let Some(err) = errors.get("invalid name!") {
+            assert!(err.to_string().contains("Invalid server name"));
+        } else {
+            // If no error, it means it proceeded to spawn.
+            // For the purpose of "fail first", this counts as failure of the test to catch invalid name.
+            panic!(
+                "Expected validation error for 'invalid name!', but got success (or different error)"
+            );
+        }
+
+        assert_eq!(manager.clients.len(), 0);
+    }
 }
