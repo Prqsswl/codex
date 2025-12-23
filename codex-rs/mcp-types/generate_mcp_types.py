@@ -11,7 +11,7 @@ from dataclasses import (
 from pathlib import Path
 
 # Helper first so it is defined when other functions call it.
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 SCHEMA_VERSION = "2025-03-26"
 JSONRPC_VERSION = "2.0"
@@ -409,6 +409,121 @@ def define_untagged_enum(name: str, type_list: list[str], out: list[str]) -> Non
     out.append("}\n\n")
 
 
+@dataclass
+class UnionStrategy:
+    tag: Optional[str] = None
+    content: Optional[str] = None
+
+    @property
+    def is_tagged(self) -> bool:
+        return self.tag is not None and self.content is not None
+
+
+def analyze_any_of(name: str, list_of_refs: list[Any]) -> UnionStrategy:
+    """Analyze the variants of an anyOf union to determine the Serde strategy."""
+    # Verify each item in list_of_refs is a dict with a $ref key.
+    refs = [
+        item["$ref"] for item in list_of_refs if isinstance(item, dict) and "$ref" in item
+    ]
+    if not refs:
+        return UnionStrategy()
+
+    # 1. Identify potential tag candidates (common required const properties)
+    # We look at the first definition to get candidates.
+    first_def = DEFINITIONS.get(type_from_ref(refs[0]), {})
+    first_props = first_def.get("properties", {})
+
+    # Candidates are properties that are 'const' strings in the first definition
+    tag_candidates = []
+    for prop_name, prop_schema in first_props.items():
+        if "const" in prop_schema:
+            tag_candidates.append(prop_name)
+
+    if not tag_candidates:
+        return UnionStrategy()
+
+    # Filter candidates: must exist and be const in ALL refs
+    valid_tags = []
+    for tag in tag_candidates:
+        is_valid = True
+        for ref in refs[1:]:
+            d = DEFINITIONS.get(type_from_ref(ref), {})
+            p = d.get("properties", {}).get(tag)
+            if not p or "const" not in p:
+                is_valid = False
+                break
+        if is_valid:
+            valid_tags.append(tag)
+
+    if not valid_tags:
+        return UnionStrategy()
+
+    # Pick the best tag. 'method' is preferred if present.
+    tag = "method" if "method" in valid_tags else valid_tags[0]
+
+    # Verify uniqueness of the tag value across variants
+    # If multiple variants have the same tag value, it's not a valid discriminator
+    tag_values = set()
+    for ref in refs:
+        d = DEFINITIONS.get(type_from_ref(ref), {})
+        val = d.get("properties", {}).get(tag, {}).get("const")
+        if val in tag_values:
+            # Duplicate tag value found
+            return UnionStrategy()
+        tag_values.add(val)
+
+    # 2. Identify potential content candidates
+    # Look for a property that exists in all refs, is not the tag.
+
+    # Strategy: Find properties common to all.
+    common_props = set(first_props.keys())
+    for ref in refs[1:]:
+        d = DEFINITIONS.get(type_from_ref(ref), {})
+        common_props.intersection_update(d.get("properties", {}).keys())
+
+    common_props.discard(tag)
+
+    content = None
+    if "params" in common_props:
+        content = "params"
+    elif len(common_props) == 1:
+        content = list(common_props)[0]
+
+    if tag and content:
+        # 3. Validation: ensure no data loss.
+        # For a valid `tag + content` adjacent tagging strategy, the schema for each variant
+        # should generally NOT contain other properties that would be ignored.
+        # We iterate all variants and check that they only contain `tag` and `content`.
+        # (We tolerate `_meta` if it's not the content, assuming it might be ignorable or handled otherwise,
+        # but for strict correctness, we should probably check that too.
+        # However, in MCP, `_meta` is often inside `params` for requests, but at top level for results.
+        # If `content` is picked as `params`, then `_meta` inside params is fine.
+        # If `content` is picked as `annotations` (e.g. for TextContent), but `text` is also present,
+        # then `text` would be lost. This is what we must prevent.)
+
+        is_strict_valid = True
+        for ref in refs:
+            d = DEFINITIONS.get(type_from_ref(ref), {})
+            props = set(d.get("properties", {}).keys())
+
+            # Remove the tag and the content from the set of properties
+            props.discard(tag)
+            props.discard(content)
+
+            # If there are any properties left, it means this variant has extra fields
+            # that would be lost if we used `tag` + `content`.
+            # We might allow `_meta` if we decide it's safe to drop, but standard Serde would drop it.
+            # For now, strict check: no other properties allowed.
+            if props:
+                is_strict_valid = False
+                break
+
+        if is_strict_valid:
+            return UnionStrategy(tag=tag, content=content)
+
+    return UnionStrategy()
+
+
 def define_any_of(
     name: str, list_of_refs: list[Any], description: str | None = None
 ) -> list[str]:
@@ -436,8 +551,12 @@ def define_any_of(
         emit_doc_comment(description, out)
     out.append(STANDARD_DERIVE)
 
-    if serde := get_serde_annotation_for_anyof_type(name):
-        out.append(serde + "\n")
+    strategy = analyze_any_of(name, list_of_refs)
+
+    if strategy.is_tagged:
+        out.append(f'#[serde(tag = "{strategy.tag}", content = "{strategy.content}")]\n')
+    else:
+        out.append("#[serde(untagged)]\n")
 
     out.append(f"pub enum {name} {{\n")
 
@@ -463,31 +582,36 @@ def define_any_of(
             else ref_name
         )
 
-        # Special-case for `ClientRequest` and `ServerNotification` so the enum
-        # variant's payload is the *Params type rather than the full *Request /
-        # *Notification marker type.
-        if name in ("ClientRequest", "ServerNotification"):
-            # Rely on the trait implementation to tell us the exact Rust type
-            # of the `params` payload. This guarantees we stay in sync with any
-            # special-case logic used elsewhere (e.g. objects with
-            # `additionalProperties` mapping to `serde_json::Value`).
-            if name == "ClientRequest":
-                payload_type = f"<{ref_name} as ModelContextProtocolRequest>::Params"
-            else:
-                payload_type = (
-                    f"<{ref_name} as ModelContextProtocolNotification>::Params"
-                )
+        if strategy.is_tagged:
+            # Use the generic strategy to extract the content payload type
 
-            # Determine the wire value for `method` so we can annotate the
-            # variant appropriately. If for some reason the schema does not
-            # specify a constant we fall back to the type name, which will at
-            # least compile (although deserialization will likely fail).
+            # 1. Determine the wire value for the tag (rename)
             request_def = DEFINITIONS.get(ref_name, {})
             method_const = (
                 request_def.get("properties", {})
-                .get("method", {})
+                .get(strategy.tag, {})
                 .get("const", ref_name)
             )
+
+            # 2. Determine the payload type (content)
+            content_prop_def = request_def.get("properties", {}).get(strategy.content)
+            if content_prop_def:
+                # Use map_type but disable side-effect definition generation
+                payload_type = map_type(
+                    content_prop_def,
+                    strategy.content,
+                    ref_name,
+                    generate_defs=False
+                )
+
+                # Check if optional
+                required_props = request_def.get("required", [])
+                if strategy.content not in required_props:
+                     payload_type = f"Option<{payload_type}>"
+            else:
+                 # Should not happen if analysis is correct, unless analysis missed something
+                 # Fallback to serde_json::Value
+                 payload_type = "serde_json::Value"
 
             out.append(f'    #[serde(rename = "{method_const}")]\n')
             out.append(f"    {variant_name}({payload_type}),\n")
@@ -499,21 +623,11 @@ def define_any_of(
     return out
 
 
-def get_serde_annotation_for_anyof_type(type_name: str) -> str | None:
-    # TODO: Solve this in a more generic way.
-    match type_name:
-        case "ClientRequest":
-            return '#[serde(tag = "method", content = "params")]'
-        case "ServerNotification":
-            return '#[serde(tag = "method", content = "params")]'
-        case _:
-            return "#[serde(untagged)]"
-
-
 def map_type(
     typedef: dict[str, any],
     prop_name: str | None = None,
     struct_name: str | None = None,
+    generate_defs: bool = True,
 ) -> str:
     """typedef must have a `type` key, but may also have an `items`key."""
     ref_prop = typedef.get("$ref", None)
@@ -525,7 +639,8 @@ def map_type(
         assert prop_name is not None
         assert struct_name is not None
         custom_type = struct_name + capitalize(prop_name)
-        extra_defs.extend(define_any_of(custom_type, any_of))
+        if generate_defs:
+            extra_defs.extend(define_any_of(custom_type, any_of))
         return custom_type
 
     type_prop = typedef.get("type", None)
@@ -548,7 +663,7 @@ def map_type(
     elif type_prop == "array":
         item_type = typedef.get("items", None)
         if item_type:
-            item_type = map_type(item_type, prop_name, struct_name)
+            item_type = map_type(item_type, prop_name, struct_name, generate_defs=generate_defs)
             assert isinstance(item_type, str)
             return f"Vec<{item_type}>"
         else:
@@ -568,14 +683,15 @@ def map_type(
         assert prop_name is not None
         assert struct_name is not None
         custom_type = struct_name + capitalize(prop_name)
-        extra_defs.extend(
-            define_struct(
-                custom_type,
-                typedef["properties"],
-                set(typedef.get("required", [])),
-                typedef.get("description"),
+        if generate_defs:
+            extra_defs.extend(
+                define_struct(
+                    custom_type,
+                    typedef["properties"],
+                    set(typedef.get("required", [])),
+                    typedef.get("description"),
+                )
             )
-        )
         return custom_type
     else:
         raise ValueError(f"Unknown type: {type_prop} in {typedef}")

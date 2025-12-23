@@ -102,8 +102,6 @@ pub enum CallToolResultContent {
 
 impl From<CallToolResult> for serde_json::Value {
     fn from(value: CallToolResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -147,45 +145,47 @@ pub struct ClientCapabilitiesRoots {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "method", content = "params")]
 pub enum ClientNotification {
-    CancelledNotification(CancelledNotification),
-    InitializedNotification(InitializedNotification),
-    ProgressNotification(ProgressNotification),
-    RootsListChangedNotification(RootsListChangedNotification),
+    #[serde(rename = "notifications/cancelled")]
+    CancelledNotification(CancelledNotificationParams),
+    #[serde(rename = "notifications/initialized")]
+    InitializedNotification(Option<serde_json::Value>),
+    #[serde(rename = "notifications/progress")]
+    ProgressNotification(ProgressNotificationParams),
+    #[serde(rename = "notifications/roots/list_changed")]
+    RootsListChangedNotification(Option<serde_json::Value>),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(tag = "method", content = "params")]
 pub enum ClientRequest {
     #[serde(rename = "initialize")]
-    InitializeRequest(<InitializeRequest as ModelContextProtocolRequest>::Params),
+    InitializeRequest(InitializeRequestParams),
     #[serde(rename = "ping")]
-    PingRequest(<PingRequest as ModelContextProtocolRequest>::Params),
+    PingRequest(Option<serde_json::Value>),
     #[serde(rename = "resources/list")]
-    ListResourcesRequest(<ListResourcesRequest as ModelContextProtocolRequest>::Params),
+    ListResourcesRequest(Option<ListResourcesRequestParams>),
     #[serde(rename = "resources/templates/list")]
-    ListResourceTemplatesRequest(
-        <ListResourceTemplatesRequest as ModelContextProtocolRequest>::Params,
-    ),
+    ListResourceTemplatesRequest(Option<ListResourceTemplatesRequestParams>),
     #[serde(rename = "resources/read")]
-    ReadResourceRequest(<ReadResourceRequest as ModelContextProtocolRequest>::Params),
+    ReadResourceRequest(ReadResourceRequestParams),
     #[serde(rename = "resources/subscribe")]
-    SubscribeRequest(<SubscribeRequest as ModelContextProtocolRequest>::Params),
+    SubscribeRequest(SubscribeRequestParams),
     #[serde(rename = "resources/unsubscribe")]
-    UnsubscribeRequest(<UnsubscribeRequest as ModelContextProtocolRequest>::Params),
+    UnsubscribeRequest(UnsubscribeRequestParams),
     #[serde(rename = "prompts/list")]
-    ListPromptsRequest(<ListPromptsRequest as ModelContextProtocolRequest>::Params),
+    ListPromptsRequest(Option<ListPromptsRequestParams>),
     #[serde(rename = "prompts/get")]
-    GetPromptRequest(<GetPromptRequest as ModelContextProtocolRequest>::Params),
+    GetPromptRequest(GetPromptRequestParams),
     #[serde(rename = "tools/list")]
-    ListToolsRequest(<ListToolsRequest as ModelContextProtocolRequest>::Params),
+    ListToolsRequest(Option<ListToolsRequestParams>),
     #[serde(rename = "tools/call")]
-    CallToolRequest(<CallToolRequest as ModelContextProtocolRequest>::Params),
+    CallToolRequest(CallToolRequestParams),
     #[serde(rename = "logging/setLevel")]
-    SetLevelRequest(<SetLevelRequest as ModelContextProtocolRequest>::Params),
+    SetLevelRequest(SetLevelRequestParams),
     #[serde(rename = "completion/complete")]
-    CompleteRequest(<CompleteRequest as ModelContextProtocolRequest>::Params),
+    CompleteRequest(CompleteRequestParams),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
@@ -242,8 +242,6 @@ pub struct CompleteResultCompletion {
 
 impl From<CompleteResult> for serde_json::Value {
     fn from(value: CompleteResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -316,8 +314,6 @@ pub enum CreateMessageResultContent {
 
 impl From<CreateMessageResult> for serde_json::Value {
     fn from(value: CreateMessageResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -372,8 +368,6 @@ pub struct GetPromptResult {
 
 impl From<GetPromptResult> for serde_json::Value {
     fn from(value: GetPromptResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -428,8 +422,6 @@ pub struct InitializeResult {
 
 impl From<InitializeResult> for serde_json::Value {
     fn from(value: InitializeResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -548,8 +540,6 @@ pub struct ListPromptsResult {
 
 impl From<ListPromptsResult> for serde_json::Value {
     fn from(value: ListPromptsResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -584,8 +574,6 @@ pub struct ListResourceTemplatesResult {
 
 impl From<ListResourceTemplatesResult> for serde_json::Value {
     fn from(value: ListResourceTemplatesResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -619,8 +607,6 @@ pub struct ListResourcesResult {
 
 impl From<ListResourcesResult> for serde_json::Value {
     fn from(value: ListResourcesResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -644,8 +630,6 @@ pub struct ListRootsResult {
 
 impl From<ListRootsResult> for serde_json::Value {
     fn from(value: ListRootsResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -679,8 +663,6 @@ pub struct ListToolsResult {
 
 impl From<ListToolsResult> for serde_json::Value {
     fn from(value: ListToolsResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -802,8 +784,6 @@ pub struct PaginatedResult {
 
 impl From<PaginatedResult> for serde_json::Value {
     fn from(value: PaginatedResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -926,8 +906,6 @@ pub enum ReadResourceResultContents {
 
 impl From<ReadResourceResult> for serde_json::Value {
     fn from(value: ReadResourceResult) -> Self {
-        // Leave this as it should never fail
-        #[expect(clippy::unwrap_used)]
         serde_json::to_value(value).unwrap()
     }
 }
@@ -1109,37 +1087,30 @@ pub struct ServerCapabilitiesPrompts {
 #[serde(tag = "method", content = "params")]
 pub enum ServerNotification {
     #[serde(rename = "notifications/cancelled")]
-    CancelledNotification(<CancelledNotification as ModelContextProtocolNotification>::Params),
+    CancelledNotification(CancelledNotificationParams),
     #[serde(rename = "notifications/progress")]
-    ProgressNotification(<ProgressNotification as ModelContextProtocolNotification>::Params),
+    ProgressNotification(ProgressNotificationParams),
     #[serde(rename = "notifications/resources/list_changed")]
-    ResourceListChangedNotification(
-        <ResourceListChangedNotification as ModelContextProtocolNotification>::Params,
-    ),
+    ResourceListChangedNotification(Option<serde_json::Value>),
     #[serde(rename = "notifications/resources/updated")]
-    ResourceUpdatedNotification(
-        <ResourceUpdatedNotification as ModelContextProtocolNotification>::Params,
-    ),
+    ResourceUpdatedNotification(ResourceUpdatedNotificationParams),
     #[serde(rename = "notifications/prompts/list_changed")]
-    PromptListChangedNotification(
-        <PromptListChangedNotification as ModelContextProtocolNotification>::Params,
-    ),
+    PromptListChangedNotification(Option<serde_json::Value>),
     #[serde(rename = "notifications/tools/list_changed")]
-    ToolListChangedNotification(
-        <ToolListChangedNotification as ModelContextProtocolNotification>::Params,
-    ),
+    ToolListChangedNotification(Option<serde_json::Value>),
     #[serde(rename = "notifications/message")]
-    LoggingMessageNotification(
-        <LoggingMessageNotification as ModelContextProtocolNotification>::Params,
-    ),
+    LoggingMessageNotification(LoggingMessageNotificationParams),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "method", content = "params")]
 pub enum ServerRequest {
-    PingRequest(PingRequest),
-    CreateMessageRequest(CreateMessageRequest),
-    ListRootsRequest(ListRootsRequest),
+    #[serde(rename = "ping")]
+    PingRequest(Option<serde_json::Value>),
+    #[serde(rename = "sampling/createMessage")]
+    CreateMessageRequest(CreateMessageRequestParams),
+    #[serde(rename = "roots/list")]
+    ListRootsRequest(Option<serde_json::Value>),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
