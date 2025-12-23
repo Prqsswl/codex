@@ -82,6 +82,12 @@ type AgentLoopParams = {
     applyPatch: ApplyPatchCommand | undefined,
   ) => Promise<CommandConfirmation>;
   onLastResponseId: (lastResponseId: string) => void;
+  tools?: Array<Tool>;
+  toolHandler?: (
+    name: string,
+    args: Record<string, unknown>,
+    toolCallId: string,
+  ) => Promise<Array<ResponseInputItem> | undefined>;
 };
 
 const shellFunctionTool: FunctionTool = {
@@ -120,6 +126,12 @@ export class AgentLoop {
   private approvalPolicy: ApprovalPolicy;
   private config: AppConfig;
   private additionalWritableRoots: ReadonlyArray<string>;
+  private tools?: Array<Tool>;
+  private toolHandler?: (
+    name: string,
+    args: Record<string, unknown>,
+    toolCallId: string,
+  ) => Promise<Array<ResponseInputItem> | undefined>;
   /** Whether we ask the API to persist conversation state on the server */
   private readonly disableResponseStorage: boolean;
 
@@ -281,6 +293,8 @@ export class AgentLoop {
     getCommandConfirmation,
     onLastResponseId,
     additionalWritableRoots,
+    tools,
+    toolHandler,
   }: AgentLoopParams & { config?: AppConfig }) {
     this.model = model;
     this.provider = provider;
@@ -301,6 +315,8 @@ export class AgentLoop {
     this.onLoading = onLoading;
     this.getCommandConfirmation = getCommandConfirmation;
     this.onLastResponseId = onLastResponseId;
+    this.tools = tools;
+    this.toolHandler = toolHandler;
 
     this.disableResponseStorage = disableResponseStorage ?? false;
     this.sessionId = getSessionId() || randomUUID().replaceAll("-", "");
@@ -404,7 +420,13 @@ export class AgentLoop {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const callId: string = (item as any).call_id ?? (item as any).id;
 
-    const args = parseToolCallArguments(rawArguments ?? "{}");
+    let args: Record<string, unknown> | undefined;
+    try {
+      args = JSON.parse(rawArguments ?? "{}");
+    } catch {
+      /* invalid json */
+    }
+
     log(
       `handleFunctionCall(): name=${
         name ?? "undefined"
@@ -444,12 +466,22 @@ export class AgentLoop {
 
     // TODO: allow arbitrary function calls (beyond shell/container.exec)
     if (name === "container.exec" || name === "shell") {
+      const execInput = parseToolCallArguments(rawArguments ?? "{}");
+      if (execInput == null) {
+        const outputItem: ResponseInputItem.FunctionCallOutput = {
+          type: "function_call_output",
+          call_id: item.call_id,
+          output: `invalid arguments: ${rawArguments}`,
+        };
+        return [outputItem];
+      }
+
       const {
         outputText,
         metadata,
         additionalItems: additionalItemsFromExec,
       } = await handleExecCommand(
-        args,
+        execInput,
         this.config,
         this.approvalPolicy,
         this.additionalWritableRoots,
@@ -460,6 +492,11 @@ export class AgentLoop {
 
       if (additionalItemsFromExec) {
         additionalItems.push(...additionalItemsFromExec);
+      }
+    } else if (this.toolHandler) {
+      const result = await this.toolHandler(name, args ?? {}, callId);
+      if (result) {
+        return result;
       }
     }
 
@@ -620,6 +657,9 @@ export class AgentLoop {
       let tools: Array<Tool> = [shellFunctionTool];
       if (this.model.startsWith("codex")) {
         tools = [localShellTool];
+      }
+      if (this.tools) {
+        tools.push(...this.tools);
       }
 
       const stripInternalFields = (
