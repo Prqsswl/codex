@@ -1,6 +1,8 @@
+
 import { Video } from '../types';
 
 export const videos: Video[] = [
+  // --- The 23 Pillars (Hardcoded Originals) ---
   // Track: AGI & Existential Threat
   {
     id: 'k_onqn68GHY',
@@ -216,5 +218,161 @@ export const videos: Video[] = [
     description: 'Full movie recap of the hacker thriller.',
     duration: '15:00',
     views: 'Unknown'
+  },
+
+  // --- Deep Research Content (New Additions) ---
+
+  // Philosophy & Thinking
+  {
+    id: 'fCfTfIrHdoQ',
+    title: 'Why First Principles Thinking Will Outlast Every Trend in Tech',
+    thumbnail: 'https://img.youtube.com/vi/fCfTfIrHdoQ/maxresdefault.jpg',
+    category: 'Philosophy & Thinking',
+    description: 'Breakdown of First Principles Thinking used by Elon Musk and others.',
+    duration: '15:00',
+    views: '15K'
+  },
+  {
+     id: '5RtodLdMOu8',
+     title: '3 Mental Models to Think and Speak More Clearly',
+     thumbnail: 'https://img.youtube.com/vi/5RtodLdMOu8/maxresdefault.jpg',
+     category: 'Philosophy & Thinking',
+     description: 'Kara Ronin on mental models for clear communication.',
+     duration: '14:00',
+     views: 'High'
+  },
+  {
+    id: 'o6ooV-19NLY',
+    title: 'Epistemology: Science, Can it Teach Us Everything?',
+    thumbnail: 'https://img.youtube.com/vi/o6ooV-19NLY/maxresdefault.jpg',
+    category: 'Philosophy & Thinking',
+    description: 'Wireless Philosophy and MIT on the limits of science and knowledge.',
+    duration: '10:43',
+    views: '71K'
+  },
+  {
+    id: 'LC1JU6T7otw',
+    title: 'How Clear Thinking Leads to Financial Success | Naval Ravikant',
+    thumbnail: 'https://img.youtube.com/vi/LC1JU6T7otw/maxresdefault.jpg',
+    category: 'Philosophy & Thinking',
+    description: 'Deep dive into the wisdom of Naval Ravikant on judgment and decision making.',
+    duration: '15:00',
+    views: 'High'
+  },
+  {
+    id: 'AmoeA_Hz5Rg',
+    title: 'Second Order Effects Explained',
+    thumbnail: 'https://img.youtube.com/vi/AmoeA_Hz5Rg/maxresdefault.jpg',
+    category: 'Philosophy & Thinking',
+    description: 'Mob Mentality Show discussion on second order effects in systems.',
+    duration: '31:54',
+    views: '123'
+  },
+
+  // History & Strategy
+  {
+    id: 'HgevVtm815A',
+    title: 'Resilient Alpha Startup Failure: Lessons Learned',
+    thumbnail: 'https://img.youtube.com/vi/HgevVtm815A/maxresdefault.jpg',
+    category: 'History & Strategy',
+    description: 'Startup failure stories and pivoting forward.',
+    duration: 'Shorts',
+    views: 'High'
+  },
+  {
+    id: 'nTpRs-iJcy4',
+    title: 'Business Model Innovation with Examples',
+    thumbnail: 'https://img.youtube.com/vi/nTpRs-iJcy4/maxresdefault.jpg',
+    category: 'History & Strategy',
+    description: 'Dr. Will Baber explains business models with Google and Uber examples.',
+    duration: '9:32',
+    views: '864'
+  },
+   {
+    id: 'uoEadnwc90I',
+    title: 'Business Model Innovation Strategy',
+    thumbnail: 'https://img.youtube.com/vi/uoEadnwc90I/maxresdefault.jpg',
+    category: 'History & Strategy',
+    description: 'Summary of Business Model Innovation Strategy by Raphael Amit.',
+    duration: '10:00',
+    views: 'High'
+  },
+
+  // Creativity & Craft
+  {
+    id: 'WdubLS-4_zg',
+    title: 'XENOS / Creative Process Documentary',
+    thumbnail: 'https://img.youtube.com/vi/WdubLS-4_zg/maxresdefault.jpg',
+    category: 'Creativity & Craft',
+    description: 'Documenting the creative process of Akram Khan\'s final solo.',
+    duration: 'Doc',
+    views: 'High'
+  },
+  {
+    id: 'q_FK5XzeK-s',
+    title: 'From Nothing, Something: A Documentary on the Creative Process',
+    thumbnail: 'https://img.youtube.com/vi/q_FK5XzeK-s/maxresdefault.jpg',
+    category: 'Creativity & Craft',
+    description: 'Full documentary exploring techniques and habits of breakthrough ideas.',
+    duration: 'Full Doc',
+    views: '860'
+  },
+
+  // Tech Deep Dive
+  {
+    id: 'iyLqwyFL0Zc',
+    title: 'Design Tinder - System Design Interview',
+    thumbnail: 'https://img.youtube.com/vi/iyLqwyFL0Zc/maxresdefault.jpg',
+    category: 'Tech Deep Dive',
+    description: 'TikTok Senior Engineer breaks down system design for Tinder.',
+    duration: '1:13:22',
+    views: '111K'
+  },
+  {
+    id: 'oHyaRvnX2G8',
+    title: 'Senior Engineer Breaks Down Systems Design Interview',
+    thumbnail: 'https://img.youtube.com/vi/oHyaRvnX2G8/maxresdefault.jpg',
+    category: 'Tech Deep Dive',
+    description: 'Alex Golec from Reddit reviews a mock system design interview.',
+    duration: '1:08:06',
+    views: '31K'
+  },
+  {
+    id: 'Bt6mVg5ivyQ',
+    title: 'Job Scheduler: System Design Interview',
+    thumbnail: 'https://img.youtube.com/vi/Bt6mVg5ivyQ/maxresdefault.jpg',
+    category: 'Tech Deep Dive',
+    description: 'Senior FAANG Engineer interview designing a job scheduler.',
+    duration: '1:00:00',
+    views: 'High'
+  },
+
+  // Anti-Algorithm
+  {
+    id: 'zT5xT4PBAjQ',
+    title: 'The 10 Most Underrated Books You\'ve Never Heard Of',
+    thumbnail: 'https://img.youtube.com/vi/zT5xT4PBAjQ/maxresdefault.jpg',
+    category: 'Anti-Algorithm',
+    description: 'A curated list of underrated books that deserve more hype.',
+    duration: '15:23',
+    views: 'High'
+  },
+  {
+    id: '7nH0OBdBRk0',
+    title: 'The Hard Truth About Freelancing: What I Wish I Knew',
+    thumbnail: 'https://img.youtube.com/vi/7nH0OBdBRk0/maxresdefault.jpg',
+    category: 'Anti-Algorithm',
+    description: 'Alex Cattoni shares lessons learned from 10 years of freelancing.',
+    duration: '9:00',
+    views: '9K'
+  },
+  {
+    id: 'hey0S35__Ls',
+    title: 'The Horror of "Hidden in Plain Sight"',
+    thumbnail: 'https://img.youtube.com/vi/hey0S35__Ls/maxresdefault.jpg',
+    category: 'Anti-Algorithm',
+    description: 'Video essay on horror movie techniques hidden in plain sight.',
+    duration: '12:00',
+    views: '2.3M'
   }
 ];
