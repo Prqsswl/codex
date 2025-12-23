@@ -219,6 +219,13 @@ export default function TerminalChatInput({
 
     loadHistory();
   }, []);
+
+  // Clear cached cursor state when the editor is remounted (e.g. history navigation)
+  useEffect(() => {
+    prevCursorRow.current = null;
+    prevCursorWasAtLastRow.current = null;
+  }, [editorState.key]);
+
   // Reset slash suggestion index when input prefix changes
   useEffect(() => {
     if (input.trim().startsWith("/")) {
