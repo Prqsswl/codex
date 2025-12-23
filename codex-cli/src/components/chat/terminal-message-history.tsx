@@ -15,12 +15,6 @@ import React, { useMemo } from "react";
 type BatchEntry = { item?: ResponseItem; group?: GroupedResponseItem };
 type TerminalMessageHistoryProps = {
   batch: Array<BatchEntry>;
-  groupCounts: Record<string, number>;
-  items: Array<ResponseItem>;
-  userMsgCount: number;
-  confirmationPrompt: React.ReactNode;
-  loading: boolean;
-  thinkingSeconds: number;
   headerProps: TerminalHeaderProps;
   fullStdout: boolean;
   setOverlayMode: React.Dispatch<React.SetStateAction<OverlayModeType>>;
@@ -30,9 +24,6 @@ type TerminalMessageHistoryProps = {
 const TerminalMessageHistory: React.FC<TerminalMessageHistoryProps> = ({
   batch,
   headerProps,
-  // `loading` and `thinkingSeconds` handled by input component now.
-  loading: _loading,
-  thinkingSeconds: _thinkingSeconds,
   fullStdout,
   setOverlayMode,
   fileOpener,
