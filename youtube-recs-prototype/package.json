@@ -1,0 +1,21 @@
+{
+  "name": "youtube-recs-prototype",
+  "version": "1.0.0",
+  "description": "Prototype for Custom YouTube recommendations",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-table3": "^0.6.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "rising": [
+    {"rank": 1, "topic": "AI Tools & Tutorials", "growth": "+350%", "reason": "ChatGPT and AI revolution"},
+    {"rank": 2, "topic": "YouTube Shorts", "growth": "+280%", "reason": "Short format competitive with TikTok"},
+    {"rank": 3, "topic": "Side Hustle Ideas", "growth": "+220%", "reason": "Economic crisis + extra income search"},
+    {"rank": 4, "topic": "Productivity Hacks", "growth": "+190%", "reason": "Work from home + time management"},
+    {"rank": 5, "topic": "Mental Health", "growth": "+175%", "reason": "Mental health awareness"},
+    {"rank": 6, "topic": "Crypto & Web3", "growth": "+165%", "reason": "Blockchain technology"},
+    {"rank": 7, "topic": "Sustainable Living", "growth": "+155%", "reason": "Climate crisis + awareness"},
+    {"rank": 8, "topic": "Home Gym Workouts", "growth": "+145%", "reason": "Post-COVID home fitness"},
+    {"rank": 9, "topic": "Digital Nomad Life", "growth": "+140%", "reason": "Remote work from anywhere"},
+    {"rank": 10, "topic": "VR & Metaverse", "growth": "+135%", "reason": "Advanced VR technology"}
+  ],
+  "declining": [
+    {"rank": 1, "topic": "Fortnite Content", "decline": "-65%", "reason": "Game less popular"},
+    {"rank": 2, "topic": "Unboxing Videos", "decline": "-55%", "reason": "Saturation and disruptions"},
+    {"rank": 3, "topic": "Pranks", "decline": "-50%", "reason": "Violence + fake content"},
+    {"rank": 4, "topic": "PUBG Mobile", "decline": "-48%", "reason": "Game lost popularity"},
+    {"rank": 5, "topic": "Slime Videos", "decline": "-45%", "reason": "Past trend"}
+  ]
+}

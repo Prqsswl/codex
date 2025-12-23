@@ -1,0 +1,36 @@
+{
+  "gaming": [
+    {
+      "criteria": "Subscribers",
+      "PewDiePie": "111M+",
+      "MrBeastGaming": "50M+",
+      "Markiplier": "36M+",
+      "Jacksepticeye": "30M+",
+      "DanTDM": "28M+"
+    },
+    {
+      "criteria": "Upload Frequency",
+      "PewDiePie": "3-4/week",
+      "MrBeastGaming": "Daily",
+      "Markiplier": "4-5/week",
+      "Jacksepticeye": "5-6/week",
+      "DanTDM": "2-3/week"
+    },
+    {
+      "criteria": "Content Style",
+      "PewDiePie": "Comedy + Gaming",
+      "MrBeastGaming": "Challenges + Gaming",
+      "Markiplier": "Horror + Comedy",
+      "Jacksepticeye": "High Energy + Variety",
+      "DanTDM": "Minecraft + Family"
+    },
+    {
+      "criteria": "Avg Length",
+      "PewDiePie": "15-20 min",
+      "MrBeastGaming": "20-30 min",
+      "Markiplier": "25-40 min",
+      "Jacksepticeye": "20-30 min",
+      "DanTDM": "20-25 min"
+    }
+  ]
+}
