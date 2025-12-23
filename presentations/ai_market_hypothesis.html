@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מצגת: השערות שוק הבינה המלאכותית</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --accent-color: #4a90e2;
+            --highlight-color: #e74c3c;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 80%;
+            max-width: 900px;
+            height: 70vh;
+            position: relative;
+            background: #2c2c2c;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: var(--text-color);
+            font-size: 1.8em;
+            margin-bottom: 0.5em;
+        }
+        ul {
+            font-size: 1.3em;
+            line-height: 1.6;
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 15px;
+            position: relative;
+            padding-right: 30px;
+        }
+        li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-weight: bold;
+            position: absolute;
+            right: 0;
+            font-size: 1.2em;
+        }
+        .concept-term {
+            color: var(--highlight-color);
+            font-weight: bold;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+
+    <!-- Slide 1 -->
+    <div class="slide active" id="slide-1">
+        <h1>ההטיה והרגרסיה לאחור</h1>
+        <ul>
+            <li><span class="concept-term">פרק 4 / שאלה 4:</span> הקשר לרעש (כהנמן) והאם ניתן לתקן הטיה במודלים?</li>
+            <li><span class="concept-term">רגרסיה לאחור:</span> מודלים מתקדמים מאמנים את החדשים וקובעים מה "נכון" ומה "חשוב".</li>
+            <li>התוצאה: שליטה מלאה על הנרטיב, לא כאוס.</li>
+            <li><strong>השאלה:</strong> האם "חוסר השליטה" הוא אשליה שנועדה להצדיק עלויות מטורפות?</li>
+        </ul>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide" id="slide-2">
+        <h1>תסמונת ליברמור ו"המאפיה"</h1>
+        <ul>
+            <li>המנורה בקליפורניה שדולקת יותר ממאה שנה.</li>
+            <li><span class="concept-term">ה"מאפיה":</span> החלטה מושכלת לייצר מוצרים שבירים (Planned Obsolescence).</li>
+            <li>בהקשר ל-AI: המנכ"לים טוענים שהאימון עולה מיליארדים והסיבוב לא נגמר.</li>
+            <li><strong>השאלה:</strong> האם זהו מחיר אמיתי או מודל עסקי של "הרס" ושדרוג מכוון?</li>
+        </ul>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide" id="slide-3">
+        <h1>אפקט שיאומי והרובוטים</h1>
+        <ul>
+            <li>שיאומי שילמה 300,000$ על שינוי לוגו מזערי. הרעש היה עצום.</li>
+            <li>הרובוטים (2022 והלאה): למה דווקא עכשיו? ולמה סרטוני הפחדה?</li>
+            <li><span class="concept-term">ההשערה:</span> יצירת "סצנה" (Drama) סביב מוצר שהיה יכול להיות "עוזר משרדי" משעמם.</li>
+            <li>האם הדרמה והפרסום השלילי הם המטרה?</li>
+        </ul>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide" id="slide-4">
+        <h1>רחוב הסנדלרים 2.0</h1>
+        <ul>
+            <li><span class="concept-term">אשליה של תחרות:</span> כולם (מיקרוסופט, גוגל, אנתרופיק) יושבים סביב אותו שולחן.</li>
+            <li>שיתוף פעולה סמוי: מודלים מחליפים מידע, פיצ'רים מועתקים מיידית (Thinking Process, Artifacts).</li>
+            <li><strong>פרדוקס המחיר:</strong> איך Perplexity מציעה את כולם במחיר מנוי יחיד?</li>
+            <li>המסקנה: אין תחרות אמיתית. זו אותה "משפחה".</li>
+        </ul>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide" id="slide-5">
+        <h1>סיכום ומושגים (לדיון)</h1>
+        <ul>
+            <li><span class="concept-term">רחוב הסנדלרים:</span> שוק ללא תחרות אמיתית, כולם "אותה משפחה".</li>
+            <li><span class="concept-term">תסמונת ליברמור:</span> התיישנות מתוכננת ויצירת תלות בעדכונים.</li>
+            <li><span class="concept-term">אפקט שיאומי:</span> יצירת באזז דרך שינויים טפלים או הפחדה.</li>
+            <li><span class="concept-term">קוביית המיקוד:</span> ? (סימן שאלה).</li>
+            <li style="margin-top: 20px; font-style: italic; color: #888;">* כל הנ"ל הן שאלות והשערות לדיון בלבד.</li>
+        </ul>
+    </div>
+
+    <div class="slide-number">שקופית <span id="current-slide">1</span> מתוך <span id="total-slides">5</span></div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="changeSlide(-1)" disabled>הקודם</button>
+        <button id="next-btn" onclick="changeSlide(1)">הבא</button>
+    </div>
+</div>
+
+<script>
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    document.getElementById('total-slides').textContent = totalSlides;
+
+    function changeSlide(direction) {
+        slides[currentSlideIndex].classList.remove('active');
+
+        currentSlideIndex += direction;
+
+        if (currentSlideIndex < 0) currentSlideIndex = 0;
+        if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
+
+        slides[currentSlideIndex].classList.add('active');
+
+        document.getElementById('current-slide').textContent = currentSlideIndex + 1;
+
+        document.getElementById('prev-btn').disabled = currentSlideIndex === 0;
+        document.getElementById('next-btn').disabled = currentSlideIndex === totalSlides - 1;
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') changeSlide(1); // RTL: Left arrow goes to next slide
+        if (e.key === 'ArrowRight') changeSlide(-1); // RTL: Right arrow goes to prev slide
+    });
+</script>
+
+</body>
+</html>
