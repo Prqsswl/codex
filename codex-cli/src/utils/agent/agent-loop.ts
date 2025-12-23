@@ -262,7 +262,7 @@ export class AgentLoop {
    * Currently not used anywhere – comment out to keep the strict compiler
    * happy under `noUnusedLocals`.  Restore when telemetry support lands.
    */
-  // private cumulativeThinkingMs = 0;
+  private cumulativeThinkingMs = 0;
   constructor({
     model,
     provider = "openai",
@@ -1306,40 +1306,40 @@ export class AgentLoop {
         this.pendingAborts.clear();
         // Now emit system messages recording the per‑turn *and* cumulative
         // thinking times so UIs and tests can surface/verify them.
-        // const thinkingEnd = Date.now();
+        const thinkingEnd = Date.now();
 
         // 1) Per‑turn measurement – exact time spent between request and
         //    response for *this* command.
-        // this.onItem({
-        //   id: `thinking-${thinkingEnd}`,
-        //   type: "message",
-        //   role: "system",
-        //   content: [
-        //     {
-        //       type: "input_text",
-        //       text: `🤔  Thinking time: ${Math.round(
-        //         (thinkingEnd - thinkingStart) / 1000
-        //       )} s`,
-        //     },
-        //   ],
-        // });
+        this.onItem({
+          id: `thinking-${thinkingEnd}`,
+          type: "message",
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text: `🤔  Thinking time: ${Math.round(
+                (thinkingEnd - thinkingStart) / 1000,
+              )} s`,
+            },
+          ],
+        });
 
         // 2) Session‑wide cumulative counter so users can track overall wait
         //    time across multiple turns.
-        // this.cumulativeThinkingMs += thinkingEnd - thinkingStart;
-        // this.onItem({
-        //   id: `thinking-total-${thinkingEnd}`,
-        //   type: "message",
-        //   role: "system",
-        //   content: [
-        //     {
-        //       type: "input_text",
-        //       text: `⏱  Total thinking time: ${Math.round(
-        //         this.cumulativeThinkingMs / 1000
-        //       )} s`,
-        //     },
-        //   ],
-        // });
+        this.cumulativeThinkingMs += thinkingEnd - thinkingStart;
+        this.onItem({
+          id: `thinking-total-${thinkingEnd}`,
+          type: "message",
+          role: "system",
+          content: [
+            {
+              type: "input_text",
+              text: `⏱  Total thinking time: ${Math.round(
+                this.cumulativeThinkingMs / 1000,
+              )} s`,
+            },
+          ],
+        });
 
         this.onLoading(false);
       };

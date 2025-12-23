@@ -60,12 +60,13 @@ class FakeStream {
  * the global counter accumulates.
  */
 vi.mock("openai", () => {
-  let callCount = 0;
   class FakeOpenAI {
+    private callCount = 0;
+
     public responses = {
       create: async () => {
-        callCount += 1;
-        return new FakeStream(callCount === 1 ? 10_000 : 500); // 10s vs 0.5s
+        this.callCount += 1;
+        return new FakeStream(this.callCount === 1 ? 10_000 : 500); // 10s vs 0.5s
       },
     };
   }
@@ -130,7 +131,7 @@ describe("thinking time counter", () => {
   }
 
   // TODO: this is disabled
-  it.fails("reports correct per-task thinking time per command", async () => {
+  it("reports correct per-task thinking time per command", async () => {
     await runScenario();
 
     const perTaskMsgs = items.filter(
@@ -152,7 +153,7 @@ describe("thinking time counter", () => {
   });
 
   // TODO: this is disabled
-  it.fails("reports correct global thinking time accumulation", async () => {
+  it("reports correct global thinking time accumulation", async () => {
     await runScenario();
 
     const globalMsgs = items.filter(
