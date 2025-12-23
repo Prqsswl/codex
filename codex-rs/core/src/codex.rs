@@ -568,22 +568,27 @@ async fn submission_loop(
                 // abort any current running session and clone its state
                 let retain_zdr_transcript =
                     record_conversation_history(disable_response_storage, provider.wire_api);
-                let state = match sess.take() {
+                let (state, existing_rollout) = match sess.take() {
                     Some(sess) => {
                         sess.abort();
-                        sess.state
+                        let state = sess.state
                             .lock()
                             .unwrap()
-                            .partial_clone(retain_zdr_transcript)
+                            .partial_clone(retain_zdr_transcript);
+                        let rollout = sess.rollout.lock().unwrap().clone();
+                        (state, rollout)
                     }
-                    None => State {
-                        zdr_transcript: if retain_zdr_transcript {
-                            Some(ConversationHistory::new())
-                        } else {
-                            None
+                    None => (
+                        State {
+                            zdr_transcript: if retain_zdr_transcript {
+                                Some(ConversationHistory::new())
+                            } else {
+                                None
+                            },
+                            ..Default::default()
                         },
-                        ..Default::default()
-                    },
+                        None,
+                    ),
                 };
 
                 let writable_roots = Mutex::new(get_writable_roots(&cwd));
@@ -619,17 +624,17 @@ async fn submission_loop(
 
                 // Attempt to create a RolloutRecorder *before* moving the
                 // `instructions` value into the Session struct.
-                // TODO: if ConfigureSession is sent twice, we will create an
-                // overlapping rollout file. Consider passing RolloutRecorder
-                // from above.
-                let rollout_recorder =
+                let rollout_recorder = if let Some(r) = existing_rollout {
+                    Some(r)
+                } else {
                     match RolloutRecorder::new(&config, session_id, instructions.clone()).await {
                         Ok(r) => Some(r),
                         Err(e) => {
                             tracing::warn!("failed to initialise rollout recorder: {e}");
                             None
                         }
-                    };
+                    }
+                };
 
                 sess = Some(Arc::new(Session {
                     client,
