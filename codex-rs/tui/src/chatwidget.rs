@@ -92,8 +92,13 @@ impl ChatWidget<'_> {
             let (codex, session_event, _ctrl_c) = match init_codex(config_for_agent_loop).await {
                 Ok(vals) => vals,
                 Err(e) => {
-                    // TODO: surface this error to the user.
                     tracing::error!("failed to initialize codex: {e}");
+                    app_event_tx_clone.send(AppEvent::CodexEvent(Event {
+                        id: "initialization".to_string(),
+                        msg: EventMsg::Error(ErrorEvent {
+                            message: format!("Failed to initialize Codex: {e}"),
+                        }),
+                    }));
                     return;
                 }
             };
