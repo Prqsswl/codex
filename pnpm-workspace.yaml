@@ -3,6 +3,7 @@ packages:
   - docs
   - packages/*
   - youtube-recs-prototype
+  - youtube-recs-web
 
 ignoredBuiltDependencies:
   - esbuild
