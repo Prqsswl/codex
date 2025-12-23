@@ -6,7 +6,7 @@ import { exec } from "./raw-exec.js";
 import { execFile } from "child_process";
 import fs from "fs";
 import path from "path";
-import { log } from "src/utils/logger/log.js";
+import { log, isLoggingEnabled } from "src/utils/logger/log.js";
 import { fileURLToPath } from "url";
 
 /**
@@ -47,6 +47,21 @@ export async function execWithLandlock(
   ];
 
   return exec(fullCommand, opts, config, abortSignal);
+}
+
+/**
+ * Returns true if the Landlock sandbox is supported in this environment.
+ */
+export async function isLandlockSupported(): Promise<boolean> {
+  try {
+    await getSandboxExecutable();
+    return true;
+  } catch (error) {
+    if (isLoggingEnabled()) {
+      log(`Landlock sandbox check failed: ${error}`);
+    }
+    return false;
+  }
 }
 
 /**
