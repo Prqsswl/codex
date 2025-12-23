@@ -1060,7 +1060,21 @@ export class AgentLoop {
                     (item as { id?: string }).id;
                   if (callId) {
                     this.pendingAborts.add(callId);
+
+                    if (!alreadyProcessedResponses.has(callId)) {
+                      alreadyProcessedResponses.add(callId);
+                      let result: Array<ResponseInputItem> = [];
+                      if (item.type === "function_call") {
+                        // eslint-disable-next-line no-await-in-loop
+                        result = await this.handleFunctionCall(item);
+                      } else {
+                        // eslint-disable-next-line no-await-in-loop
+                        result = await this.handleLocalShellCall(item);
+                      }
+                      newTurnInput.push(...result);
+                    }
                   }
+                  stageItem(item as ResponseItem);
                 } else {
                   stageItem(item as ResponseItem);
                 }
@@ -1077,12 +1091,6 @@ export class AgentLoop {
                   (event.response.status as unknown as string) ===
                     "requires_action"
                 ) {
-                  // TODO: remove this once we can depend on streaming events
-                  newTurnInput = await this.processEventsWithoutStreaming(
-                    event.response.output,
-                    stageItem,
-                  );
-
                   // When we do not use server‑side storage we maintain our
                   // own transcript so that *future* turns still contain full
                   // conversational context. However, whether we advance to
@@ -1556,44 +1564,6 @@ export class AgentLoop {
     }
   }
 
-  // we need until we can depend on streaming events
-  private async processEventsWithoutStreaming(
-    output: Array<ResponseInputItem>,
-    emitItem: (item: ResponseItem) => void,
-  ): Promise<Array<ResponseInputItem>> {
-    // If the agent has been canceled we should short‑circuit immediately to
-    // avoid any further processing (including potentially expensive tool
-    // calls). Returning an empty array ensures the main run‑loop terminates
-    // promptly.
-    if (this.canceled) {
-      return [];
-    }
-    const turnInput: Array<ResponseInputItem> = [];
-    for (const item of output) {
-      if (item.type === "function_call") {
-        if (alreadyProcessedResponses.has(item.id)) {
-          continue;
-        }
-        alreadyProcessedResponses.add(item.id);
-        // eslint-disable-next-line no-await-in-loop
-        const result = await this.handleFunctionCall(item);
-        turnInput.push(...result);
-        //@ts-expect-error - waiting on sdk
-      } else if (item.type === "local_shell_call") {
-        //@ts-expect-error - waiting on sdk
-        if (alreadyProcessedResponses.has(item.id)) {
-          continue;
-        }
-        //@ts-expect-error - waiting on sdk
-        alreadyProcessedResponses.add(item.id);
-        // eslint-disable-next-line no-await-in-loop
-        const result = await this.handleLocalShellCall(item);
-        turnInput.push(...result);
-      }
-      emitItem(item as ResponseItem);
-    }
-    return turnInput;
-  }
 }
 
 // Dynamic developer message prefix: includes user, workdir, and rg suggestion.
