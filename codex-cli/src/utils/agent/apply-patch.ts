@@ -494,11 +494,11 @@ function peek_next_section(
       // Tolerate invalid lines where the leading whitespace is missing. This is necessary as
       // the model sometimes doesn't fully adhere to the spec and returns lines without leading
       // whitespace for context lines.
-      mode = "keep";
-      line = " " + line;
+      //
+      // UPDATE: Strict mode re-enabled.
 
       // TODO: Re-enable strict mode.
-      // throw new DiffError(`Invalid Line: ${line}`)
+      throw new DiffError(`Invalid Line: ${line}`);
     }
 
     line = line.slice(1);

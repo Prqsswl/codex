@@ -248,12 +248,11 @@ test("process_patch - invalid patch throws DiffError", () => {
   ).toThrow(DiffError);
 });
 
-test("process_patch - tolerates omitted space for keep line", () => {
+test("process_patch - strict mode rejects omitted space for keep line", () => {
   const original = "line1\nline2\nline3";
   const patch = `*** Begin Patch\n*** Update File: foo.txt\n@@\n line1\n-line2\n+some new line2\nline3\n*** End Patch`;
   const fs = createInMemoryFS({ "foo.txt": original });
-  process_patch(patch, fs.openFn, fs.writeFn, fs.removeFn);
-  expect(fs.files["foo.txt"]).toBe("line1\nsome new line2\nline3");
+  expect(() => process_patch(patch, fs.openFn, fs.writeFn, fs.removeFn)).toThrow(DiffError);
 });
 
 test("assemble_changes correctly detects add, update and delete", () => {
