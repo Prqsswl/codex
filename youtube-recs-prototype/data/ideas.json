@@ -1,0 +1,54 @@
+{
+  "education": [
+    "Coding for Kids", "Philosophy for All", "Home Economics", "Critical Thinking", "Neuroscience",
+    "Applied Statistics", "Sleep Hygiene", "Cyber Security", "Machine Learning", "Practical Ecology"
+  ],
+  "practical_life": [
+    "DIY Home Repair", "Basic Sewing", "Car Maintenance", "Creative Recycling", "Balcony Gardening",
+    "Green Cleaning", "Home Organization", "Soap Making", "Pet Care", "Smart Saving"
+  ],
+  "mental_health": [
+    "Anxiety Management", "Breathing Exercises", "Journaling", "Self Awareness", "Healthy Boundaries",
+    "Trauma Recovery", "Happiness & Balance", "Grief Management", "Mindfulness", "Confidence Building"
+  ],
+  "career": [
+    "LinkedIn Building", "Job Interviews", "Winning CV", "Salary Negotiation", "Remote Work",
+    "Freelancing", "Portfolio Building", "Professional Networking", "Small Business", "Passive Income"
+  ],
+  "social": [
+    "Relationship Communication", "Positive Parenting", "Healthy Friendships", "Body Language", "Conflict Resolution",
+    "Empathy", "Dating Modeling", "Emotional Intelligence", "Public Speaking", "Active Listening"
+  ],
+  "adventures": [
+    "Diving", "Extreme Biking", "Mountain Climbing", "Skydiving", "Motorcycle Trips",
+    "Kayaking", "Wildlife Photography", "Overlanding", "Surfing", "Parkour"
+  ],
+  "music_skills": [
+    "Guitar Learning", "Music Production", "Music Theory", "Singing", "Drums",
+    "Piano", "DJing", "Songwriting", "Mixing & Mastering", "Musical Improvisation"
+  ],
+  "family": [
+    "Family Games", "Cooking with Kids", "Storytelling", "Family Crafts", "Family Trips",
+    "Homeschooling", "Family Traditions", "Homework Help", "Yard Games", "Family Workshops"
+  ],
+  "animals": [
+    "Dog Training", "Cat Care", "Aquarium Fish", "Pet Birds", "Horses",
+    "Reptiles", "Animal Rescue", "Home Vet Tips", "Animal Behavior", "Pet Grooming"
+  ],
+  "hobbies": [
+    "Model Building", "Stamp Collecting", "Magic Tricks", "Amateur Astronomy", "Lego MOC",
+    "Metal Detecting", "Coin Rings", "Resin Art", "Vintage Collection", "Woodworking"
+  ],
+  "bonus": [
+    "Urban Exploration", "Tiny House Living", "Van Life", "Study Playlists", "Sign Language",
+    "Slow TV", "Cartography", "Electronics Repair", "Home Compost", "Aquarium Building",
+    "Braille Learning", "Guitar Building", "Green Tech", "Bread Baking", "Home Chemistry",
+    "Robot Building", "Morse Code", "Horology", "Biohacking", "Cryptology",
+    "World Geography", "Quantum Physics", "Astrology", "Numerology", "Graphology",
+    "Social Psychology", "Architecture", "Interior Design", "Feng Shui", "Minimalism",
+    "Zero Waste", "Permaculture", "Hydroponics", "Mushroom Growing", "Beekeeping",
+    "Poultry Keeping", "Water Purification", "Solar Energy", "Wind Turbines", "Survival",
+    "Bushcraft", "Glassblowing", "Leatherworking", "Metalworking", "Blacksmithing",
+    "Weaving", "Knitting", "Embroidery", "Bookbinding", "Hand Printing"
+  ]
+}

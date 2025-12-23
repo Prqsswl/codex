@@ -1,6 +1,7 @@
 packages:
   - codex-cli
   - docs
+  - youtube-recs-prototype
   - packages/*
 
 ignoredBuiltDependencies:

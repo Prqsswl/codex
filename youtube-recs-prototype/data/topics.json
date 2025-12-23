@@ -1,0 +1,42 @@
+{
+  "kids_education": [
+    "Nursery Rhymes", "Kids Animation", "DIY for Kids", "Math Education", "Science for Kids",
+    "Bedtime Stories", "Alphabet & Numbers", "Brain Games", "Toys & Dolls", "Language Learning"
+  ],
+  "gaming": [
+    "Minecraft", "Fortnite", "Roblox", "Among Us", "GTA V",
+    "League of Legends", "Call of Duty", "FIFA", "Pokemon", "Speedruns"
+  ],
+  "music_entertainment": [
+    "Music Videos", "Covers", "Lyric Videos", "Live Concerts", "Reaction Videos",
+    "Viral Challenges", "Pranks", "Comedy Sketches", "Stand-up", "Parodies"
+  ],
+  "food_cooking": [
+    "Quick Recipes", "Baking", "Street Food", "Mukbang", "Food Reviews",
+    "Vegan Recipes", "Meal Prep", "Ethnic Cooking", "Food Hacks", "Knife Skills"
+  ],
+  "fitness_health": [
+    "HIIT Workouts", "Morning Yoga", "Strength Training", "Stretching", "Home Workouts",
+    "Meditation", "Running/Cardio", "Healthy Eating", "Body Transformation", "Dance Workouts"
+  ],
+  "tech_science": [
+    "Smartphone Reviews", "AI & Explainers", "Unboxing", "Coding Tutorials", "Science Experiments",
+    "Space & Astronomy", "PC Building", "New Gadgets", "Robotics", "Quantum Physics"
+  ],
+  "art_creative": [
+    "Digital Art", "Anime Art", "Realistic Drawing", "Graphic Design", "Photography",
+    "Video Editing", "Animation", "Calligraphy", "Origami", "Sculpting"
+  ],
+  "business_finance": [
+    "Entrepreneurship", "Stock Investing", "Crypto", "Real Estate", "Digital Marketing",
+    "Dropshipping", "Affiliate Marketing", "Personal Development", "Time Management", "Sales"
+  ],
+  "travel": [
+    "Travel Vlogs", "Budget Travel", "World Street Food", "Hotels & Resorts", "Camping",
+    "Solo Travel", "Trip Planning", "Cruises", "Mountain Hiking", "Travel Photography"
+  ],
+  "unique_niche": [
+    "ASMR", "True Crime", "Conspiracy Theories", "Paranormal", "History",
+    "Archaeology", "Family Drama", "Polyglots", "Urban Gardening", "Repair & DIY"
+  ]
+}
