@@ -449,11 +449,35 @@ export default function TerminalChat({
   }, []);
 
   // Just render every item in order, no grouping/collapse.
-  const lastMessageBatch = items.map((item) => ({ item }));
-  const groupCounts: Record<string, number> = {};
-  const userMsgCount = items.filter(
-    (i) => i.type === "message" && i.role === "user",
-  ).length;
+  const lastMessageBatch = useMemo(
+    () => items.map((item) => ({ item })),
+    [items],
+  );
+
+  const headerProps = useMemo(
+    () => ({
+      terminalRows,
+      version: CLI_VERSION,
+      PWD,
+      model,
+      provider,
+      approvalPolicy,
+      colorsByPolicy,
+      agent,
+      initialImagePaths,
+      flexModeEnabled: Boolean(config.flexMode),
+    }),
+    [
+      terminalRows,
+      PWD,
+      model,
+      provider,
+      approvalPolicy,
+      agent,
+      initialImagePaths,
+      config.flexMode,
+    ],
+  );
 
   const contextLeftPercent = useMemo(
     () => calculateContextPercentRemaining(items, model),
@@ -477,25 +501,8 @@ export default function TerminalChat({
           <TerminalMessageHistory
             setOverlayMode={setOverlayMode}
             batch={lastMessageBatch}
-            groupCounts={groupCounts}
-            items={items}
-            userMsgCount={userMsgCount}
-            confirmationPrompt={confirmationPrompt}
-            loading={loading}
-            thinkingSeconds={thinkingSeconds}
             fullStdout={fullStdout}
-            headerProps={{
-              terminalRows,
-              version: CLI_VERSION,
-              PWD,
-              model,
-              provider,
-              approvalPolicy,
-              colorsByPolicy,
-              agent,
-              initialImagePaths,
-              flexModeEnabled: Boolean(config.flexMode),
-            }}
+            headerProps={headerProps}
             fileOpener={config.fileOpener}
           />
         ) : (
