@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Linear+B&family=Noto+Sans+Phoenician&family=Noto+Sans+Runic&display=swap');
+
+.font-ancient {
+  font-family: 'Noto Sans Phoenician', 'Noto Sans Runic', 'Noto Sans Linear B', sans-serif;
+}
