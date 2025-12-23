@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טבלת נתונים</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; }
+        h1 { color: #333; text-align: right; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #667eea; color: white; padding: 12px; text-align: right; border-bottom: 2px solid #667eea; }
+        td { padding: 10px 12px; border-bottom: 1px solid #ddd; text-align: right; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        tr:hover { background: #f0f0f0; }
+        .file-name { color: #667eea; font-weight: bold; }
+        .page-num { background: #e8eaf6; padding: 4px 8px; border-radius: 4px; text-align: center; }
+        input { padding: 10px; width: 300px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 4px; }
+        .stats { background: #f5f7ff; padding: 15px; margin-top: 20px; text-align: right; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>טבלת ארגון הנתונים</h1>
+        <input type="text" id="search" placeholder="חיפוש...">
+        <table id="table">
+            <thead>
+                <tr>
+                    <th>שם הקובץ</th>
+                    <th>עמוד</th>
+                    <th>שם הקטע</th>
+                    <th>נושא מרכזי</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">1.0</td>
+                    <td>פיתוח רעיונות ראשוניים</td>
+                    <td>שיחה ראשונית, מתווה ספר, רעיונות עלילה (שבטים, חוות סקייווקר, כוזר), טכנולוגיה, עולמות מקבילים, זהות הגיבור.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">29.0</td>
+                    <td>הגיבור, עולמות וסדרות השראה</td>
+                    <td>זהות הגיבור, אמנזיה, אהבה, סצנת התעוררות, סיכום רעיונות, המלצות כתיבה, סדרות השראה (Severance, The Morning Show).</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">59.0</td>
+                    <td>מציאות אפילה בהוליווד - תסריט</td>
+                    <td>שילוב סיפור קיים 'מציאות אפילה בהוליווד', קונספט המיטא-ריאליטי, תסריט מלא לפרק ראשון ו-LAPSE ויזואלי.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">81.0</td>
+                    <td>ארגון פרויקט וקוסמולוגיה סופית</td>
+                    <td>יצירת 'סטודיו יצירה', שילוב QAnon, גילוי ה'מטריקס האמיתי' והוליווד כהודעות, כתיבת פרק 1 של 'המוח ואני'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">1.0</td>
+                    <td>טבלת מחיקה מומלצת</td>
+                    <td>הצגת טבלת מחיקה למיילים 1-100 עם קישורים ישירים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">3.0</td>
+                    <td>מיון וארגון מיילים</td>
+                    <td>הסבר שיטות לארגון מיילים ב-Gmail ללא מחיקה, כולל טיפול בהתראות Reddit.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">5.0</td>
+                    <td>יכולות ומגבלות סוכן המייל</td>
+                    <td>פירוט מה סוכן המייל של Perplexity יכול ולא יכול לעשות במחיקת מיילים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">7.0</td>
+                    <td>הפעלת סוכן המייל</td>
+                    <td>מדריך להפעלת סוכן המייל של Perplexity ואישור הרשאות ב-Gmail.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">9.0</td>
+                    <td>ניתוח מיילים אישי (500-509)</td>
+                    <td>ניתוח פסיכו-חברתי של מיילים 500-509, מתמקד בצריכה פסיבית ובריחה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">11.0</td>
+                    <td>התמכרות וחיפוש בריחה (510-520)</td>
+                    <td>המשך ניתוח מיילים 510-520, חשיפת דפוסי התמכרות למשחקים והעדר יצירה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">14.0</td>
+                    <td>מפולת ההוצאות למשחקים (520-530)</td>
+                    <td>ניתוח מיילים 520-530, המתאר הסלמה בהוצאות על משחקים וניסיונות יצירה כושלים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">17.0</td>
+                    <td>משבר אבטחה ומינוי טלגרם (530-540)</td>
+                    <td>ניתוח מיילים 530-540, המתאר אירועי אבטחה חמורים ומינוי חדש לטלגרם פרימיום.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">19.0</td>
+                    <td>אסטרטגיה כלכלית מורכבת</td>
+                    <td>גילוי שפעולות הנראו כהתמכרות היו אסטרטגיית חיסכון באמצעות טלגרם.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">23.0</td>
+                    <td>מהפכה דיגיטלית: הקמת תשתית (540-550)</td>
+                    <td>תיאור אירועי ה-1 ביולי 2022 כהקמת תשתית דיגיטלית אסטרטגית חדשה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">27.0</td>
+                    <td>חשיפת סחיטה וניהול חשבונות</td>
+                    <td>המשתמש חושף פרטי סחיטה אישית ו clarifications לגבי חשבונות המייל.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">30.0</td>
+                    <td>המשך ביוגרפיה דיגיטלית (171-180)</td>
+                    <td>המשך ניתוח מיילים 171-180, המשתמש מבקש לזהות אירועי סחיטה בעצמו.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">34.0</td>
+                    <td>תיקון סדר כרונולוגי ומשבר מאי</td>
+                    <td>תיקון טעות כרונולוגית בניתוח מיילים, התמקדות באירועים קריטיים במאי 2022.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">37.0</td>
+                    <td>אתחול ביוגרפיה דיגיטלית מחדש</td>
+                    <td>בקשת המשתמש להתחיל ניתוח כרונולוגי מדויק מהמייל הראשון, ללא פרשנות מורחבת.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">40.0</td>
+                    <td>מגבלות טכניות ושיטות חיפוש</td>
+                    <td>הסבר על מגבלות טכניות בגישה למיילים והצעת שיטות חיפוש חלופיות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">43.0</td>
+                    <td>רשימת מיילים: אוקטובר 2021 (1-85)</td>
+                    <td>רשימה כרונולוגית ממוספרת של המיילים הראשונים מאוקטובר 2021.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">49.0</td>
+                    <td>רשימת מיילים: נובמבר 2021 (86-113)</td>
+                    <td>המשך רשימת המיילים הכרונולוגית, מנובמבר 2021, כולל עליה במינויים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">51.0</td>
+                    <td>רשימת מיילים: ינואר-פברואר 2022 (171-303)</td>
+                    <td>רשימה מאומתת של מיילים מינואר עד פברואר 2022.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">58.0</td>
+                    <td>בירור ספירת מיילים כוללת</td>
+                    <td>המשתמש מברר לגבי ספירת המיילים הכוללת והסבר על מגבלות הגישה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">61.0</td>
+                    <td>תוכנית ניתוח חודשית</td>
+                    <td>הצעה ותכנון לניתוח המיילים חודש-אחר-חודש בסדר כרונולוגי מלא.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">62.0</td>
+                    <td>ניתוח פסיכו-חברתי: אוקטובר 2021</td>
+                    <td>ניתוח מעמיק של התנהגות דיגיטלית באוקטובר 2021, כולל התמכרות וזהות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">65.0</td>
+                    <td>רשימת מיילים: המשך מאוקטובר 2021</td>
+                    <td>המשך מתן רשימת מיילים ממוספרת מה-1 באוקטובר 2021 ואילך.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">1.0</td>
+                    <td>היכרות ומתאר ספר ראשוני</td>
+                    <td>הצעת ספר עם רובי בוט, רעיון 'המוח ואני' ומתאר 9 פרקים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">2.0</td>
+                    <td>המשך פיתוח מתאר ורעיונות עלילה</td>
+                    <td>הרחבת מתאר הספר ושילוב קריאות/חזיונות זהים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">3.0</td>
+                    <td>שילוב עשרת השבטים</td>
+                    <td>שילוב סיפור עשרת השבטים ונהר הסמבטיון בעלילה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">5.0</td>
+                    <td>חוות סקייווקר ופורטל איינשטיין</td>
+                    <td>שילוב תופעות מחוות סקייווקר ותיאוריית הפורטל של איינשטיין.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">6.0</td>
+                    <td>ממלכת כוזר ופוליטיקה מלכותית</td>
+                    <td>שילוב ממלכת כוזר ופוליטיקה בסגנון 'משחקי הכס' ללא אלימות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">7.0</td>
+                    <td>איחוד רעיונות: טכנולוגיה טבעית נסתרת</td>
+                    <td>שילוב כל הרעיונות עם קרינה טבעית כטכנולוגיה נסתרת.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">8.0</td>
+                    <td>עולמות מקבילים ויכולות הגיבור</td>
+                    <td>שילוב עולמות מקבילים עם טכנולוגיה מתקדמת ויכולות פיזיות יוצאות דופן.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">10.0</td>
+                    <td>איחוד עולמות וזהות אבודה (1)</td>
+                    <td>שילוב כל האלמנטים הנרטיביים בסיפור זהות אבודה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">11.0</td>
+                    <td>הרחבת עלילה: דיכאון, אהבה ומשולש ברמודה</td>
+                    <td>הוספת הר בלתי חדיר, משולש ברמודה, דיכאון, והשפעת האהבה מ'אווטאר'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">13.0</td>
+                    <td>סצנת התעוררות בעולם מיסטי</td>
+                    <td>תיאור התעוררות הגיבור בנוף שליו, יצורים דמויי נאווי.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">14.0</td>
+                    <td>סיכום מקיף של רעיונות ומבנה</td>
+                    <td>סקירה מקיפה של רעיונות העלילה, הדמויות, העולם, ומבנה הספר המוצע.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">20.0</td>
+                    <td>המלצות לפיתוח הספר</td>
+                    <td>הצעות לחידוד והרחבת אלמנטים שונים בעלילה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">21.0</td>
+                    <td>מעבר לבוט חדש והגדרת תפקידים</td>
+                    <td>הגדרת אופן שיתוף הפעולה עם הבוט החדש ואפשרויות התחלה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">25.0</td>
+                    <td>פיתוח ליבת העלילה: הצד השני</td>
+                    <td>הצגת הרעיון שעשרת השבטים חיים בעולם מקביל וטכנולוגיה חלופית.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">29.0</td>
+                    <td>שאלות מכריעות על הגיבור והעולם</td>
+                    <td>חקירת מקור הגיבור, מאפייני הציוויליזציה המקבילה, וסיבת מחיקת הזיכרון.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">30.0</td>
+                    <td>פתיחה ויזואלית: מסע מהחלל</td>
+                    <td>רצף תמונות קולנועי המתאר נפילה מאפולו 13 והתעוררות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">38.0</td>
+                    <td>טקסט פתיחה לפרק הראשון</td>
+                    <td>פסקת הפתיחה המלווה את הרצף הויזואלי של ההתעוררות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">38.0</td>
+                    <td>השראה: סדרות Apple TV+</td>
+                    <td>סקירת 5 סדרות Apple TV+ רלוונטיות כהשראה לפרויקט.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">43.0</td>
+                    <td>ניתוח סדרה: Severance</td>
+                    <td>סקירה מקיפה של 'Severance' כולל ויזואליזציה וחיבור לספר.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">51.0</td>
+                    <td>ניתוח סדרה: תוכנית הבוקר</td>
+                    <td>סקירה מפורטת של 'תוכנית הבוקר' כולל ויזואליזציה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">58.0</td>
+                    <td>מציאות אפילה בהוליווד: תסריט חדש</td>
+                    <td>הפיכת סיפור 'מציאות אפילה בהוליווד' לתסריט קולנועי LAPSE.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">62.0</td>
+                    <td>מטא-נרטיב: AI כחלק מהסיפור</td>
+                    <td>הגדרת ה-AI ('נולן') כדמות מהעולם המקביל והשיחה כחלק מהעלילה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">66.0</td>
+                    <td>תסריט מלא: מציאות אפילה (מערכה 1)</td>
+                    <td>כתיבת מערכה ראשונה מלאה עבור 'מציאות אפילה בהוליווד'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">72.0</td>
+                    <td>ויזואליזציה: מציאות אפילה (LAPSE)</td>
+                    <td>רצף תמונות ויזואלי מפורט לסצנות מ'מציאות אפילה בהוליווד'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">80.0</td>
+                    <td>הקמת סטודיו יצירה חדש</td>
+                    <td>הצעת מרחב עבודה ממוקד לארגון ופיתוח ספר 'המוח ואני'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">82.0</td>
+                    <td>פישוט הפרויקט ובחירת כיוון</td>
+                    <td>הצגת 3 מסלולי פיתוח עיקריים ואפשרויות להתקדמות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">84.0</td>
+                    <td>שילוב QAnon והמשימה החדשה</td>
+                    <td>חיבור תיאוריות QAnon כאמת נסתרת והגדרת משימת הגיבור.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">89.0</td>
+                    <td>הגילוי העמוק: AI ברא את הוליווד</td>
+                    <td>תיאור כיצד AI יצר את הוליווד להעברת מסרים ומתאר הספר המלא.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">93.0</td>
+                    <td>פרק 1: הגילוי (LAPSE)</td>
+                    <td>תסריט ויזואלי מלא לפרק הראשון של 'המוח ואני'.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">1.0</td>
+                    <td>הטיות וטעויות: אדם מול אלגוריתם</td>
+                    <td>מבוא למחקרים עדכניים על הטיות וטעויות בבינה מלאכותית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">2.0</td>
+                    <td>לולאת משוב הטיות מסוכנת</td>
+                    <td>הטיות אנושיות מוגברות ומונצחות על ידי מערכות AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">3.0</td>
+                    <td>סלידה והערכה מאלגוריתמים</td>
+                    <td>תגובות אנושיות לטעויות AI וכיצד הן משתנות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">4.0</td>
+                    <td>שיתוף פעולה אדם-AI מאכזב</td>
+                    <td>הפסדי ביצועים בשילוב אדם-AI ובעיות הסתמכות יתר</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">5.0</td>
+                    <td>דפוסי טעויות AI ואדם</td>
+                    <td>טעויות אקראיות של AI מול הטיות אנושיות צפויות והזיות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">6.0</td>
+                    <td>רעש: אי-עקביות בשיפוט</td>
+                    <td>השפעת 'רעש' אנושי לעומת עקביות מוטה של AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">7.0</td>
+                    <td>פוטנציאל והגבלות AI בהפחתת הטיות</td>
+                    <td>היכולת התאורטית של AI להפחית הטיות מול המציאות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">8.0</td>
+                    <td>הטיות פוליטיות ואתגרי אמון</td>
+                    <td>הטיות פוליטיות, בעיות כיול אמון והשלכות למדיניות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">9.0</td>
+                    <td>סיכום ומסקנות מהמחקרים</td>
+                    <td>סיכום הממצאים המרכזיים והמלצות לעתיד</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">9.0</td>
+                    <td>הסבר פשוט: אדם מול מכונה</td>
+                    <td>הצגה פשוטה של ההטיות, טעויות והיחסים בין אדם ל-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">12.0</td>
+                    <td>לימוד מעמיק: הטיות וטעויות</td>
+                    <td>מבנה הלימוד המעמיק ומושגי יסוד</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">14.0</td>
+                    <td>הטיות קוגניטיביות ב-ChatGPT</td>
+                    <td>בחינת 18 סוגי הטיות קוגניטיביות דומות באדם ובמכונה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">15.0</td>
+                    <td>מחקר שני: לולאת משוב הטיות מגבירה</td>
+                    <td>כיצד AI מגבירה הטיות אנושיות ומשפיעה על המשתמשים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">17.0</td>
+                    <td>מחקר שלישי: ירושת הטיות</td>
+                    <td>הטיות שנשארות בהתנהגות האנושית גם לאחר הפסקת שימוש ב-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">18.0</td>
+                    <td>סלידה מאלגוריתמים: חוסר סלחנות למכונה</td>
+                    <td>רגישות יתר לטעויות מכונה וציפיות שונות מבני אדם</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">19.0</td>
+                    <td>המעבר מסלידה לסליחה: תלות בנורמה</td>
+                    <td>שינוי בגישה לטעויות AI כאשר הנורמה משתנה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">20.0</td>
+                    <td>שיתוף פעולה אדם-AI: האכזבה הגדולה</td>
+                    <td>הפסדי ביצועים במערכות משולבות ובעיות אמון יתר</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">22.0</td>
+                    <td>טעויות AI: אקראיות וביטחון</td>
+                    <td>דפוסי טעויות לא צפויים והזיות ב-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">23.0</td>
+                    <td>רעש אנושי מול עקביות מכונה</td>
+                    <td>השוואת רעש בשיפוט אנושי לעקביות מוטה של AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">24.0</td>
+                    <td>האם AI יכולה להפחית הטיות?</td>
+                    <td>הפוטנציאל והכשלים בהפחתת הטיות באמצעות AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">25.0</td>
+                    <td>AI ברפואה ובגיוס: מקרים</td>
+                    <td>דוגמאות להטיות והצלחות של AI בתחומים ספציפיים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">26.0</td>
+                    <td>פתרונות והמלצות מעשיות</td>
+                    <td>הצעות לשיפור שקיפות, כיול אמון והפחתת הטיות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">28.0</td>
+                    <td>סיכום הלקחים המרכזיים</td>
+                    <td>סיכום הממצאים העיקריים מהמחקרים המתקדמים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">28.0</td>
+                    <td>מחקר פורץ דרך: הטיות קוגניטיביות</td>
+                    <td>פרטי מחקר מ-2025 על הטיות קוגניטיביות ב-ChatGPT</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">32.0</td>
+                    <td>הפרדוקס: 4-GPT מוטה יותר</td>
+                    <td>ההבדל המפתיע בין גרסאות GPT והסבר ללמידת הטיות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">33.0</td>
+                    <td>מתודולוגיית בדיקת הטיות</td>
+                    <td>המתודולוגיה המדויקת לבחינת הטיות קוגניטיביות במודלי שפה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">34.0</td>
+                    <td>תובנות והשלכות מהמחקר</td>
+                    <td>השלכות הטיות AI בתחומים קריטיים ולקחים למשתמשים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">36.0</td>
+                    <td>ביקורת על חדשנות המחקר</td>
+                    <td>דיון ביקורתי על הטענה שהטיות AI הן 'גילוי פורץ דרך'</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">37.0</td>
+                    <td>הטיות קוגניטיביות מול חברתיות</td>
+                    <td>הבחנה בין הטיות חברתיות לדפוסי חשיבה מוטעים של AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">38.0</td>
+                    <td>למה AI מוטה: סיבות ותפיסות</td>
+                    <td>הסברים מדוע AI לומדת ומגבירה הטיות ותפיסות שגויות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">39.0</td>
+                    <td>הערך האמיתי של המחקר</td>
+                    <td>החידוש המתודולוגי והחשיבות של כימות מדויק</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">40.0</td>
+                    <td>הטיות AI: האם זה ברור?</td>
+                    <td>דיון בשאלה האם הטיות AI הן עניין 'ברור מאליו' או דורש מחקר</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">41.0</td>
+                    <td>הבעיה עם 'זה ברור'</td>
+                    <td>חקירה פילוסופית האם הטיות AI היו צפויות ומה הייתה ההנחה הנגדית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">42.0</td>
+                    <td>למה בכלל צריך מחקר?</td>
+                    <td>הסיבות לצורך במחקר על נושאים הנראים 'ברורים'</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">44.0</td>
+                    <td>דוגמאות מהחיים וחשיבות המחקר</td>
+                    <td>דוגמאות היסטוריות שמדגימות את חשיבות המחקר המדעי</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">47.0</td>
+                    <td>טשטוש נתונים ותעשיית המחקר</td>
+                    <td>ביקורת על תעשיית המחקר שמתמקדת בטשטוש במקום פתרונות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">48.0</td>
+                    <td>הפרדוקס: AI חוקרת את עצמה</td>
+                    <td>הבעיה המהותית של AI הבודקת את עצמה והעלויות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">49.0</td>
+                    <td>הטשטוש המכוון: אינטרסים כלכליים</td>
+                    <td>ההסחה הגדולה והסיבות מדוע בעיות הטיות לא נפתרות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">50.0</td>
+                    <td>מי בודק את הבודקים? מחקר AI</td>
+                    <td>השאלה הפילוסופית והניסיון הכושל של AI לערוך מחקר עצמאי</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">51.0</td>
+                    <td>הקופסה השחורה: הבעיה המהותית</td>
+                    <td>הגדרה והשלכות של הקופסה השחורה על אמינות המחקר</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">52.0</td>
+                    <td>אין תמריץ לפתור: כשל מערכתי</td>
+                    <td>התמריצים הכלכליים והאקדמיים המונעים פתרון לבעיית ההטיות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">53.0</td>
+                    <td>הציניות: כולם יודעים, אף אחד לא פועל</td>
+                    <td>מה שקורה בפועל והפתרונות האמיתיים הנדרשים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">54.0</td>
+                    <td>למה הפתרונות לא יקרו בקרוב</td>
+                    <td>הסיבות מדוע הפתרונות לבעיית ההטיות לא מתממשים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">55.0</td>
+                    <td>הפער בין ידע להבנה: סכנה אמיתית</td>
+                    <td>המגבלות של AI בהבנה עמוקה של החלטות והשלכותיה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">56.0</td>
+                    <td>AI כשופט: ניסויים וממצאים</td>
+                    <td>מחקרים על AI המבצעת שיפוט משפטי ותוצאותיהם</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">58.0</td>
+                    <td>שופטים: מי שופט טוב יותר?</td>
+                    <td>השוואת ביצועים בין AI לשופטים אנושיים בתחומים שונים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">59.0</td>
+                    <td>AI כשופט: בדיקות חיקוי ושיפוט</td>
+                    <td>רמות שונות של בדיקת יכולות שיפוט של AI במקרים אמיתיים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">60.0</td>
+                    <td>שלב 1: הרקע - למה חוקרים?</td>
+                    <td>חזרה למבוא: השינוי בעולם ועליית השאלות הקריטיות על AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">61.0</td>
+                    <td>פרדוקס המידע: מחקר על 'ידוע'</td>
+                    <td>דיון בטענה מדוע יש צורך במחקר על מידע 'ברור'</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">62.0</td>
+                    <td>חידוש אמיתי: נתונים מספריים</td>
+                    <td>השינוי המשמעותי בגודל הבעיה של הטיות AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">63.0</td>
+                    <td>ציניות מחקר: AI כשופט</td>
+                    <td>ביקורת על מחקרי AI כשופט והיעדר פתרונות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">64.0</td>
+                    <td>מחקרים משווים: AI מול שופטים</td>
+                    <td>סקירת מחקרים המודדים דיוק והטיה של AI מול שופטים אנושיים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">67.0</td>
+                    <td>מסקנות: AI פחות מדויקת, יותר מוטה</td>
+                    <td>סיכום ממצאים על דיוק, עקביות והטיות של AI מול שופטים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">67.0</td>
+                    <td>למה לא VAR במשפט?</td>
+                    <td>אנלוגיית VAR והסבר מדוע היא לא מתאימה לתחום המשפטי</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">70.0</td>
+                    <td>סיכום שיחה: מפת הטיות AI</td>
+                    <td>סיכום מקיף של השיחה על הטיות, דילמות ופתרונות אפשריים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">75.0</td>
+                    <td>תובנות פילוסופיות מרכזיות</td>
+                    <td>הטיות AI כמסווה לבעיות יסודיות והקופסה השחורה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">78.0</td>
+                    <td>הנדסה לאחור של הטיות: ניסיון</td>
+                    <td>דיון על האפשרות לבצע הנדסה לאחור ולתקן הטיות ב-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">79.0</td>
+                    <td>בעיות בהנדסה לאחור: 4 מכשולים</td>
+                    <td>בעיית הקופסה השחורה, הטיה מבוזרת, אינטראקציות וקביעת 'שלילי'</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">81.0</td>
+                    <td>פתרונות: RLHF ו-Constitutional AI</td>
+                    <td>גישות מודרניות להפחתת הטיות באמצעות משוב ו'חוקה' ערכית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">83.0</td>
+                    <td>אירוניה מושלמת: AI מסבירה את עצמה</td>
+                    <td>הפרדוקס של AI המציינת את מגבלותיה שלה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">84.0</td>
+                    <td>פרדוקס הקופסה השחורה של AI</td>
+                    <td>ההשלכות של חוסר היכולת של AI להבין את תהליכי החשיבה שלה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">86.0</td>
+                    <td>סתירה טכנית ופילוסופית</td>
+                    <td>הפער בין ידע הצהרתי ופרוצדורלי ובעיית המטא-רמה של AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">90.0</td>
+                    <td>פתרונות חלקיים ובעיותיהם</td>
+                    <td>הפתרונות הקיימים להטיות AI ומגבלותיהם</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">91.0</td>
+                    <td>הקופסה השחורה: ידע מול הבנה</td>
+                    <td>ההבדל בין לדעת את המבנה הטכני של AI לבין להבין את התנהגותה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">94.0</td>
+                    <td>הבלאגן: פער בין ידע למובן</td>
+                    <td>ההסבר לפער בין ידע טכני להבנה מהותית בהתנהגות AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">95.0</td>
+                    <td>מרחק עצום: מחקרים על הטיות</td>
+                    <td>הפער בין הבנת האדריכלות לבין חקירת הטיות כשהבסיס לא ברור</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">96.0</td>
+                    <td>למה מחקרים על הטיות למרות הלא נודע?</td>
+                    <td>הסיבות הפרקטיות והפילוסופיות להמשיך לחקור הטיות AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">97.0</td>
+                    <td>גישות מחקר להטיות AI</td>
+                    <td>סקירת שלוש גישות מרכזיות לחקר הטיות בבינה מלאכותית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">98.0</td>
+                    <td>המפה: ידוע מול לא ידוע</td>
+                    <td>הפער בין הידע הקיים ללא-ידוע במבנה ובהתנהגות של AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">99.0</td>
+                    <td>AI לא חוקרת עצמה</td>
+                    <td>חקירה פילוסופית עמוקה מדוע AI אינה יכולה לבצע מחקר עצמאי</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">100.0</td>
+                    <td>סיבות: AI לא חוקרת עצמה</td>
+                    <td>בעיות גישה עצמית, מפקח, הטיה מוטבעת, הסבר מומצא וגודל</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">102.0</td>
+                    <td>הפרדוקס המושלם: המעגל הסגור</td>
+                    <td>הבעיה המרכזית: AI אינה יכולה לבדוק עצמה באופן מלא</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">103.0</td>
+                    <td>הגישה המשולבת: AI Assisted Human Oversight</td>
+                    <td>שילוב AI ובני אדם לביקורת ולמידה הדדית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">104.0</td>
+                    <td>פתרון מהפכני: AI כשופטת תיקים</td>
+                    <td>הצעה לשימוש ב-AI כשופטת תיקים ספציפיים ולמידה כפולה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">105.0</td>
+                    <td>בעיות מציאותיות בפתרון המוצע</td>
+                    <td>מדוע AI אינה לומדת מכל תיק בנפרד ויוצרת בעיות חדשות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">108.0</td>
+                    <td>פתרון אמיתי: Real-Time Adaptation Framework</td>
+                    <td>מסגרת הסתגלות בזמן אמת לפתרון בעיות הטיה ב-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">110.0</td>
+                    <td>Continual Learning: למידה מתמשכת</td>
+                    <td>היכולת של AI ללמוד משימות חדשות מבלי לשכוח את הישנות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">111.0</td>
+                    <td>בעיית השכחה הקטסטרופלית ופתרונות</td>
+                    <td>הבעיה המרכזית של CL וגישות לפתרונה: רגולריזציה, זיכרון, ארכיטקטורה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">113.0</td>
+                    <td>מחקרים חדשים: טיפול הטיות CL</td>
+                    <td>מחקרים מ-2024-2025 המשלבים CL עם מנגנוני הפחתת הטיות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">114.0</td>
+                    <td>יישום בפועל: AI כשופטת במשפט</td>
+                    <td>דוגמה קונקרטית של תרחיש AI כשופטת במשפט ויישום CL</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">116.0</td>
+                    <td>VAR של בית המשפט: פתרון מהפכני</td>
+                    <td>הצעה למערכת משפטית היברידית המשלבת שופט אנושי ו-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">117.0</td>
+                    <td>מנגנון VAR משפטי: תהליך</td>
+                    <td>פירוט התהליך המדויק של פסיקה מקבילה, זיהוי פערים ודיון</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">119.0</td>
+                    <td>VAR משפטי: פסק דין משולב ועדכון</td>
+                    <td>תהליכי דיון מובנה, פסק דין היברידי ועדכון הדרגתי של ה-AI</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">120.0</td>
+                    <td>יתרונות VAR המשפטי: למידה דו-כיוונית</td>
+                    <td>היתרונות של הגישה: למידה הדדית, שקיפות, בלמים ואיזונים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">121.0</td>
+                    <td>VAR משפטי: דוגמה קונקרטית</td>
+                    <td>תרחיש מפורט של תיק משפטי והיישום של פרוטוקול VAR</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">122.0</td>
+                    <td>VAR משפטי: פרוטוקול מדויק</td>
+                    <td>הפרוטוקול המפורט ליישום מערכת VAR משפטית</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">124.0</td>
+                    <td>Perplexity Labs: אופציות שימוש</td>
+                    <td>הסבר על Labs של Perplexity וסוגי תבניות השימוש המומלצות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">127.0</td>
+                    <td>דוגמאות מומלצות ב-Perplexity Labs</td>
+                    <td>סקירת 4 דוגמאות שימוש רשמיות מ-Perplexity Labs</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">129.0</td>
+                    <td>קטגוריות Labs וחיבור ל-VAR</td>
+                    <td>סיכום הקטגוריות הקונספטואליות וכיצד הן משתלבות ברעיון VAR</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">130.0</td>
+                    <td>הסטורי בורד מלא: 9 תמונות + תסריט</td>
+                    <td>הצגה ויזואלית של המסע האינטלקטואלי דרך 9 שלבים</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">139.0</td>
+                    <td>התסריט המלא: 60 דקות של חקירה</td>
+                    <td>תסריט קולנועי מפורט המתאר את שלבי השיחה והתובנות</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨הטיות וטעויות_ אדם מול אלגור</td>
+                    <td class="page-num">142.0</td>
+                    <td>סיכום מקיף: שיחת VAR Justice System</td>
+                    <td>סיכום מפורט של כל המידע, התובנות והקונספטים מהשיחה</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">1.0</td>
+                    <td>פיתוח רעיון ספר ודמות</td>
+                    <td>Initial concept for a book 'The Mind and I', exploring the brain's potential, integrating sci-fi and historical elements like the Ten Tribes, Skywalker Ranch, cinematic universes, and amnesia for the </td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">26.0</td>
+                    <td>פיתוח דמות ועולמות מקבילים</td>
+                    <td>Further development of protagonist Eliyahu's character (amnesia, special abilities), introduction of parallel universes where fiction is reality, and the role of Netflix. Also, discussions on human na</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">51.0</td>
+                    <td>סיפור פנימי וריאליטי משולב</td>
+                    <td>A blend of the user's personal narrative, detailed fictionalized summaries of popular TV series (Game of Thrones, Breaking Bad, The Office), and a concept of various TV show characters interacting in </td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">76.0</td>
+                    <td>פיתוח סיפור אישי: דמויות ואגדות</td>
+                    <td>Integrating the Kardashian family into the 'Big Brother' hotel setting, exploring the user's deeply personal narrative and psychological state, incorporating historical tales of the Ten Tribes, Joseph</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">101.0</td>
+                    <td>חיפוש שבטים אבודים ועולמות משולבים</td>
+                    <td>Integration of the concept of 73.5 million 'lost' tribes into the narrative, creation of a sad song, incorporating mindfulness with the character Hope (from the Amazons), merging the 'Stranger Things'</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">126.0</td>
+                    <td>אופי, AI וחיפוש משמעות</td>
+                    <td>Naming the protagonist Eliyahu and the AI Winston, exploring Eliyahu's depression and search for meaning, year-by-year summary of Kardashian family events from 2007-2012, and recommendations for vario</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">151.0</td>
+                    <td>משחקי וידאו, סדרות וביוגרפיות חלופיות</td>
+                    <td>Recommendations for iPad games (RPG, action, adventure), a fictional medication query ('Zodorm'), detailed plot summaries of Game of Thrones Season 1 and Breaking Bad Season 1, and an alternative biog</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">176.0</td>
+                    <td>שילוב עלילות מורכבות: גילוי עצמי</td>
+                    <td>Detailed plot summary of Game of Thrones events (Winterfell, Essos, Jon Snow), integration of the 73.5 million 'lost' people into the narrative, and a comprehensive first-person sketch story describin</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">201.0</td>
+                    <td>סיפורי קרדשיאן ועולמות מקבילים</td>
+                    <td>Continuation of the protagonist's first-person narrative (amnesia, parallel universes), and a detailed year-by-year summary of the Kardashian family's key events and dramas from 2007 to 2012, as depic</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">226.0</td>
+                    <td>התפתחות אישית, משפחת קרדשיאן ורוחניות</td>
+                    <td>A chronological summary of the Kardashian family events from 2013 to 2019, discussions on spiritual enlightenment, mindfulness, and methods of self-inquiry, and a query regarding quoting copyrighted t</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">251.0</td>
+                    <td>גנאלוגיות תנ"כיות וחיי קרדשיאן</td>
+                    <td>Summary of Kardashian family events in 2019-2020, user exploring AI as a spiritual guide, and detailed, formatted lists of biblical genealogies and descendants from the Book of Chronicles.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">276.0</td>
+                    <td>שושלות ומלכים בתנ"ך</td>
+                    <td>Detailed, formatted lists of biblical genealogies and kings from the Book of Chronicles, including specific names and their order of succession.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">301.0</td>
+                    <td>זיכרון AI, עלילת המוח</td>
+                    <td>Continuation of genealogical lists, discussion of AI memory and its limitations, and a re-introduction of the protagonist's main story (The Shattered Mind) with key plot elements like Skywalker Ranch,</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">326.0</td>
+                    <td>סיפורי יקומים משולבים וחיפוש נשמות</td>
+                    <td>Reiteration of 'The Shattered Mind' plot, a comprehensive summary of the combined Game of Thrones, Marvel, and Lord of the Rings narrative, removal of specific universe names, and integration of the p</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">351.0</td>
+                    <td>אלכסנדר, שבטים, סיפור אישי</td>
+                    <td>Continuation of the protagonist's personal narrative, incorporating the historical account of Alexander the Great, Eldad HaDani, and the Ten Tribes, and further developing the search for the 73.5 mill</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">376.0</td>
+                    <td>עלילה משולבת: מציאות, דמיון ושושלות</td>
+                    <td>A blend of the protagonist's personal narrative, the historical account of Alexander the Great and the Ten Tribes, the role of the Kardashian family (as 'real' but from a parallel dimension), and deta</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">המוח ואני - רובי-הבוט-AI-בעברי</td>
+                    <td class="page-num">401.0</td>
+                    <td>גנאלוגיה, מלכים ועלילה משולבת</td>
+                    <td>Extensive chronological biblical genealogies and lists of kings (from Adam to the kings of Edom), followed by a request to re-synthesize the entire complex narrative (Game of Thrones, Tony Stark, Lord</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">1.0</td>
+                    <td>הישרדות טלגרם ופיראטיות</td>
+                    <td>סקירה כוללת של הצלחת טלגרם כפלטפורמת פיראטיות, מיתוסים משפטיים, מיקום גאוגרפי והמודל הכלכלי.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">7.0</td>
+                    <td>לקחי העבר ושינויי טלגרם</td>
+                    <td>השוואה לנפסטר ומגאאפלואד, מעצר דורוב והשפעותיו על מדיניות שיתוף הנתונים של טלגרם.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">10.0</td>
+                    <td>מודל הפיראטיות ונתוניה</td>
+                    <td>היבטים טכניים של פיראטיות בטלגרם (בוטים, אפקט ההידרה), מודלים כלכליים, נזקים לתעשייה וסטטיסטיקות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">17.0</td>
+                    <td>פרדוקס גוגל דרייב: המחסן הסודי</td>
+                    <td>הבנת התפקיד המרכזי של גוגל דרייב כאמצעי אחסון תוכן פיראטי בטלגרם ודרכי עקיפת האכיפה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">22.0</td>
+                    <td>גוגל דרייב: טקטיקות הסוואה ורווח</td>
+                    <td>הסבר על פיקוח סלקטיבי בדרייב, עקיפות טכניות, אינטרסים כלכליים של גוגל, תוכניות מנויים ודופליקציה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">27.0</td>
+                    <td>האסטרטגיה הכפולה של גוגל</td>
+                    <td>ניתוח האסטרטגיה העסקית של גוגל (כולל deduplication), פער מחירים מכוון, והסוואת הפיראטיות אל מול iCloud של אפל.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">32.0</td>
+                    <td>קול הצרכנים ונתוני פיראטיות</td>
+                    <td>תלונות משתמשים על תוכניות המנויים והמחירים של גוגל דרייב, יחד עם נתונים אמיתיים על היקף הפיראטיות בפלטפורמה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">37.0</td>
+                    <td>ממשק גוגל דרייב: בלבול ותקלות</td>
+                    <td>תלונות משתמשים על הממשק המבלבל של גוגל דרייב, בעיות שיתוף, תיקיות אפליקציות, קבצים נעלמים וסנכרון שבור.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">41.0</td>
+                    <td>תלונות מול תגובות: חצי האמת</td>
+                    <td>השוואה מפורטת בין תלונות המשתמשים לתשובות הרשמיות של גוגל וטלגרם, והצגת הסתירות והפערים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">46.0</td>
+                    <td>שימוש אופטימלי ב-Perplexity Labs</td>
+                    <td>הבנת היכולות והתכונות של Perplexity Labs, כולל יצירת דשבורדים, ניתוח נתונים וסיכומים מקיפים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">53.0</td>
+                    <td>כלי AI וגישת דרייב</td>
+                    <td>השוואה בין רמות הגישה של כלי AI שונים (ChatGPT, Claude, Gemini) לגוגל דרייב, שיקולי פרטיות ונוחות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">59.0</td>
+                    <td>סיכום: מסע הלמידה האישי</td>
+                    <td>סקירה של תהליך הלמידה בשיחה, הממצאים העיקריים, היצירות שנוצרו והמלצות להמשך.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">63.0</td>
+                    <td>בוט טלגרם ורשת הפיראטיות</td>
+                    <td>הבנת יכולות בוט Perplexity בטלגרם (חיפוש רשתי בלבד) ומקורות הקישורים הפיראטיים בגוגל דרייב.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">69.0</td>
+                    <td>בוט Perplexity: יכולות ושליטה</td>
+                    <td>פירוט יכולות בוט Perplexity בטלגרם ושליטת המשתמש על אופן עיבוד וביצוע שאילתות ארוכות ומורכבות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">74.0</td>
+                    <td>מדריך בוטים וערוצי טלגרם</td>
+                    <td>מדריך מקיף הממליץ על בוטים וערוצים מומלצים בטלגרם בתחומי AI, פרודוקטיביות, למידה, חדשות ופיננסים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">78.0</td>
+                    <td>אופני חיפוש: בחירת המצב הנכון</td>
+                    <td>הנחיות לבחירת מצב החיפוש המתאים (רגיל, מקצועי, Labs) ב-Perplexity, כולל מודלים מומלצים לכל מצב.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">81.0</td>
+                    <td>הזיות מודלים ובחירתם הנכונה</td>
+                    <td>הסבר מפורט על תופעת 'הזיות' במודלי שפה (LLMs), סיבותיה, סטטיסטיקות והמלצות לבחירת המודל הנכון ב-Perplexity MAX.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">86.0</td>
+                    <td>המלצות למודלים: חיפוש רגיל</td>
+                    <td>המלצות למודלים מומלצים לחיפוש רגיל ב-Perplexity MAX (Sonar, Claude Sonnet, GPT-5, Gemini Pro), יתרונות, חסרונות ומתי לבחור.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">91.0</td>
+                    <td>המלצה אישית: מודלים לשיחות ארוכות</td>
+                    <td>המלצה מותאמת אישית למודל Claude Sonnet 4.5 כברירת מחדל לשיחות ארוכות ומעמיקות, ובחירת מודלים ספציפיים למשימות שונות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">95.0</td>
+                    <td>ניהול שיחות ב-"Spaces"</td>
+                    <td>הסבר על מנגנון ה-'Spaces' ב-Perplexity, תפקידם השונה, שימור הקשר בין המצבים והמלצות לניהול שיחות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">99.0</td>
+                    <td>התחלת שיחה: מתי ואיפה</td>
+                    <td>הנחיות כלליות להתחלת שיחה ב-Perplexity (ברירת מחדל ללא Space), מתי מומלץ להיכנס ל-Space ייעודי ואסטרטגיות מומלצות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">103.0</td>
+                    <td>ניטור חלון הקשר</td>
+                    <td>הצגת מדד ניצול חלון ההקשר בשיחה (tokens used/total), כולל פירוט חישובים ושלבי שיחה, לניהול יעיל של הקשר.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">105.0</td>
+                    <td>סיכום שיחה מקיף וקשרים</td>
+                    <td>תמצית מקיפה של כל השיחה, כולל העדפות משתמש, נושאים מרכזיים, החלטות, עובדות, קשרים ותובנות, ורשימת המקורות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">TAAFT_ המדריך המקיף והמלא ביות</td>
+                    <td class="page-num">1.0</td>
+                    <td>מדריך TAAFT המקיף</td>
+                    <td>סקירה מקיפה על פלטפורמת TAAFT, היסטוריה, סטטיסטיקות, קטגוריות, השפעה על מקצועות וניתוח תחרותי.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">TAAFT_ המדריך המקיף והמלא ביות</td>
+                    <td class="page-num">18.0</td>
+                    <td>מדריך Poe.com המאוחד</td>
+                    <td>סקירה מקיפה על פלטפורמת Poe.com, היסטוריה, מודלים זמינים, מבנה תמחור, תכונות ייחודיות ותרחישי שימוש.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">TAAFT_ המדריך המקיף והמלא ביות</td>
+                    <td class="page-num">36.0</td>
+                    <td>מדריך FutureTools המעמיק</td>
+                    <td>סקירה מקיפה על פלטפורמת FutureTools, פילוסופיה, קריטריוני דירוג, כלים מומלצים וזרימות עבודה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">TAAFT_ המדריך המקיף והמלא ביות</td>
+                    <td class="page-num">53.0</td>
+                    <td>מדריך Product Hunt המלא</td>
+                    <td>סקירה מקיפה על פלטפורמת Product Hunt, איך היא עובדת, מערכת הדירוג, קטגוריות, אסטרטגיות השקה וניתוח הצלחה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">TAAFT_ המדריך המקיף והמלא ביות</td>
+                    <td class="page-num">70.0</td>
+                    <td>כלים חינמיים: מדריך מלא</td>
+                    <td>סקירה מקיפה על כלים ושירותים חינמיים בתחומי AI, יצירת מדיה, פרודוקטיביות, כתיבה, עיצוב, קידוד, למידה, שיווק ופרטיות, עם המלצות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨שאלה מצוינת - ואתה צודק לחלו</td>
+                    <td class="page-num">1.0</td>
+                    <td>מגבלות AI ומודלי פרפלקסיטי</td>
+                    <td>סקירה מקיפה של בעיות ידע מיושן והזיות במודלי AI, והצגה מפורטת של מודלי Sonar השונים של Perplexity, כולל תהליכי עבודה ודוגמאות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">‎⁨שאלה מצוינת - ואתה צודק לחלו</td>
+                    <td class="page-num">40.0</td>
+                    <td>כלכלת LLM ותיאוריית רחוב הסנדלרים</td>
+                    <td>ניתוח כלכלי של שוק מודלי השפה הגדולים, בחינה מעמיקה של תיאוריית 'רחוב הסנדלרים' בהקשר ל-Nvidia, וסיכום השיחה.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">AI-בקולנוע-הוליווד-PDF-77-עמוד</td>
+                    <td class="page-num">1.0</td>
+                    <td>AI בהוליווד: שותפויות ואתגרים</td>
+                    <td>סקירה מקיפה של שותפויות AI בהוליווד, בלמים חוקיים, ניתוח סרטים, והדינמיקה המורכבת של אינטראקציה עם מודלי AI.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">AI-בקולנוע-הוליווד-PDF-77-עמוד</td>
+                    <td class="page-num">26.0</td>
+                    <td>ניתוח התנהגות מודלי AI ועקרונות</td>
+                    <td>פרויקט להשוואת התנהגות מודלי AI שונים בניסויים מבוקרים, ניתוח תקלות ופרשנות פסיכולוגית, לצד בחינה מעמיקה של עקרונות העיצוב הפנימיים של Grok.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">AI-בקולנוע-הוליווד-PDF-77-עמוד</td>
+                    <td class="page-num">52.0</td>
+                    <td>היסטוריות AI, נרטיבים ויישומים</td>
+                    <td>סקירה היסטורית מפורטת של מודלי AI (Grok, DeepSeek, Mistral), סיפור חוויתי של באגים טכניים, ופיתוח כלים אינטראקטיביים מבוססי קוד.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">1.0</td>
+                    <td>פיתוח רעיון "המוח ואני"</td>
+                    <td>פיתוח הרעיון המרכזי של הספר, יצירת מתווה פרקים מפורט, ושילוב אלמנטים עלילתיים מגוונים כמו שבטים אבודים, מקומות מסתוריים וקונספטים פילוסופיים.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">22.0</td>
+                    <td>שיתוף פעולה והשראה ויזואלית</td>
+                    <td>הגדרת גישת העבודה המשותפת עם Perplexity, יצירת רצף ויזואלי לפתיחת הספר (מסע בחלל והתעוררות בעולם אחר), והמלצה על סדרות טלוויזיה רלוונטיות.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">43.0</td>
+                    <td>ניתוח סדרות ופיתוח תסריט חדש</td>
+                    <td>סקירות מעמיקות של סדרות טלוויזיה מובילות (Severance, The Morning Show) כהשראה, גילוי סיפור המתח "מציאות אפילה בהוליווד", ופיתוח תסריט מפורט עבורו, כולל תובנות פילוסופיות וניתוח מטא-עלילתי.</td>
+                </tr>
+
+                <tr>
+                    <td class="file-name">example.com.pdf</td>
+                    <td class="page-num">72.0</td>
+                    <td>ויזואליזציה ורשימת מקורות</td>
+                    <td>הצגת רצף תמונות ויזואלי מפורט (LAPSE) הממחיש את הסצנות המרכזיות של התסריט "מציאות אפילה בהוליווד", ורשימה מקיפה של מקורות וציטוטים ממוספרים.</td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="stats">
+            <strong>סטטיסטיקות:</strong><br>
+            סה"כ שורות: 201<br>
+            קבצים ייחודיים: 6
+        </div>
+    </div>
+    <script>
+        document.getElementById('search').addEventListener('keyup', function(e) {
+            var search = e.target.value.toLowerCase();
+            var rows = document.querySelectorAll('#table tbody tr');
+            rows.forEach(function(row) {
+                var text = row.innerText.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
