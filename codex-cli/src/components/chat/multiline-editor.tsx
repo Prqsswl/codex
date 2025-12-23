@@ -286,6 +286,7 @@ const MultilineTextEditorInner = (
         console.log("[MultilineTextEditor] key event", { input, key });
       }
 
+      const oldText = buffer.current.getText();
       const modified = buffer.current.handleInput(
         input,
         key as Record<string, boolean>,
@@ -296,7 +297,7 @@ const MultilineTextEditorInner = (
       }
 
       const newText = buffer.current.getText();
-      if (onChange) {
+      if (onChange && newText !== oldText) {
         onChange(newText);
       }
     },

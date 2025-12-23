@@ -127,7 +127,7 @@ describe("TerminalChatInput – history navigation with multiline drafts", () =>
   });
 
   // TODO: Fix this test.
-  it.skip("should restore the draft when navigating forward (↓) past the newest history entry", async () => {
+  it("should restore the draft when navigating forward (↓) past the newest history entry", async () => {
     const { stdin, lastFrameStripped, flush, cleanup } = renderTui(
       React.createElement(TerminalChatInput, stubProps()),
     );
