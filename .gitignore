@@ -81,3 +81,8 @@ CHANGELOG.ignore.md
 # nix related
 .direnv
 .envrc
+*.md
+*.txt
+__MACOSX
+processed_book/assets
+processed_book/
