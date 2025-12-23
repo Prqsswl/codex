@@ -178,11 +178,53 @@ function processUserMessage(item: ResponseItem): string | null {
     const texts: Array<string> = [];
     if (Array.isArray(parts)) {
       for (const part of parts) {
-        if (part && typeof part === "object" && "text" in part) {
+        if (!part || typeof part !== "object") {
+          continue;
+        }
+
+        // 1. Text content
+        if ("text" in part) {
           const t = (part as unknown as { text?: string }).text;
           if (typeof t === "string" && t.length > 0) {
             texts.push(t);
           }
+          continue;
+        }
+
+        // 2. Images and files
+        // The cli uses 'input_image' with 'image_url' containing a data URI.
+        // Standard OpenAI might use 'image_url' type with { url: ... }.
+        const p = part as Record<string, unknown>;
+        let imageUrl: string | undefined;
+
+        if (p["type"] === "input_image" && typeof p["image_url"] === "string") {
+          imageUrl = p["image_url"];
+        } else if (
+          p["type"] === "image_url" &&
+          p["image_url"] &&
+          typeof p["image_url"] === "object" &&
+          "url" in (p["image_url"] as Record<string, unknown>)
+        ) {
+          imageUrl = (p["image_url"] as Record<string, unknown>)[
+            "url"
+          ] as string;
+        }
+
+        if (imageUrl && imageUrl.startsWith("data:")) {
+          // Extract mime type: data:image/png;base64,...
+          const mime = imageUrl.split(";")[0]?.split(":")[1];
+          if (mime) {
+            if (mime.startsWith("image/")) {
+              texts.push("[Image]");
+            } else {
+              texts.push(`[File: ${mime}]`);
+            }
+          } else {
+            texts.push("[Image]");
+          }
+        } else if (imageUrl) {
+          // If it's a URL but not data URI, just mark as image
+          texts.push("[Image]");
         }
       }
     }

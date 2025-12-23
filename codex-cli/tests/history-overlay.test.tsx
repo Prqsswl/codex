@@ -173,6 +173,49 @@ describe("HistoryOverlay", () => {
       // Verify it's not too long (allowing for some UI elements)
       expect(truncatedLine.trim().length).toBeLessThan(150);
     });
+
+    it("displays user messages with images", () => {
+      const items = [
+        {
+          type: "message",
+          role: "user",
+          id: "msg_img",
+          content: [
+            { type: "input_text", text: "Here is an image" },
+            { type: "input_image", image_url: "data:image/png;base64,..." },
+          ],
+        } as unknown as ResponseInputMessageItem,
+      ];
+
+      const { lastFrame } = render(
+        <HistoryOverlay items={items} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+      expect(frame).toContain("Here is an image [Image]");
+    });
+
+    it("displays user messages with file attachments", () => {
+      const items = [
+        {
+          type: "message",
+          role: "user",
+          id: "msg_file",
+          content: [
+            { type: "input_text", text: "Here is a file" },
+            {
+              type: "input_image",
+              image_url: "data:application/pdf;base64,...",
+            },
+          ],
+        } as unknown as ResponseInputMessageItem,
+      ];
+
+      const { lastFrame } = render(
+        <HistoryOverlay items={items} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+      expect(frame).toContain("Here is a file [File: application/pdf]");
+    });
   });
 
   describe("file mode", () => {
