@@ -33,7 +33,7 @@ pub struct Prompt {
 }
 
 impl Prompt {
-    pub(crate) fn get_full_instructions(&self) -> Cow<str> {
+    pub(crate) fn get_full_instructions(&self) -> Cow<'_, str> {
         match &self.instructions {
             Some(instructions) => {
                 let instructions = format!("{BASE_INSTRUCTIONS}\n{instructions}");

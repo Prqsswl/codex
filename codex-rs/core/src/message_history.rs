@@ -19,7 +19,9 @@ use std::fs::OpenOptions;
 use std::io::Result;
 use std::io::Write;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 
+use regex::Regex;
 use serde::Deserialize;
 use serde::Serialize;
 use std::time::Duration;
@@ -40,6 +42,25 @@ const HISTORY_FILENAME: &str = "history.jsonl";
 
 const MAX_RETRIES: usize = 10;
 const RETRY_SLEEP: Duration = Duration::from_millis(100);
+
+static SENSITIVE_PATTERNS: OnceLock<Vec<Regex>> = OnceLock::new();
+
+fn get_sensitive_patterns() -> &'static Vec<Regex> {
+    SENSITIVE_PATTERNS.get_or_init(|| {
+        vec![
+            // AWS Access Key ID
+            Regex::new(r"AKIA[0-9A-Z]{16}").expect("Invalid regex"),
+            // Google API Key
+            Regex::new(r"AIza[0-9A-Za-z-_]{35}").expect("Invalid regex"),
+            // Private Key
+            Regex::new(r"-----BEGIN [A-Z ]+ PRIVATE KEY-----").expect("Invalid regex"),
+            // URI with password (basic auth)
+            Regex::new(r"://[^:\s]+:[^@\s]+@[^@\s]+").expect("Invalid regex"),
+            // Stripe Publishable/Secret Key
+            Regex::new(r"(?:sk|pk)_(?:test|live)_[0-9a-zA-Z]{24}").expect("Invalid regex"),
+        ]
+    })
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct HistoryEntry {
@@ -68,7 +89,13 @@ pub(crate) async fn append_entry(text: &str, session_id: &Uuid, config: &Config)
         }
     }
 
-    // TODO: check `text` for sensitive patterns
+    // Check `text` for sensitive patterns
+    for pattern in get_sensitive_patterns() {
+        if pattern.is_match(text) {
+            tracing::warn!("Blocking history entry due to sensitive pattern match");
+            return Ok(());
+        }
+    }
 
     // Resolve `~/.codex/history.jsonl` and ensure the parent directory exists.
     let path = history_filepath(config);
@@ -294,4 +321,80 @@ async fn ensure_owner_only_permissions(file: &File) -> Result<()> {
 async fn ensure_owner_only_permissions(_file: &File) -> Result<()> {
     // For now, on non-Unix, simply succeed.
     Ok(())
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config_types::{History, HistoryPersistence};
+    use tempfile::TempDir;
+
+    fn create_test_config(codex_home: PathBuf) -> Config {
+        Config {
+            model: "test-model".to_string(),
+            model_provider_id: "test-provider".to_string(),
+            model_provider: crate::model_provider_info::ModelProviderInfo {
+                name: "Test Provider".to_string(),
+                base_url: "http://localhost".to_string(),
+                env_key: None,
+                wire_api: crate::WireApi::Chat,
+                env_key_instructions: None,
+            },
+            approval_policy: crate::protocol::AskForApproval::Never,
+            sandbox_policy: crate::protocol::SandboxPolicy::new_read_only_policy(),
+            shell_environment_policy: crate::config_types::ShellEnvironmentPolicy::default(),
+            disable_response_storage: false,
+            instructions: None,
+            notify: None,
+            cwd: PathBuf::from("/"),
+            mcp_servers: std::collections::HashMap::new(),
+            model_providers: std::collections::HashMap::new(),
+            project_doc_max_bytes: 1024,
+            codex_home,
+            history: History {
+                persistence: HistoryPersistence::SaveAll,
+                max_bytes: None,
+            },
+            file_opener: crate::config_types::UriBasedFileOpener::VsCode,
+            tui: crate::config_types::Tui::default(),
+            codex_linux_sandbox_exe: None,
+        }
+    }
+
+    #[tokio::test]
+    async fn test_append_entry_sensitive_blocked() {
+        let temp_dir = TempDir::new().unwrap();
+        let config = create_test_config(temp_dir.path().to_path_buf());
+        let session_id = Uuid::new_v4();
+
+        // AWS Key Pattern
+        let sensitive_text = "Here is my key: AKIAIOSFODNN7EXAMPLE";
+        append_entry(sensitive_text, &session_id, &config).await.unwrap();
+
+        let (_, count) = history_metadata(&config).await;
+        // Should be empty because it was blocked
+        assert_eq!(count, 0, "Sensitive entry should not be written");
+
+        // Normal text
+        let normal_text = "Hello world";
+        append_entry(normal_text, &session_id, &config).await.unwrap();
+
+        let (id, count) = history_metadata(&config).await;
+        assert_eq!(count, 1, "Normal entry should be written");
+
+        let entry = lookup(id, 0, &config).expect("Should find entry");
+        assert_eq!(entry.text, normal_text);
+    }
+
+    #[tokio::test]
+    async fn test_append_entry_private_key_blocked() {
+        let temp_dir = TempDir::new().unwrap();
+        let config = create_test_config(temp_dir.path().to_path_buf());
+        let session_id = Uuid::new_v4();
+
+        let sensitive_text = "-----BEGIN RSA PRIVATE KEY-----";
+        append_entry(sensitive_text, &session_id, &config).await.unwrap();
+
+        let (_, count) = history_metadata(&config).await;
+        assert_eq!(count, 0, "Private key entry should not be written");
+    }
 }
