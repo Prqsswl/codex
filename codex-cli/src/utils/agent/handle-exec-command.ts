@@ -11,6 +11,7 @@ import { exec, execApplyPatch } from "./exec.js";
 import { ReviewDecision } from "./review.js";
 import { isLoggingEnabled, log } from "../logger/log.js";
 import { SandboxType } from "./sandbox/interface.js";
+import { checkLandlockSupport } from "./sandbox/landlock.js";
 import { PATH_TO_SEATBELT_EXECUTABLE } from "./sandbox/macos-seatbelt.js";
 import fs from "fs/promises";
 
@@ -309,10 +310,14 @@ async function getSandbox(runInSandbox: boolean): Promise<SandboxType> {
         );
       }
     } else if (process.platform === "linux") {
-      // TODO: Need to verify that the Landlock sandbox is working. For example,
+      // Need to verify that the Landlock sandbox is working. For example,
       // using Landlock in a Linux Docker container from a macOS host may not
       // work.
-      return SandboxType.LINUX_LANDLOCK;
+      if (await checkLandlockSupport()) {
+        return SandboxType.LINUX_LANDLOCK;
+      }
+      // If Landlock is not working, we fall through to the
+      // CODEX_UNSAFE_ALLOW_NO_SANDBOX check below.
     } else if (CODEX_UNSAFE_ALLOW_NO_SANDBOX) {
       // Allow running without a sandbox if the user has explicitly marked the
       // environment as already being sufficiently locked-down.

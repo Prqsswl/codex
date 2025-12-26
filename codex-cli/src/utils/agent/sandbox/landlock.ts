@@ -50,10 +50,27 @@ export async function execWithLandlock(
 }
 
 /**
+ * Returns true if the Landlock sandbox is supported in the current environment.
+ * This includes checking if the binary exists and if it can successfully run
+ * a simple command.
+ */
+export async function checkLandlockSupport(): Promise<boolean> {
+  try {
+    await getSandboxExecutable();
+    return true;
+  } catch {
+    // We intentionally ignore the error here because we just want to know if
+    // it is supported or not. The error is already logged in
+    // verifySandboxExecutable if it was a verification failure.
+    return false;
+  }
+}
+
+/**
  * Lazily initialized promise that resolves to the absolute path of the
  * architecture-specific Landlock helper binary.
  */
-let sandboxExecutablePromise: Promise<string> | null = null;
+export let sandboxExecutablePromise: Promise<string> | null = null;
 
 async function detectSandboxExecutable(): Promise<string> {
   // Find the executable relative to the package.json file.
@@ -151,7 +168,7 @@ function verifySandboxExecutable(sandboxExecutable: string): Promise<void> {
  * Returns the absolute path to the architecture-specific Landlock helper
  * binary. (Could be a rejected promise if not found.)
  */
-function getSandboxExecutable(): Promise<string> {
+export function getSandboxExecutable(): Promise<string> {
   if (!sandboxExecutablePromise) {
     sandboxExecutablePromise = detectSandboxExecutable();
   }
