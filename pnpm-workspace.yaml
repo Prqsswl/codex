@@ -1,6 +1,7 @@
 packages:
   - codex-cli
   - docs
+  - deep-view-ai
   - packages/*
 
 ignoredBuiltDependencies:
