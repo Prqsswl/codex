@@ -2,6 +2,8 @@ packages:
   - codex-cli
   - docs
   - packages/*
+  - youtube-recs-prototype
+  - youtube-recs-web
 
 ignoredBuiltDependencies:
   - esbuild
