@@ -63,6 +63,33 @@ function createFunctionCall(
   } as ResponseFunctionToolCallItem;
 }
 
+function createUserMessageWithImage(content: string): ResponseInputMessageItem {
+  return {
+    type: "message",
+    role: "user",
+    id: `msg_${Math.random().toString(36).slice(2)}`,
+    content: [
+      { type: "input_text", text: content },
+      { type: "input_image", image_url: "data:image/png;base64,..." } as any,
+    ],
+  };
+}
+
+function createUserMessageWithFile(
+  content: string,
+  filename: string,
+): ResponseInputMessageItem {
+  return {
+    type: "message",
+    role: "user",
+    id: `msg_${Math.random().toString(36).slice(2)}`,
+    content: [
+      { type: "input_text", text: content },
+      { type: "input_file", filename: filename, content: "..." } as any,
+    ],
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -90,6 +117,26 @@ describe("HistoryOverlay", () => {
       const frame = lastFrame();
       expect(frame).toContain("ls -la");
       expect(frame).toContain("pwd");
+    });
+
+    it("displays image indicator", () => {
+      const items = [createUserMessageWithImage("Look at this:")];
+      const { lastFrame } = render(
+        <HistoryOverlay items={items} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+      expect(frame).toContain("Look at this:");
+      expect(frame).toContain("[Image]");
+    });
+
+    it("displays file indicator", () => {
+      const items = [createUserMessageWithFile("Read this:", "data.csv")];
+      const { lastFrame } = render(
+        <HistoryOverlay items={items} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+      expect(frame).toContain("Read this:");
+      expect(frame).toContain("[File: data.csv]");
     });
 
     it("displays file operations", () => {
