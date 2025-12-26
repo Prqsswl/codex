@@ -82,6 +82,49 @@ fn try_parse_bash(bash_lc_arg: &str) -> Option<Tree> {
     parser.parse(bash_lc_arg, old_tree)
 }
 
+fn extract_safe_string(node: tree_sitter::Node, src: &str) -> Option<String> {
+    match node.kind() {
+        "word" | "number" => node.utf8_text(src.as_bytes()).ok().map(|s| s.to_owned()),
+        "string" => {
+            if node.child_count() == 3
+                && node.child(0)?.kind() == "\""
+                && node.child(1)?.kind() == "string_content"
+                && node.child(2)?.kind() == "\""
+            {
+                node.child(1)?
+                    .utf8_text(src.as_bytes())
+                    .ok()
+                    .map(|s| s.to_owned())
+            } else if node.child_count() == 2
+                && node.child(0)?.kind() == "\""
+                && node.child(1)?.kind() == "\""
+            {
+                // Empty string ""
+                Some(String::new())
+            } else {
+                None
+            }
+        }
+        "raw_string" => {
+            let raw_string = node.utf8_text(src.as_bytes()).ok()?;
+            let stripped = raw_string
+                .strip_prefix('\'')
+                .and_then(|s| s.strip_suffix('\''));
+            stripped.map(|s| s.to_owned())
+        }
+        "concatenation" => {
+            let mut result = String::new();
+            let mut cursor = node.walk();
+            for child in node.named_children(&mut cursor) {
+                let part = extract_safe_string(child, src)?;
+                result.push_str(&part);
+            }
+            Some(result)
+        }
+        _ => None,
+    }
+}
+
 /// If `tree` represents a single Bash command whose name and every argument is
 /// an ordinary `word`, return those words in order; otherwise, return `None`.
 ///
@@ -117,37 +160,10 @@ pub fn try_parse_single_word_only_command(tree: &Tree, src: &str) -> Option<Vec<
                 }
                 words.push(word_node.utf8_text(src.as_bytes()).ok()?.to_owned());
             }
-            // Positional‑argument word (allowed).
-            "word" | "number" => {
-                words.push(child.utf8_text(src.as_bytes()).ok()?.to_owned());
-            }
-            "string" => {
-                if child.child_count() == 3
-                    && child.child(0)?.kind() == "\""
-                    && child.child(1)?.kind() == "string_content"
-                    && child.child(2)?.kind() == "\""
-                {
-                    words.push(child.child(1)?.utf8_text(src.as_bytes()).ok()?.to_owned());
-                } else {
-                    // Anything else means the command is *not* plain words.
-                    return None;
-                }
-            }
-            "concatenation" => {
-                // TODO: Consider things like `'ab\'a'`.
-                return None;
-            }
-            "raw_string" => {
-                // Raw string is a single word, but we need to strip the quotes.
-                let raw_string = child.utf8_text(src.as_bytes()).ok()?;
-                let stripped = raw_string
-                    .strip_prefix('\'')
-                    .and_then(|s| s.strip_suffix('\''));
-                if let Some(stripped) = stripped {
-                    words.push(stripped.to_owned());
-                } else {
-                    return None;
-                }
+            // Arguments
+            "word" | "number" | "string" | "raw_string" | "concatenation" => {
+                let text = extract_safe_string(child, src)?;
+                words.push(text);
             }
             // Anything else means the command is *not* plain words.
             _ => return None,
@@ -330,5 +346,26 @@ mod tests {
             })
             .unwrap();
         assert_eq!(vec!["grep", "-R", "Cargo.toml", "-n"], parsed_words);
+    }
+
+    #[test]
+    fn test_concatenation() {
+        // "a"b -> ab
+        let script = "echo \"a\"b";
+        let parsed = try_parse_bash(script)
+            .and_then(|tree| try_parse_single_word_only_command(&tree, script));
+        assert!(parsed.is_some(), "Should handle simple concatenation");
+        assert_eq!(parsed.unwrap(), vec!["echo", "ab"]);
+
+        // 'ab'\''a' -> ab'a
+        // In bash: echo 'ab'\''a'
+        // In rust string: "echo 'ab'\\''a'"
+        let script2 = "echo 'ab'\\''a'";
+        let parsed2 = try_parse_bash(script2)
+            .and_then(|tree| try_parse_single_word_only_command(&tree, script2));
+        assert!(parsed2.is_some(), "Should handle escaped quote concatenation");
+        // tree-sitter-bash parses `\'` as a word with text `\'`.
+        // We do not unescape words.
+        assert_eq!(parsed2.unwrap(), vec!["echo", "ab\\'a"]);
     }
 }
