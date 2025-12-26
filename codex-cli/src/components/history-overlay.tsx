@@ -178,10 +178,26 @@ function processUserMessage(item: ResponseItem): string | null {
     const texts: Array<string> = [];
     if (Array.isArray(parts)) {
       for (const part of parts) {
-        if (part && typeof part === "object" && "text" in part) {
-          const t = (part as unknown as { text?: string }).text;
-          if (typeof t === "string" && t.length > 0) {
-            texts.push(t);
+        if (part && typeof part === "object") {
+          const p = part as {
+            type?: string;
+            text?: string;
+            filename?: string;
+          };
+
+          if (p.type === "input_image") {
+            texts.push("[Image]");
+          } else if (
+            p.type === "input_file" &&
+            typeof p.filename === "string"
+          ) {
+            texts.push(`[File: ${p.filename}]`);
+          } else if (
+            "text" in p &&
+            typeof p.text === "string" &&
+            p.text.length > 0
+          ) {
+            texts.push(p.text);
           }
         }
       }
