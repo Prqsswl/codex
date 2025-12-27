@@ -172,16 +172,29 @@ function processUserMessage(item: ResponseItem): string | null {
     item.type === "message" &&
     (item as unknown as { role?: string }).role === "user"
   ) {
-    // TODO: We're ignoring images/files here.
     const parts =
       (item as unknown as { content?: Array<unknown> }).content ?? [];
     const texts: Array<string> = [];
     if (Array.isArray(parts)) {
       for (const part of parts) {
-        if (part && typeof part === "object" && "text" in part) {
+        if (!part || typeof part !== "object") {
+          continue;
+        }
+
+        if ("text" in part) {
           const t = (part as unknown as { text?: string }).text;
           if (typeof t === "string" && t.length > 0) {
             texts.push(t);
+          }
+        } else if (
+          "image_url" in part ||
+          (part as { type?: string }).type === "input_image"
+        ) {
+          texts.push("[Image]");
+        } else if ((part as { type?: string }).type === "input_file") {
+          const f = (part as { filename?: string }).filename;
+          if (typeof f === "string" && f.length > 0) {
+            texts.push(`[File: ${f}]`);
           }
         }
       }
