@@ -1,11 +1,11 @@
 use std::collections::BTreeMap;
 use std::path::Path;
-use std::path::PathBuf;
 
 use codex_core::error::CodexErr;
 use codex_core::error::Result;
 use codex_core::error::SandboxErr;
 use codex_core::protocol::SandboxPolicy;
+use codex_utils_absolute_path::AbsolutePathBuf;
 
 use landlock::ABI;
 use landlock::Access;
@@ -36,7 +36,11 @@ pub(crate) fn apply_sandbox_policy_to_current_thread(
     }
 
     if !sandbox_policy.has_full_disk_write_access() {
-        let writable_roots = sandbox_policy.get_writable_roots_with_cwd(cwd);
+        let writable_roots = sandbox_policy
+            .get_writable_roots_with_cwd(cwd)
+            .into_iter()
+            .map(|writable_root| writable_root.root)
+            .collect();
         install_filesystem_landlock_rules_on_current_thread(writable_roots)?;
     }
 
@@ -52,7 +56,9 @@ pub(crate) fn apply_sandbox_policy_to_current_thread(
 ///
 /// # Errors
 /// Returns [`CodexErr::Sandbox`] variants when the ruleset fails to apply.
-fn install_filesystem_landlock_rules_on_current_thread(writable_roots: Vec<PathBuf>) -> Result<()> {
+fn install_filesystem_landlock_rules_on_current_thread(
+    writable_roots: Vec<AbsolutePathBuf>,
+) -> Result<()> {
     let abi = ABI::V5;
     let access_rw = AccessFs::from_all(abi);
     let access_ro = AccessFs::from_read(abi);
@@ -98,10 +104,10 @@ fn install_network_seccomp_filter_on_current_thread() -> std::result::Result<(),
     deny_syscall(libc::SYS_getsockname);
     deny_syscall(libc::SYS_shutdown);
     deny_syscall(libc::SYS_sendto);
-    deny_syscall(libc::SYS_sendmsg);
     deny_syscall(libc::SYS_sendmmsg);
-    deny_syscall(libc::SYS_recvfrom);
-    deny_syscall(libc::SYS_recvmsg);
+    // NOTE: allowing recvfrom allows some tools like: `cargo clippy` to run
+    // with their socketpair + child processes for sub-proc management
+    // deny_syscall(libc::SYS_recvfrom);
     deny_syscall(libc::SYS_recvmmsg);
     deny_syscall(libc::SYS_getsockopt);
     deny_syscall(libc::SYS_setsockopt);
@@ -111,12 +117,12 @@ fn install_network_seccomp_filter_on_current_thread() -> std::result::Result<(),
     let unix_only_rule = SeccompRule::new(vec![SeccompCondition::new(
         0, // first argument (domain)
         SeccompCmpArgLen::Dword,
-        SeccompCmpOp::Eq,
+        SeccompCmpOp::Ne,
         libc::AF_UNIX as u64,
     )?])?;
 
-    rules.insert(libc::SYS_socket, vec![unix_only_rule]);
-    rules.insert(libc::SYS_socketpair, vec![]); // always deny (Unix can use socketpair but fine, keep open?)
+    rules.insert(libc::SYS_socket, vec![unix_only_rule.clone()]);
+    rules.insert(libc::SYS_socketpair, vec![unix_only_rule]); // always deny (Unix can use socketpair but fine, keep open?)
 
     let filter = SeccompFilter::new(
         rules,
