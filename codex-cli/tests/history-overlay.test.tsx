@@ -347,4 +347,46 @@ describe("HistoryOverlay", () => {
       expect(lastFrame()).toBeTruthy();
     });
   });
+
+  describe("image and file handling", () => {
+    it("displays [Image] marker for input_image", () => {
+      const item = {
+        type: "message",
+        role: "user",
+        id: "msg_1",
+        content: [
+          { type: "input_text", text: "Look at this:" },
+          { type: "input_image", image_url: { url: "..." } },
+        ],
+      } as any;
+
+      const { lastFrame } = render(
+        <HistoryOverlay items={[item]} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+
+      expect(frame).toContain("Look at this:");
+      expect(frame).toContain("[Image]");
+    });
+
+    it("displays [File: ...] marker for input_file", () => {
+      const item = {
+        type: "message",
+        role: "user",
+        id: "msg_2",
+        content: [
+          { type: "input_text", text: "Analyze this file:" },
+          { type: "input_file", filename: "data.csv" },
+        ],
+      } as any;
+
+      const { lastFrame } = render(
+        <HistoryOverlay items={[item]} onExit={vi.fn()} />,
+      );
+      const frame = lastFrame();
+
+      expect(frame).toContain("Analyze this file:");
+      expect(frame).toContain("[File: data.csv]");
+    });
+  });
 });
