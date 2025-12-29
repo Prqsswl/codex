@@ -81,6 +81,15 @@ impl WidgetRef for &WelcomeWidget {
             ", OpenAI's command-line coding agent".into(),
         ]));
 
+        // UX Enhancement: Add hint for keyboard shortcuts
+        lines.push("".into());
+        lines.push(Line::from(vec![
+            "  ".into(),
+            "Press ".dim(),
+            "?".bold(),
+            " for keyboard shortcuts".dim(),
+        ]));
+
         Paragraph::new(lines)
             .wrap(Wrap { trim: false })
             .render(area, buf);
@@ -149,5 +158,30 @@ mod tests {
             before, after,
             "expected ctrl+. to switch welcome animation variant"
         );
+    }
+
+    #[test]
+    fn welcome_renders_shortcut_hint() {
+        let widget = WelcomeWidget::new(false, FrameRequester::test_dummy(), false);
+        // Ensure width/height is enough to render text but maybe not animation
+        let area = Rect::new(0, 0, 80, 20);
+        let mut buf = Buffer::empty(area);
+        (&widget).render_ref(area, &mut buf);
+
+        let mut found_hint = false;
+        for y in 0..area.height {
+            let line = (0..area.width)
+                .map(|x| buf[(x, y)].symbol())
+                .collect::<String>();
+            // The renderer might pad or wrap, so we check for substring.
+            // Also styling (dim/bold) doesn't affect the symbol() call in ratatui usually,
+            // but let's just search for the text.
+            if line.contains("? for keyboard shortcuts") {
+                found_hint = true;
+                break;
+            }
+        }
+
+        assert!(found_hint, "Expected welcome screen to contain keyboard shortcut hint");
     }
 }
