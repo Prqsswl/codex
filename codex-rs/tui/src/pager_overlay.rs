@@ -88,7 +88,7 @@ const KEY_CTRL_C: KeyBinding = key_hint::ctrl(KeyCode::Char('c'));
 const PAGER_KEY_HINTS: &[(&[KeyBinding], &str)] = &[
     (&[KEY_UP, KEY_DOWN], "to scroll"),
     (&[KEY_PAGE_UP, KEY_PAGE_DOWN], "to page"),
-    (&[KEY_HOME, KEY_END], "to jump"),
+    (&[KEY_HOME, KEY_END], "to top/bottom"),
 ];
 
 // Render a single line of key hints from (key(s), description) pairs.
