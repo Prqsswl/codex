@@ -245,9 +245,7 @@ impl AuthModeWidget {
             lines.push("".into());
         }
         lines.push(
-            // AE: Following styles.md, this should probably be Cyan because it's a user input tip.
-            //     But leaving this for a future cleanup.
-            "  Press Enter to continue".dim().into(),
+            "  Press Enter to continue".cyan().into(),
         );
         if let Some(err) = &self.error {
             lines.push("".into());
