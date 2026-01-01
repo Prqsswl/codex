@@ -888,11 +888,21 @@ fn render_empty_state_line(state: &PickerState) -> Line<'static> {
             );
             return vec![Span::from(msg).italic().dim()].into();
         }
-        return vec!["No results for your search".italic().dim()].into();
+        return vec![
+            Span::from(format!("No sessions found matching \"{}\"", state.query))
+                .italic()
+                .dim(),
+        ]
+        .into();
     }
 
     if state.all_rows.is_empty() && state.pagination.num_scanned_files == 0 {
-        return vec!["No sessions yet".italic().dim()].into();
+        return vec![
+            "No previous sessions found. Press ".italic().dim(),
+            key_hint::plain(KeyCode::Esc).into(),
+            " to start a new one.".italic().dim(),
+        ]
+        .into();
     }
 
     if state.pagination.loading.is_pending() {
