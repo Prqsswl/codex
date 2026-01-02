@@ -212,7 +212,6 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         paste_image,
         edit_previous,
         quit,
-        Line::from(""),
         show_transcript,
     ];
 
