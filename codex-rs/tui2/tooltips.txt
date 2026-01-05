@@ -8,3 +8,4 @@ You can define your own `/` commands with custom prompts. More info: https://dev
 When the composer is empty, press Esc to step back and edit your last message; Enter confirms.
 Paste an image with Ctrl+V to attach it to your next message.
 You can resume a previous conversation by running `codex resume`
+Press Ctrl+t to view the full conversation transcript in an overlay.
