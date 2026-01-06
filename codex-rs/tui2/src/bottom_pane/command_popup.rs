@@ -1,6 +1,9 @@
+use crossterm::event::KeyCode;
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::widgets::WidgetRef;
+
+use crate::key_hint;
 
 use super::popup_consts::MAX_POPUP_ROWS;
 use super::scroll_state::ScrollState;
@@ -162,7 +165,8 @@ impl CommandPopup {
     ) -> Vec<GenericDisplayRow> {
         matches
             .into_iter()
-            .map(|(item, indices, _)| {
+            .enumerate()
+            .map(|(idx, (item, indices, _))| {
                 let (name, description) = match item {
                     CommandItem::Builtin(cmd) => {
                         (format!("/{}", cmd.command()), cmd.description().to_string())
@@ -179,10 +183,18 @@ impl CommandPopup {
                         )
                     }
                 };
+
+                // Show "Tab" hint only for the currently selected item
+                let display_shortcut = if self.state.selected_idx == Some(idx) {
+                    Some(key_hint::plain(KeyCode::Tab))
+                } else {
+                    None
+                };
+
                 GenericDisplayRow {
                     name,
                     match_indices: indices.map(|v| v.into_iter().map(|i| i + 1).collect()),
-                    display_shortcut: None,
+                    display_shortcut,
                     description: Some(description),
                     wrap_indent: None,
                 }
