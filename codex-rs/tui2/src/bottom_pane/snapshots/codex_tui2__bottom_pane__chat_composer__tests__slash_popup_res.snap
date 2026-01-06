@@ -7,4 +7,4 @@ expression: terminal.backend()
 "                                                            "
 "                                                            "
 "                                                            "
-"  /resume  resume a saved chat                              "
+"  /resume (tab)  resume a saved chat                        "
