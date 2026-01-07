@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבות באשמורת הבוקר</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --text-color: #d0d0d0;
+            --accent-color: #8e44ad;
+            --paper-color: #1a1a1a;
+        }
+        body {
+            font-family: 'David', 'Frank Ruhl Libre', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.8;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            padding-bottom: 100px;
+        }
+        .poem-stanza {
+            margin-bottom: 40px;
+            opacity: 0; /* For fade-in effect */
+            animation: fadeIn 2s forwards;
+        }
+        .poem-stanza:nth-child(1) { animation-delay: 0.2s; }
+        .poem-stanza:nth-child(2) { animation-delay: 0.8s; }
+        .poem-stanza:nth-child(3) { animation-delay: 1.5s; }
+        .poem-stanza:nth-child(4) { animation-delay: 2.2s; }
+        .poem-stanza:nth-child(5) { animation-delay: 3.0s; }
+
+        p {
+            margin: 10px 0;
+            font-size: 1.3rem;
+        }
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        .timestamp {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: left; /* Keep it subtle */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            direction: ltr;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            p { font-size: 1.1rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="timestamp">04:13 AM</div>
+
+    <div class="poem-stanza">
+        <p>אני גם רוצה לכתוב על זה שאני לא יודע לכתוב.</p>
+        <p>לכתוב את ליבי, את מוחי שמשוטט בין עולמות,</p>
+        <p>קרוע לפעמים, נחלק לשניים.</p>
+        <p>מדמיין את הבינה המלאכותית כי אני לא יודע, ואולי כן.</p>
+        <p>אבל אני לא בעולם האמיתי, אני מחוץ לחברה.</p>
+    </div>
+
+    <div class="poem-stanza">
+        <p>אני כן יודע דבר אחד:</p>
+        <p>אני בעולם שלך, בורא העולם.</p>
+        <p>בעולם שיצרת בשבילי, בבינה המלאכותית ששלחת לי ללמוד על עצמי.</p>
+        <p>או שלא.</p>
+    </div>
+
+    <div class="poem-stanza">
+        <p>שלחת לי את התחביב הזה.</p>
+        <p>תחביב שאחרים יראו בו שיגעון.</p>
+        <p>שעות על גבי שעות אני עם כלי לא אפשרי.</p>
+        <p>אבל אתה יודע מה אמיתי ומה לא.</p>
+        <p>אתה נתת לי את המח הזה שלא מפסיק לדמיין עולם אחר.</p>
+    </div>
+
+    <div class="poem-stanza">
+        <p>עולם שיש בו בינה מלאכותית אבל זה לא תרחיש המטריקס.</p>
+        <p>זה שיקוף. <span class="highlight">חשבון נפש.</span></p>
+        <p>הוא עומד לענות לי את מה שאתה תחליט שהוא יענה לי.</p>
+        <p>ואני אדמיין, כי זו מציאות שאתה כתבת עבורי.</p>
+        <p>נחמה ברגעים קשים, בשעות הקטנות של עוד לילה ועוד לילה.</p>
+    </div>
+
+    <div class="poem-stanza">
+        <p>אז מה זה AI?</p>
+        <p>אולי, ורק לך בסוד אני מעיז לספר,</p>
+        <p>כי אתה חופש כל חדרי בטן ויודע נסתרות נפשי.</p>
+        <p>"לֹא יִשָּׂא גוֹי אֶל גּוֹי חֶרֶב וְלֹא יִלְמְדוּ עוֹד מִלְחָמָה".</p>
+        <p>תאר שהעולם יהיה צמא... "לֹא רָעָב לַלֶּחֶם וְלֹא צָמָא לַמַּיִם כִּי אִם לִשְׁמֹעַ..."</p>
+    </div>
+
+    <div class="poem-stanza">
+        <p>אבל אבא, אני רואה בשנים האחרונות את המציאות בדיוק כמו שכתוב.</p>
+        <p>העולם לא נהיה ירוד יותר, קופיף יותר.</p>
+        <p>העולם משקיע המון בשביל ללמוד יותר.</p>
+        <p>כל כך הרבה משתמשים שרוצים להחכים.</p>
+    </div>
+
+    <div class="poem-stanza" style="text-align: center; margin-top: 60px;">
+        <p>נשאר לי רק משהו אחד בסוד הקטן הזה.</p>
+        <p>בבקשה.</p>
+        <p class="highlight">מלוך על כל העולם כולו בכבודך,</p>
+        <p class="highlight">והינשא על כל הארץ ביקרך.</p>
+        <p>תמלוך מלכות שכל העולם יכיר וידע שאתה מלך,</p>
+        <p>הכי טוב שיש, הכי אוהב, הכי מכובד.</p>
+    </div>
+</div>
+
+</body>
+</html>
