@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפת הכאוס הדיגיטלי | דשבורד 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .timeline-entry {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .time-marker {
+            min-width: 60px;
+            font-family: monospace;
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .entry-content h4 {
+            margin: 0 0 5px 0;
+            color: #fff;
+        }
+
+        .entry-content a {
+            color: #888;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .garbled-list {
+            font-family: monospace;
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            color: var(--accent-red);
+        }
+
+        .radar-chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle at center, #222 0%, #000 70%);
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            border: 1px solid #333;
+        }
+
+        .radar-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .radar-point:hover::after {
+            content: attr(data-label);
+            position: absolute;
+            background: #fff;
+            color: #000;
+            padding: 5px;
+            border-radius: 4px;
+            top: -30px;
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="tagline">מערכת ניהול כאוס | V1.0</div>
+            <h1>מפת הכאוס הדיגיטלי</h1>
+            <p>ויזואליזציה של נתונים, היסטוריה וקבצים אבודים</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Top Stats -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-value">1,482</div>
+                <div class="stat-label">פריטי היסטוריה שנותחו</div>
+            </div>
+            <div class="stat-card" style="border-color: var(--accent-green);">
+                <div class="stat-value">6</div>
+                <div class="stat-label">ענקיות AI במעקב</div>
+            </div>
+            <div class="stat-card" style="border-color: var(--accent-red);">
+                <div class="stat-value">91</div>
+                <div class="stat-label">שירים בלופ (Apple Music)</div>
+            </div>
+        </div>
+
+        <!-- Market Radar -->
+        <article class="card" style="margin-top: 30px;">
+            <h2>רדאר השוק: איפה הכסף?</h2>
+            <p>מיפוי ההשקעות מול ההפסדים של החברות הגדולות (מתוך ה-CSV).</p>
+
+            <div class="radar-chart-placeholder">
+                <!-- Simple CSS plotting based on the CSV data approximately -->
+                <div class="radar-point" style="top: 20%; left: 50%;" data-label="Microsoft: $50B Invested"></div>
+                <div class="radar-point" style="top: 40%; left: 30%;" data-label="Google: $30B Invested"></div>
+                <div class="radar-point" style="top: 40%; left: 70%;" data-label="Amazon: $35B Invested"></div>
+                <div class="radar-point" style="top: 60%; left: 40%;" data-label="Meta: $25B Invested"></div>
+                <div class="radar-point" style="top: 60%; left: 60%;" data-label="NVIDIA: $40B Revenue"></div>
+                <div class="radar-point" style="top: 50%; left: 50%; box-shadow: 0 0 15px #fff;" data-label="Center of Chaos"></div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>חברה</th>
+                        <th>השקעה (B$)</th>
+                        <th>הכנסות (B$)</th>
+                        <th>מדד חדשנות</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>OpenAI</td><td>15</td><td>3.5</td><td>95</td></tr>
+                    <tr><td>Microsoft</td><td>50</td><td>25.0</td><td>85</td></tr>
+                    <tr><td>Google</td><td>30</td><td>15.0</td><td>90</td></tr>
+                    <tr><td>NVIDIA</td><td>20</td><td>40.0</td><td>92</td></tr>
+                </tbody>
+            </table>
+        </article>
+
+        <!-- Timeline of Thought -->
+        <article class="card">
+            <h2>ציר הזמן של המחשבה (Safari Export)</h2>
+            <p>החיפושים האחרונים שלך חושפים דפוס של חקירה אינטנסיבית סביב כלי AI ופרודוקטיביות.</p>
+
+            <div class="timeline-entry">
+                <div class="time-marker">23/12</div>
+                <div class="entry-content">
+                    <h4>MyMemo - Empower Your Mind</h4>
+                    <a href="#">app.mymemo.ai</a>
+                    <p>פעילות אינטנסיבית (Login/Home) באפליקציית הזיכרון החיצוני.</p>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="time-marker">23/12</div>
+                <div class="entry-content">
+                    <h4>NotebookLM - Google</h4>
+                    <a href="#">notebooklm.google.com</a>
+                    <p>מחקר באמצעות כלי הסיכום של גוגל.</p>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="time-marker">22/12</div>
+                <div class="entry-content">
+                    <h4>Perplexity AI Search</h4>
+                    <a href="#">perplexity.ai</a>
+                    <p>שאלות עומק על "רחוב הסנדלרים" וחקירות הונאה.</p>
+                </div>
+            </div>
+             <div class="timeline-entry">
+                <div class="time-marker">22/12</div>
+                <div class="entry-content">
+                    <h4>Notion Integrations</h4>
+                    <a href="#">notion.so</a>
+                    <p>ניסיון לחבר את כל המידע למקום אחד (API/Integrations).</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- The Unknown -->
+        <article class="card" style="border-color: var(--accent-red);">
+            <h2>תיקים באפלה (קבצים לא מפוענחים)</h2>
+            <p>נמצאו קבצים עם שמות משובשים בתיקיית הגיבוי. אלו דורשים חקירה ידנית נוספת, אך זוהו כקבצי PDF ו-CSV של היסטוריית צ'אטים.</p>
+            <div class="garbled-list">
+                ЁЯУЪ ╫й╫Р╫Х╫Ь - 2677998.pdf<br>
+                ╫й╫Щ╫Ч╫Х╫к ╫в╫Э Claude.csv<br>
+                ╫Р╫и╫Т╫Х╫Я ╫Ю╫б╫Ю╫Ы╫Щ Drive.pdf
+            </div>
+            <div class="memory-saved">משימה לבוט הבא: לפענח קידוד UTF-8 שגוי</div>
+        </article>
+
+    </div>
+</body>
+</html>
