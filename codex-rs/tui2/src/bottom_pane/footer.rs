@@ -190,6 +190,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
+    let mut jump_line = Line::from("");
+    let mut kill_line = Line::from("");
+    let mut delete_word = Line::from("");
+    let mut jump_word = Line::from("");
 
     for descriptor in SHORTCUTS {
         if let Some(text) = descriptor.overlay_entry(state) {
@@ -201,6 +205,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
+                ShortcutId::JumpLine => jump_line = text,
+                ShortcutId::KillLine => kill_line = text,
+                ShortcutId::DeleteWord => delete_word = text,
+                ShortcutId::JumpWord => jump_word = text,
             }
         }
     }
@@ -212,6 +220,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         paste_image,
         edit_previous,
         quit,
+        jump_line,
+        kill_line,
+        jump_word,
+        delete_word,
         Line::from(""),
         show_transcript,
     ];
@@ -289,6 +301,10 @@ enum ShortcutId {
     EditPrevious,
     Quit,
     ShowTranscript,
+    JumpLine,
+    KillLine,
+    DeleteWord,
+    JumpWord,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -432,6 +448,42 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: " to view transcript",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::JumpLine,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('a')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " / ctrl+e to jump start/end",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::KillLine,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " / ctrl+k to clear start/end",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::JumpWord,
+        bindings: &[ShortcutBinding {
+            key: key_hint::alt(KeyCode::Char('b')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " / alt+f to jump words",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::DeleteWord,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('w')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to delete word",
     },
 ];
 
