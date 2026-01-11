@@ -190,6 +190,9 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
+    let mut kill_line = Line::from("");
+    let mut kill_to_start = Line::from("");
+    let mut yank = Line::from("");
 
     for descriptor in SHORTCUTS {
         if let Some(text) = descriptor.overlay_entry(state) {
@@ -201,6 +204,9 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
+                ShortcutId::KillLine => kill_line = text,
+                ShortcutId::KillToStart => kill_to_start = text,
+                ShortcutId::Yank => yank = text,
             }
         }
     }
@@ -212,6 +218,9 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         paste_image,
         edit_previous,
         quit,
+        kill_line,
+        kill_to_start,
+        yank,
         Line::from(""),
         show_transcript,
     ];
@@ -289,6 +298,9 @@ enum ShortcutId {
     EditPrevious,
     Quit,
     ShowTranscript,
+    KillLine,
+    KillToStart,
+    Yank,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -423,6 +435,33 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: " to exit",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::KillLine,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('k')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " cut to line end",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::KillToStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " cut to line start",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::Yank,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('y')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " paste cut text",
     },
     ShortcutDescriptor {
         id: ShortcutId::ShowTranscript,
