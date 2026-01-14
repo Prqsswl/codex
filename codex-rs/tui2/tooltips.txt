@@ -8,3 +8,8 @@ You can define your own `/` commands with custom prompts. More info: https://dev
 When the composer is empty, press Esc to step back and edit your last message; Enter confirms.
 Paste an image with Ctrl+V to attach it to your next message.
 You can resume a previous conversation by running `codex resume`
+Press Ctrl+t to view the full conversation transcript in an overlay.
+Mention files in your prompt using @ (e.g. @src/main.rs).
+You can use Emacs-style shortcuts like Ctrl+u (clear line) and Ctrl+k (cut to end) in the input.
+Use Ctrl+a to jump to the start of the line, and Ctrl+e to jump to the end.
+Use Ctrl+w to delete the previous word.
