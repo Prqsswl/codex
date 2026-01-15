@@ -4032,4 +4032,30 @@ mod tests {
             "'/zzz' should not activate slash popup because it is not a prefix of any built-in command"
         );
     }
+
+    #[test]
+    fn ctrl_u_clears_line_content() {
+        use crossterm::event::KeyCode;
+        use crossterm::event::KeyEvent;
+        use crossterm::event::KeyModifiers;
+
+        let (tx, _rx) = unbounded_channel::<AppEvent>();
+        let sender = AppEventSender::new(tx);
+        let mut composer = ChatComposer::new(
+            true,
+            sender,
+            false,
+            "Ask Codex to do anything".to_string(),
+            false,
+        );
+
+        composer.set_text_content("some text".to_string());
+        // set_text_content resets cursor to 0, so move it to end
+        composer.textarea.set_cursor(9);
+
+        let (result, _) =
+            composer.handle_key_event(KeyEvent::new(KeyCode::Char('u'), KeyModifiers::CONTROL));
+        assert_eq!(result, InputResult::None);
+        assert_eq!(composer.textarea.text(), "");
+    }
 }
