@@ -188,6 +188,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut file_paths = Line::from("");
     let mut paste_image = Line::from("");
     let mut edit_previous = Line::from("");
+    let mut clear_line_start = Line::from("");
+    let mut kill_line_end = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
 
@@ -199,6 +201,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::FilePaths => file_paths = text,
                 ShortcutId::PasteImage => paste_image = text,
                 ShortcutId::EditPrevious => edit_previous = text,
+                ShortcutId::ClearLineStart => clear_line_start = text,
+                ShortcutId::KillLineEnd => kill_line_end = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
             }
@@ -210,6 +214,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         newline,
         file_paths,
         paste_image,
+        clear_line_start,
+        kill_line_end,
         edit_previous,
         quit,
         Line::from(""),
@@ -287,6 +293,8 @@ enum ShortcutId {
     FilePaths,
     PasteImage,
     EditPrevious,
+    ClearLineStart,
+    KillLineEnd,
     Quit,
     ShowTranscript,
 }
@@ -414,6 +422,24 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: "",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::ClearLineStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " clear to start",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::KillLineEnd,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('k')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " clear to end",
     },
     ShortcutDescriptor {
         id: ShortcutId::Quit,
