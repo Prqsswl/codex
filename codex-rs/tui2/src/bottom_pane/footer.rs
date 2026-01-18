@@ -188,6 +188,7 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut file_paths = Line::from("");
     let mut paste_image = Line::from("");
     let mut edit_previous = Line::from("");
+    let mut line_editing = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
 
@@ -201,6 +202,7 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
+                ShortcutId::LineEditing => line_editing = text,
             }
         }
     }
@@ -211,8 +213,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         file_paths,
         paste_image,
         edit_previous,
+        line_editing,
         quit,
-        Line::from(""),
         show_transcript,
     ];
 
@@ -289,6 +291,7 @@ enum ShortcutId {
     EditPrevious,
     Quit,
     ShowTranscript,
+    LineEditing,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -414,6 +417,15 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: "",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::LineEditing,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to clear start",
     },
     ShortcutDescriptor {
         id: ShortcutId::Quit,
