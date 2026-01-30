@@ -187,6 +187,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut newline = Line::from("");
     let mut file_paths = Line::from("");
     let mut paste_image = Line::from("");
+    let mut cut_line_start = Line::from("");
+    let mut cut_line_end = Line::from("");
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
@@ -198,6 +200,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::InsertNewline => newline = text,
                 ShortcutId::FilePaths => file_paths = text,
                 ShortcutId::PasteImage => paste_image = text,
+                ShortcutId::CutLineStart => cut_line_start = text,
+                ShortcutId::CutLineEnd => cut_line_end = text,
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
@@ -210,9 +214,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         newline,
         file_paths,
         paste_image,
+        cut_line_start,
+        cut_line_end,
         edit_previous,
         quit,
-        Line::from(""),
         show_transcript,
     ];
 
@@ -286,6 +291,8 @@ enum ShortcutId {
     InsertNewline,
     FilePaths,
     PasteImage,
+    CutLineStart,
+    CutLineEnd,
     EditPrevious,
     Quit,
     ShowTranscript,
@@ -405,6 +412,24 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         ],
         prefix: "",
         label: " to paste images",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::CutLineStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " cut to start",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::CutLineEnd,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('k')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " cut to end",
     },
     ShortcutDescriptor {
         id: ShortcutId::EditPrevious,
