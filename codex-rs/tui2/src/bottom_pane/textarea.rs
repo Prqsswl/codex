@@ -268,6 +268,11 @@ impl TextArea {
             } => self.delete_backward_word(),
             KeyEvent {
                 code: KeyCode::Backspace,
+                modifiers: KeyModifiers::CONTROL,
+                ..
+            } => self.delete_backward_word(),
+            KeyEvent {
+                code: KeyCode::Backspace,
                 ..
             }
             | KeyEvent {
@@ -280,6 +285,16 @@ impl TextArea {
                 modifiers: KeyModifiers::ALT,
                 ..
             }  => self.delete_forward_word(),
+            KeyEvent {
+                code: KeyCode::Delete,
+                modifiers: KeyModifiers::CONTROL,
+                ..
+            } => self.delete_forward_word(),
+            KeyEvent {
+                code: KeyCode::Char('d'),
+                modifiers: KeyModifiers::ALT,
+                ..
+            } => self.delete_forward_word(),
             KeyEvent {
                 code: KeyCode::Delete,
                 ..
@@ -1088,6 +1103,29 @@ mod tests {
         let mut t = TextArea::new();
         t.insert_str(text);
         t
+    }
+
+    #[test]
+    fn extended_word_deletion_shortcuts() {
+        let mut t = ta_with("hello world");
+        t.set_cursor(5); // "hello| world"
+
+        // Test Ctrl+Backspace (should delete "hello")
+        t.input(KeyEvent::new(KeyCode::Backspace, KeyModifiers::CONTROL));
+        assert_eq!(t.text(), " world");
+
+        // Let's reset for Alt+d
+        let mut t = ta_with("hello world");
+        t.set_cursor(5);
+        // Test Alt+d (should delete " world")
+        t.input(KeyEvent::new(KeyCode::Char('d'), KeyModifiers::ALT));
+        assert_eq!(t.text(), "hello");
+
+        // Test Ctrl+Delete (should delete " world")
+        let mut t = ta_with("hello world");
+        t.set_cursor(5);
+        t.input(KeyEvent::new(KeyCode::Delete, KeyModifiers::CONTROL));
+        assert_eq!(t.text(), "hello");
     }
 
     #[test]
