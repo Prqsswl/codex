@@ -2112,6 +2112,7 @@ mod tests {
         });
     }
 
+    // Ensure esc hint stays hidden when content exists
     #[test]
     fn esc_hint_stays_hidden_with_draft_content() {
         use crossterm::event::KeyCode;
