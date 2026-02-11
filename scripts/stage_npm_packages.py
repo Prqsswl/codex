@@ -76,6 +76,8 @@ def resolve_release_workflow(version: str) -> dict:
             "list",
             "--branch",
             f"rust-v{version}",
+            "--repo",
+            GITHUB_REPO,
             "--json",
             "workflowName,url,headSha",
             "--workflow",
