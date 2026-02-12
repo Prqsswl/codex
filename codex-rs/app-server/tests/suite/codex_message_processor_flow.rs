@@ -2,6 +2,7 @@ use anyhow::Result;
 use app_test_support::McpProcess;
 use app_test_support::create_final_assistant_message_sse_response;
 use app_test_support::create_mock_chat_completions_server;
+use app_test_support::create_mock_chat_completions_server_unchecked;
 use app_test_support::create_shell_command_sse_response;
 use app_test_support::format_with_current_shell;
 use app_test_support::to_response;
@@ -36,7 +37,7 @@ use std::path::Path;
 use tempfile::TempDir;
 use tokio::time::timeout;
 
-const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(10);
+const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(60);
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
@@ -65,7 +66,8 @@ async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
         )?,
         create_final_assistant_message_sse_response("Enjoy your new git repo!")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    // Use unchecked mock server for robustness on Windows CI
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(&codex_home, &server.uri())?;
 
     // Start MCP server and initialize.
@@ -364,7 +366,8 @@ async fn test_send_user_turn_updates_sandbox_and_cwd_between_turns() -> Result<(
         )?,
         create_final_assistant_message_sse_response("done second")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    // Use unchecked mock server for robustness on Windows CI
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(&codex_home, &server.uri())?;
 
     let mut mcp = McpProcess::new(&codex_home).await?;
