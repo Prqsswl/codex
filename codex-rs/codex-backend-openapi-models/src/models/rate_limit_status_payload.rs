@@ -42,7 +42,9 @@ impl RateLimitStatusPayload {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default)]
+#[derive(
+    Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default,
+)]
 pub enum PlanType {
     #[serde(rename = "guest")]
     #[default]
@@ -72,4 +74,3 @@ pub enum PlanType {
     #[serde(rename = "edu")]
     Edu,
 }
-
