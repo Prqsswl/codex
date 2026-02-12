@@ -39,9 +39,10 @@ struct ReadFileArgs {
     indentation: Option<IndentationArgs>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Default)]
 #[serde(rename_all = "snake_case")]
 enum ReadMode {
+    #[default]
     Slice,
     Indentation,
 }
@@ -464,11 +465,6 @@ mod defaults {
         }
     }
 
-    impl Default for ReadMode {
-        fn default() -> Self {
-            Self::Slice
-        }
-    }
 
     pub fn offset() -> usize {
         1
