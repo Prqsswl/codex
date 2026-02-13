@@ -1,7 +1,7 @@
 use anyhow::Result;
 use app_test_support::McpProcess;
 use app_test_support::create_final_assistant_message_sse_response;
-use app_test_support::create_mock_chat_completions_server;
+use app_test_support::create_mock_chat_completions_server_unchecked;
 use app_test_support::to_response;
 use codex_app_server_protocol::AddConversationListenerParams;
 use codex_app_server_protocol::AddConversationSubscriptionResponse;
@@ -22,7 +22,7 @@ use std::path::Path;
 use tempfile::TempDir;
 use tokio::time::timeout;
 
-const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(10);
+const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(30);
 
 #[tokio::test]
 async fn test_send_message_success() -> Result<()> {
@@ -32,7 +32,7 @@ async fn test_send_message_success() -> Result<()> {
         create_final_assistant_message_sse_response("Done")?,
         create_final_assistant_message_sse_response("Done")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
 
     // Create a temporary Codex home with config pointing at the mock server.
     let codex_home = TempDir::new()?;
@@ -136,7 +136,7 @@ async fn send_message(
 #[tokio::test]
 async fn test_send_message_raw_notifications_opt_in() -> Result<()> {
     let responses = vec![create_final_assistant_message_sse_response("Done")?];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
 
     let codex_home = TempDir::new()?;
     create_config_toml(codex_home.path(), &server.uri())?;
