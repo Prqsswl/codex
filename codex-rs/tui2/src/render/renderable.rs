@@ -259,6 +259,11 @@ impl<'a> FlexRenderable<'a> {
                 allocated_size += child_sizes[i];
             }
         }
+
+        // Suppress unused assignment warning for allocated_size
+        // It is used in the loop above to calculate child sizes, but the final value is not read
+        let _ = allocated_size;
+
         let free_space = max_size.saturating_sub(allocated_size);
         // 2. Allocate space to flex children, proportional to their flex factor.
         let mut allocated_flex_space = 0;
@@ -280,6 +285,8 @@ impl<'a> FlexRenderable<'a> {
                 }
             }
         }
+        // Suppress unused assignment warning for allocated_size
+        let _ = allocated_size;
 
         let mut y = area.y;
         for size in child_sizes {
