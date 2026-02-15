@@ -42,8 +42,9 @@ impl RateLimitStatusPayload {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize, Default)]
 pub enum PlanType {
+    #[default]
     #[serde(rename = "guest")]
     Guest,
     #[serde(rename = "free")]
@@ -70,10 +71,4 @@ pub enum PlanType {
     Enterprise,
     #[serde(rename = "edu")]
     Edu,
-}
-
-impl Default for PlanType {
-    fn default() -> PlanType {
-        Self::Guest
-    }
 }
