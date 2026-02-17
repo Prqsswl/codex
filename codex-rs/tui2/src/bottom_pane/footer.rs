@@ -189,6 +189,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut paste_image = Line::from("");
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
+    let mut cut_to_start = Line::from("");
+    let mut cut_to_end = Line::from("");
     let mut show_transcript = Line::from("");
 
     for descriptor in SHORTCUTS {
@@ -201,6 +203,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
+                ShortcutId::CutToStart => cut_to_start = text,
+                ShortcutId::CutToEnd => cut_to_end = text,
             }
         }
     }
@@ -212,6 +216,8 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         paste_image,
         edit_previous,
         quit,
+        cut_to_start,
+        cut_to_end,
         Line::from(""),
         show_transcript,
     ];
@@ -289,6 +295,8 @@ enum ShortcutId {
     EditPrevious,
     Quit,
     ShowTranscript,
+    CutToStart,
+    CutToEnd,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -423,6 +431,24 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: " to exit",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::CutToStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to cut to start",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::CutToEnd,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('k')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to cut to end",
     },
     ShortcutDescriptor {
         id: ShortcutId::ShowTranscript,
