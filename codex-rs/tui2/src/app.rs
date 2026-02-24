@@ -1289,6 +1289,11 @@ impl App {
         };
         if let Err(err) = clipboard_copy::copy_text(text) {
             tracing::error!(error = %err, "failed to copy selection to clipboard");
+        } else {
+            self.transcript_copy_ui.trigger_copied_feedback();
+            tui.frame_requester().schedule_frame();
+            tui.frame_requester()
+                .schedule_frame_in(Duration::from_secs(2));
         }
     }
 
