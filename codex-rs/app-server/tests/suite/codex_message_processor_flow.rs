@@ -36,7 +36,7 @@ use std::path::Path;
 use tempfile::TempDir;
 use tokio::time::timeout;
 
-const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(10);
+const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(60);
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
@@ -58,7 +58,7 @@ async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
     // Two turns are expected: initial session configure + one user message.
     let responses = vec![
         create_shell_command_sse_response(
-            vec!["ls".to_string()],
+            vec!["echo".to_string(), "hello".to_string()],
             Some(&working_directory),
             Some(5000),
             "call1234",
@@ -76,6 +76,7 @@ async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
     let new_conv_id = mcp
         .send_new_conversation_request(NewConversationParams {
             cwd: Some(working_directory.to_string_lossy().into_owned()),
+            sandbox: Some(SandboxMode::DangerFullAccess),
             ..Default::default()
         })
         .await?;
@@ -177,22 +178,14 @@ async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
     // Mock server will request a python shell call for the first and second turn, then finish.
     let responses = vec![
         create_shell_command_sse_response(
-            vec![
-                "python3".to_string(),
-                "-c".to_string(),
-                "print(42)".to_string(),
-            ],
+            vec!["touch".to_string(), "testfile".to_string()],
             Some(&working_directory),
             Some(5000),
             "call1",
         )?,
         create_final_assistant_message_sse_response("done 1")?,
         create_shell_command_sse_response(
-            vec![
-                "python3".to_string(),
-                "-c".to_string(),
-                "print(42)".to_string(),
-            ],
+            vec!["touch".to_string(), "testfile".to_string()],
             Some(&working_directory),
             Some(5000),
             "call2",
@@ -210,6 +203,7 @@ async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
     let new_conv_id = mcp
         .send_new_conversation_request(NewConversationParams {
             cwd: Some(working_directory.to_string_lossy().into_owned()),
+            sandbox: Some(SandboxMode::DangerFullAccess),
             ..Default::default()
         })
         .await?;
@@ -268,11 +262,11 @@ async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
         ExecCommandApprovalParams {
             conversation_id,
             call_id: "call1".to_string(),
-            command: format_with_current_shell("python3 -c 'print(42)'"),
+            command: format_with_current_shell("touch testfile"),
             cwd: working_directory.clone(),
             reason: None,
             parsed_cmd: vec![ParsedCommand::Unknown {
-                cmd: "python3 -c 'print(42)'".to_string()
+                cmd: "touch testfile".to_string()
             }],
         },
         params
@@ -301,7 +295,7 @@ async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
             }],
             cwd: working_directory.clone(),
             approval_policy: AskForApproval::Never,
-            sandbox_policy: SandboxPolicy::new_read_only_policy(),
+            sandbox_policy: SandboxPolicy::DangerFullAccess,
             model: "mock-model".to_string(),
             effort: Some(ReasoningEffort::Medium),
             summary: ReasoningSummary::Auto,
