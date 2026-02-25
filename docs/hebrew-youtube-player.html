@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>נגן יוטיוב עם כתוביות בעברית</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 1rem;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      .row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+
+      input {
+        flex: 1;
+        min-width: 280px;
+        border: 1px solid #475569;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        background: #1e293b;
+        color: inherit;
+      }
+
+      button,
+      a.button {
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        cursor: pointer;
+        background: #2563eb;
+        color: #fff;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .player {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        background: #020617;
+      }
+
+      .note {
+        margin-top: 0.75rem;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>נגן יוטיוב עם כתוביות בעברית</h1>
+      <p>הדבק קישור יוטיוב ולחץ "נגן". הנגן ינסה להפעיל כתוביות אוטומטית בעברית.</p>
+
+      <div class="row">
+        <input id="url" value="https://youtu.be/y04ErVTSRNI" aria-label="קישור יוטיוב" />
+        <button id="play">נגן</button>
+        <a class="button" id="open-app" href="#">פתיחה באפליקציית YouTube</a>
+      </div>
+
+      <iframe
+        id="player"
+        class="player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+
+      <p class="note">
+        אם עדיין לא רואים כתוביות: בתוך הנגן לחץ על גלגל השיניים → Subtitles/כתוביות → Auto-translate → עברית.
+      </p>
+    </main>
+
+    <script>
+      const urlInput = document.getElementById("url");
+      const playButton = document.getElementById("play");
+      const openApp = document.getElementById("open-app");
+      const iframe = document.getElementById("player");
+
+      const extractVideoId = (urlText) => {
+        const text = urlText.trim();
+
+        if (/^[a-zA-Z0-9_-]{11}$/.test(text)) {
+          return text;
+        }
+
+        try {
+          const url = new URL(text);
+
+          if (url.hostname.includes("youtu.be")) {
+            return url.pathname.replace("/", "").slice(0, 11);
+          }
+
+          if (url.hostname.includes("youtube.com")) {
+            const direct = url.searchParams.get("v");
+            if (direct) {
+              return direct.slice(0, 11);
+            }
+
+            const parts = url.pathname.split("/");
+            const embedIndex = parts.findIndex((part) => part === "embed");
+            if (embedIndex !== -1 && parts[embedIndex + 1]) {
+              return parts[embedIndex + 1].slice(0, 11);
+            }
+          }
+        } catch {
+          return null;
+        }
+
+        return null;
+      };
+
+      const loadVideo = () => {
+        const videoId = extractVideoId(urlInput.value);
+        if (!videoId) {
+          alert("לא הצלחתי לזהות מזהה סרטון. נסה להדביק קישור YouTube מלא.");
+          return;
+        }
+
+        const embedUrl = new URL(`https://www.youtube-nocookie.com/embed/${videoId}`);
+        embedUrl.searchParams.set("autoplay", "1");
+        embedUrl.searchParams.set("cc_load_policy", "1");
+        embedUrl.searchParams.set("cc_lang_pref", "he");
+        embedUrl.searchParams.set("hl", "he");
+        embedUrl.searchParams.set("rel", "0");
+        iframe.src = embedUrl.toString();
+
+        openApp.href = `youtube://www.youtube.com/watch?v=${videoId}`;
+      };
+
+      playButton.addEventListener("click", loadVideo);
+      urlInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          loadVideo();
+        }
+      });
+
+      loadVideo();
+    </script>
+  </body>
+</html>
