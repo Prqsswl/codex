@@ -38,7 +38,8 @@ use ratatui::text::Line;
 use ratatui::text::Span;
 use ratatui::widgets::Paragraph;
 use ratatui::widgets::WidgetRef;
-use std::time::{Duration, Instant};
+use std::time::Duration;
+use std::time::Instant;
 use unicode_width::UnicodeWidthStr;
 
 use crate::key_hint;
