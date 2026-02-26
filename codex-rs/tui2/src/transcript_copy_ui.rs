@@ -38,6 +38,7 @@ use ratatui::text::Line;
 use ratatui::text::Span;
 use ratatui::widgets::Paragraph;
 use ratatui::widgets::WidgetRef;
+use std::time::{Duration, Instant};
 use unicode_width::UnicodeWidthStr;
 
 use crate::key_hint;
@@ -108,6 +109,7 @@ pub(crate) struct TranscriptCopyUi {
     shortcut: CopySelectionShortcut,
     dragging: bool,
     affordance_rect: Option<Rect>,
+    copied_until: Option<Instant>,
 }
 
 impl TranscriptCopyUi {
@@ -117,6 +119,7 @@ impl TranscriptCopyUi {
             shortcut,
             dragging: false,
             affordance_rect: None,
+            copied_until: None,
         }
     }
 
@@ -134,6 +137,10 @@ impl TranscriptCopyUi {
 
     pub(crate) fn clear_affordance(&mut self) {
         self.affordance_rect = None;
+    }
+
+    pub(crate) fn trigger_copied_feedback(&mut self) {
+        self.copied_until = Some(Instant::now() + Duration::from_secs(2));
     }
 
     /// Returns `true` if the last rendered pill contains `(x, y)`.
@@ -254,10 +261,45 @@ impl TranscriptCopyUi {
             return;
         };
 
-        let key_label: Span<'static> = self.key_binding().into();
-        let key_label = key_label.content.as_ref().to_string();
+        // Check if we should show the "Copied!" feedback state.
+        let is_feedback_active = self
+            .copied_until
+            .is_some_and(|expiry| Instant::now() < expiry);
 
-        let pill_text = format!(" ⧉ copy {key_label} ");
+        let (pill_text, spans) = if is_feedback_active {
+            let pill_text = " ✓ Copied! ";
+            let base_style = Style::new().bg(Color::Green).fg(Color::Black);
+            let bold_style = base_style.add_modifier(Modifier::BOLD);
+
+            let spans: Vec<Span<'static>> = vec![
+                Span::styled(" ", base_style),
+                Span::styled("✓", bold_style),
+                Span::styled(" ", base_style),
+                Span::styled("Copied!", bold_style),
+                Span::styled(" ", base_style),
+            ];
+            (pill_text.to_string(), spans)
+        } else {
+            let key_label: Span<'static> = self.key_binding().into();
+            let key_label = key_label.content.as_ref().to_string();
+
+            let pill_text = format!(" ⧉ copy {key_label} ");
+            let base_style = Style::new().bg(Color::DarkGray);
+            let icon_style = base_style.fg(Color::Cyan);
+            let bold_style = base_style.add_modifier(Modifier::BOLD);
+
+            let mut spans: Vec<Span<'static>> = vec![
+                Span::styled(" ", base_style),
+                Span::styled("⧉", icon_style),
+                Span::styled(" ", base_style),
+                Span::styled("copy", bold_style),
+                Span::styled(" ", base_style),
+                Span::styled(key_label, base_style),
+            ];
+            spans.push(Span::styled(" ", base_style));
+            (pill_text, spans)
+        };
+
         let pill_width = UnicodeWidthStr::width(pill_text.as_str());
         if pill_width == 0 || area.width == 0 {
             return;
@@ -275,20 +317,6 @@ impl TranscriptCopyUi {
         };
 
         let pill_area = Rect::new(x, y, pill_width, 1);
-        let base_style = Style::new().bg(Color::DarkGray);
-        let icon_style = base_style.fg(Color::Cyan);
-        let bold_style = base_style.add_modifier(Modifier::BOLD);
-
-        let mut spans: Vec<Span<'static>> = vec![
-            Span::styled(" ", base_style),
-            Span::styled("⧉", icon_style),
-            Span::styled(" ", base_style),
-            Span::styled("copy", bold_style),
-            Span::styled(" ", base_style),
-            Span::styled(key_label, base_style),
-        ];
-        spans.push(Span::styled(" ", base_style));
-
         Paragraph::new(vec![Line::from(spans)]).render_ref(pill_area, buf);
         self.affordance_rect = Some(pill_area);
     }
@@ -328,5 +356,24 @@ mod tests {
         assert!(rendered.contains("ctrl + y"));
         assert!(!rendered.contains("ctrl + shift + c"));
         assert!(ui.affordance_rect.is_some());
+    }
+
+    #[test]
+    fn feedback_state_renders_copied_message() {
+        let area = Rect::new(0, 0, 60, 3);
+        let mut buf = Buffer::empty(area);
+        for y in 0..area.height {
+            for x in 2..area.width.saturating_sub(1) {
+                buf[(x, y)].set_symbol("X");
+            }
+        }
+
+        let mut ui = TranscriptCopyUi::new_with_shortcut(CopySelectionShortcut::CtrlY);
+        ui.trigger_copied_feedback();
+        ui.render_copy_pill(area, &mut buf, (1, 2), (1, 6), 0, 3);
+
+        let rendered = buf_to_string(&buf, area);
+        assert!(rendered.contains("Copied!"));
+        assert!(!rendered.contains("copy")); // Standard text should be hidden
     }
 }
