@@ -232,6 +232,10 @@ async fn shell_command_times_out_with_timeout_ms() -> anyhow::Result<()> {
 async fn unicode_output(login: bool) -> anyhow::Result<()> {
     skip_if_no_network!(Ok(()));
 
+    // Git can be slow on Windows CI, and the alias execution adds overhead.
+    // Use a longer timeout (10s) instead of the default 2s.
+    let timeout_ms = 10_000;
+
     let harness = shell_command_harness_with(|builder| {
         builder.with_model("gpt-5.2").with_config(|config| {
             config.features.enable(Feature::PowershellUtf8);
@@ -240,11 +244,12 @@ async fn unicode_output(login: bool) -> anyhow::Result<()> {
     .await?;
 
     let call_id = "unicode_output";
-    mount_shell_responses(
+    mount_shell_responses_with_timeout(
         &harness,
         call_id,
         "git -c alias.say='!printf \"%s\" \"naïve_café\"' say",
         Some(login),
+        timeout_ms,
     )
     .await;
     harness.submit("run the command without login").await?;
