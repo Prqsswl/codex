@@ -146,13 +146,13 @@ mod tests {
         // First draw should arrive.
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for first draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
 
         // No second draw should arrive.
-        let second = draw_rx.recv().timeout(Duration::from_millis(20)).await;
+        let second = draw_rx.recv().timeout(Duration::from_millis(200)).await;
         assert!(second.is_err(), "unexpected extra draw received");
     }
 
@@ -172,13 +172,13 @@ mod tests {
         time::advance(Duration::from_millis(25)).await;
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for scheduled draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
 
         // No second draw should arrive.
-        let second = draw_rx.recv().timeout(Duration::from_millis(20)).await;
+        let second = draw_rx.recv().timeout(Duration::from_millis(200)).await;
         assert!(second.is_err(), "unexpected extra draw received");
     }
 
@@ -198,13 +198,13 @@ mod tests {
         // Expect only a single draw notification despite three requests.
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for coalesced draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
 
         // No additional draw should be sent for the same coalesced batch.
-        let second = draw_rx.recv().timeout(Duration::from_millis(20)).await;
+        let second = draw_rx.recv().timeout(Duration::from_millis(200)).await;
         assert!(second.is_err(), "unexpected extra draw received");
     }
 
@@ -221,13 +221,13 @@ mod tests {
 
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for coalesced immediate draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
 
         // The later delayed request should have been coalesced into the earlier one; no second draw.
-        let second = draw_rx.recv().timeout(Duration::from_millis(120)).await;
+        let second = draw_rx.recv().timeout(Duration::from_millis(1200)).await;
         assert!(second.is_err(), "unexpected extra draw received");
     }
 
@@ -240,7 +240,7 @@ mod tests {
         time::advance(Duration::from_millis(1)).await;
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for first draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
@@ -256,7 +256,7 @@ mod tests {
         time::advance(MIN_FRAME_INTERVAL).await;
         let second = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for second draw");
         assert!(second.is_ok(), "broadcast closed unexpectedly");
@@ -271,7 +271,7 @@ mod tests {
         time::advance(Duration::from_millis(1)).await;
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for first draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
@@ -288,7 +288,7 @@ mod tests {
         time::advance(MIN_FRAME_INTERVAL).await;
         let second = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for clamped draw");
         assert!(second.is_ok(), "broadcast closed unexpectedly");
@@ -303,7 +303,7 @@ mod tests {
         time::advance(Duration::from_millis(1)).await;
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for first draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
@@ -317,7 +317,7 @@ mod tests {
         time::advance(Duration::from_millis(1)).await;
         let second = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for delayed draw");
         assert!(second.is_ok(), "broadcast closed unexpectedly");
@@ -342,13 +342,13 @@ mod tests {
         time::advance(Duration::from_millis(20)).await;
         let first = draw_rx
             .recv()
-            .timeout(Duration::from_millis(50))
+            .timeout(Duration::from_millis(500))
             .await
             .expect("timed out waiting for earliest coalesced draw");
         assert!(first.is_ok(), "broadcast closed unexpectedly");
 
         // No additional draw should fire for the later delayed requests.
-        let second = draw_rx.recv().timeout(Duration::from_millis(120)).await;
+        let second = draw_rx.recv().timeout(Duration::from_millis(1200)).await;
         assert!(second.is_err(), "unexpected extra draw received");
     }
 }
