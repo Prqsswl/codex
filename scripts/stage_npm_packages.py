@@ -76,6 +76,8 @@ def resolve_release_workflow(version: str) -> dict:
             "list",
             "--branch",
             f"rust-v{version}",
+            "--repo",
+            GITHUB_REPO,
             "--json",
             "workflowName,url,headSha",
             "--workflow",
@@ -88,7 +90,19 @@ def resolve_release_workflow(version: str) -> dict:
     )
     workflow = json.loads(stdout or "null")
     if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
+        # Fall back to listing recent runs and filtering by headBranch
+        stdout = subprocess.check_output(
+            [
+                "gh", "run", "list", "--repo", GITHUB_REPO, "--json", "workflowName,url,headSha,headBranch", "--workflow", WORKFLOW_NAME
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        workflows = json.loads(stdout or "[]")
+        for w in workflows:
+            if w.get("headBranch") == f"rust-v{version}":
+                return w
+        raise RuntimeError(f"Unable to find rust-release workflow for version {version}. (Attempted branch rust-v{version})")
     return workflow
 
 
