@@ -13,4 +13,5 @@ expression: terminal.backend()
 "  / for commands                            shift + enter for newline                               "
 "  @ for file paths                          ctrl + v to paste images                                "
 "  esc again to edit previous message        ctrl + c to exit                                        "
+"  ctrl + u cut to start                     ctrl + k cut to end                                     "
 "                                            ctrl + t to view transcript                             "
