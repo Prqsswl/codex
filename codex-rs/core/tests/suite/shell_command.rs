@@ -269,11 +269,12 @@ async fn unicode_output_with_newlines(login: bool) -> anyhow::Result<()> {
     .await?;
 
     let call_id = "unicode_output";
-    mount_shell_responses(
+    mount_shell_responses_with_timeout(
         &harness,
         call_id,
         "echo 'line1\nnaïve café\nline3'",
         Some(login),
+        5000,
     )
     .await;
     harness.submit("run the command without login").await?;
