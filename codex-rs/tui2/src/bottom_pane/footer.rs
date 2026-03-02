@@ -414,7 +414,6 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         prefix: "",
         label: " to paste images",
     },
-
     ShortcutDescriptor {
         id: ShortcutId::CutToStart,
         bindings: &[ShortcutBinding {
