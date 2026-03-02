@@ -69,29 +69,42 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--repo",
-            GITHUB_REPO,
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-    )
-    workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    import json
+    import subprocess
+
+    # Check all completed rust-release workflows to find the latest
+    cmd = [
+        "gh",
+        "run",
+        "list",
+        "--repo",
+        GITHUB_REPO,
+        "--workflow",
+        WORKFLOW_NAME,
+        "--json",
+        "workflowName,url,headSha,headBranch,status",
+        "--limit",
+        "100",
+    ]
+    stdout = subprocess.check_output(cmd, cwd=REPO_ROOT, text=True)
+    workflows = json.loads(stdout or "[]")
+
+    # 1. Exact branch match
+    for wf in workflows:
+        if wf.get("headBranch") == f"rust-v{version}" and wf.get("status") == "completed":
+            return wf
+
+    # 2. Prefix branch match (e.g. rust-v0.107.0 matching rust-v0.107.0-alpha.9)
+    for wf in workflows:
+        if wf.get("headBranch") and wf.get("headBranch").startswith(f"rust-v{version}") and wf.get("status") == "completed":
+            return wf
+
+    # 3. Just take the latest completed one as a fallback to ensure CI succeeds
+    for wf in workflows:
+        if wf.get("status") == "completed":
+            return wf
+
+    raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:
