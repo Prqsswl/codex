@@ -133,7 +133,7 @@ async fn output_without_login() -> anyhow::Result<()> {
     let harness = shell_command_harness_with(|builder| builder.with_model("gpt-5.1")).await?;
 
     let call_id = "shell-command-call-login-false";
-    mount_shell_responses(&harness, call_id, "echo 'hello, world'", Some(false)).await;
+    mount_shell_responses_with_timeout(&harness, call_id, "echo 'hello, world'", Some(false), 5000).await;
     harness.submit("run the echo command without login").await?;
 
     let output = harness.function_call_stdout(call_id).await;
@@ -209,7 +209,9 @@ async fn shell_command_times_out_with_timeout_ms() -> anyhow::Result<()> {
     } else {
         "sleep 5"
     };
-    mount_shell_responses_with_timeout(&harness, call_id, command, None, 200).await;
+    // The test asserts it times out. We shouldn't change the timeout to 5000 because then it might complete.
+    // Instead we should give the outer execution more time or let it properly timeout.
+    mount_shell_responses_with_timeout(&harness, call_id, command, None, 2000).await;
     harness
         .submit("run a long command with a short timeout")
         .await?;
@@ -240,11 +242,12 @@ async fn unicode_output(login: bool) -> anyhow::Result<()> {
     .await?;
 
     let call_id = "unicode_output";
-    mount_shell_responses(
+    mount_shell_responses_with_timeout(
         &harness,
         call_id,
         "git -c alias.say='!printf \"%s\" \"naïve_café\"' say",
         Some(login),
+        5000,
     )
     .await;
     harness.submit("run the command without login").await?;
@@ -269,11 +272,12 @@ async fn unicode_output_with_newlines(login: bool) -> anyhow::Result<()> {
     .await?;
 
     let call_id = "unicode_output";
-    mount_shell_responses(
+    mount_shell_responses_with_timeout(
         &harness,
         call_id,
         "echo 'line1\nnaïve café\nline3'",
         Some(login),
+        5000,
     )
     .await;
     harness.submit("run the command without login").await?;
