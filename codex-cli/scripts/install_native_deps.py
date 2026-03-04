@@ -399,11 +399,22 @@ def _fetch_single_rg(
 
 
 def _download_file(url: str, dest: Path) -> None:
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.unlink(missing_ok=True)
+    import time
+    from urllib.error import URLError
 
-    with urlopen(url, timeout=DOWNLOAD_TIMEOUT_SECS) as response, open(dest, "wb") as out:
-        shutil.copyfileobj(response, out)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+
+    max_retries = 3
+    for attempt in range(max_retries):
+        dest.unlink(missing_ok=True)
+        try:
+            with urlopen(url, timeout=DOWNLOAD_TIMEOUT_SECS) as response, open(dest, "wb") as out:
+                shutil.copyfileobj(response, out)
+            return
+        except (URLError, ConnectionError) as e:
+            if attempt == max_retries - 1:
+                raise e
+            time.sleep(2 ** attempt)
 
 
 def extract_archive(
