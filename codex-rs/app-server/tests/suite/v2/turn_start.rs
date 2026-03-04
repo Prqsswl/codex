@@ -3,7 +3,6 @@ use app_test_support::McpProcess;
 use app_test_support::create_apply_patch_sse_response;
 use app_test_support::create_exec_command_sse_response;
 use app_test_support::create_final_assistant_message_sse_response;
-use app_test_support::create_mock_chat_completions_server;
 use app_test_support::create_mock_chat_completions_server_unchecked;
 use app_test_support::create_shell_command_sse_response;
 use app_test_support::format_with_current_shell_display;
@@ -232,7 +231,7 @@ async fn turn_start_exec_approval_toggle_v2() -> Result<()> {
         )?,
         create_final_assistant_message_sse_response("done 2")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     // Default approval is untrusted to force elicitation on first turn.
     create_config_toml(codex_home.as_path(), &server.uri(), "untrusted")?;
 
@@ -356,7 +355,7 @@ async fn turn_start_exec_approval_decline_v2() -> Result<()> {
         )?,
         create_final_assistant_message_sse_response("done")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(codex_home.as_path(), &server.uri(), "untrusted")?;
 
     let mut mcp = McpProcess::new(codex_home.as_path()).await?;
@@ -502,7 +501,7 @@ async fn turn_start_updates_sandbox_and_cwd_between_turns_v2() -> Result<()> {
         )?,
         create_final_assistant_message_sse_response("done second")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(&codex_home, &server.uri(), "untrusted")?;
 
     let mut mcp = McpProcess::new(&codex_home).await?;
@@ -633,7 +632,7 @@ async fn turn_start_file_change_approval_v2() -> Result<()> {
         create_apply_patch_sse_response(patch, "patch-call")?,
         create_final_assistant_message_sse_response("patch applied")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(&codex_home, &server.uri(), "untrusted")?;
 
     let mut mcp = McpProcess::new(&codex_home).await?;
@@ -799,7 +798,7 @@ async fn turn_start_file_change_approval_decline_v2() -> Result<()> {
         create_apply_patch_sse_response(patch, "patch-call")?,
         create_final_assistant_message_sse_response("patch declined")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     create_config_toml(&codex_home, &server.uri(), "untrusted")?;
 
     let mut mcp = McpProcess::new(&codex_home).await?;
@@ -937,7 +936,7 @@ async fn command_execution_notifications_include_process_id() -> Result<()> {
         create_exec_command_sse_response("uexec-1")?,
         create_final_assistant_message_sse_response("done")?,
     ];
-    let server = create_mock_chat_completions_server(responses).await;
+    let server = create_mock_chat_completions_server_unchecked(responses).await;
     let codex_home = TempDir::new()?;
     create_config_toml(codex_home.path(), &server.uri(), "never")?;
     let config_toml = codex_home.path().join("config.toml");
