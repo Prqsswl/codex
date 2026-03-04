@@ -69,27 +69,41 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-    )
+    cmd_base = [
+        "gh",
+        "run",
+        "list",
+        "--repo",
+        GITHUB_REPO,
+        "--json",
+        "workflowName,url,headSha,headBranch",
+        "--workflow",
+        WORKFLOW_NAME,
+    ]
+
+    # Try filtering by branch first
+    cmd_branch = cmd_base + [
+        "--branch",
+        f"rust-v{version}",
+        "--jq",
+        "first(.[])",
+    ]
+    stdout = subprocess.check_output(cmd_branch, cwd=REPO_ROOT, text=True)
     workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    if workflow:
+        return workflow
+
+    # Fallback to listing runs and manually filtering by headBranch
+    cmd_fallback = cmd_base + ["--limit", "100"]
+    stdout = subprocess.check_output(cmd_fallback, cwd=REPO_ROOT, text=True)
+    runs = json.loads(stdout or "[]")
+
+    branch_name = f"rust-v{version}"
+    for run in runs:
+        if run.get("headBranch") == branch_name:
+            return run
+
+    raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:
