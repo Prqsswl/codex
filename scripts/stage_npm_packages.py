@@ -69,24 +69,54 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
+    branch_name = f"rust-v{version}"
+    cmd = [
+        "gh",
+        "run",
+        "list",
+        "--repo",
+        GITHUB_REPO,
+        "--branch",
+        branch_name,
+        "--json",
+        "workflowName,url,headSha",
+        "--workflow",
+        WORKFLOW_NAME,
+        "--jq",
+        "first(.[])",
+    ]
     stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
+        cmd,
         cwd=REPO_ROOT,
         text=True,
     )
     workflow = json.loads(stdout or "null")
+
+    if not workflow:
+        # Fallback to listing recent runs and filtering by headBranch.
+        # This is needed because `gh run list --branch tag` may not work as expected for tags.
+        fallback_cmd = [
+            "gh",
+            "run",
+            "list",
+            "--repo",
+            GITHUB_REPO,
+            "--json",
+            "workflowName,url,headBranch,headSha",
+            "--workflow",
+            WORKFLOW_NAME,
+            "--limit",
+            "50",
+            "--jq",
+            f"first(.[] | select(.headBranch == \"{branch_name}\"))",
+        ]
+        fallback_stdout = subprocess.check_output(
+            fallback_cmd,
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        workflow = json.loads(fallback_stdout or "null")
+
     if not workflow:
         raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
     return workflow
