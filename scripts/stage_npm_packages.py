@@ -95,6 +95,8 @@ def resolve_release_workflow(version: str) -> dict:
             "list",
             "--repo",
             GITHUB_REPO,
+            "--limit",
+            "500",
             "--json",
             "workflowName,url,headSha,headBranch",
             "--workflow",
@@ -102,13 +104,17 @@ def resolve_release_workflow(version: str) -> dict:
         ]
         fallback_stdout = subprocess.check_output(fallback_cmd, cwd=REPO_ROOT, text=True).strip()
         all_workflows = json.loads(fallback_stdout or "[]")
+
+        expected_branches = {f"rust-v{version}", f"v{version}", version}
+
         for w in all_workflows:
-            if w.get("headBranch") == f"rust-v{version}":
+            if w.get("headBranch") in expected_branches:
                 workflow = w
                 break
 
     if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
+        branches_seen = sorted(list(set(w.get("headBranch", "") for w in json.loads(fallback_stdout or "[]"))))
+        raise RuntimeError(f"Unable to find rust-release workflow for version {version}. Looked for branches {expected_branches}. Saw: {branches_seen}")
     return workflow
 
 
