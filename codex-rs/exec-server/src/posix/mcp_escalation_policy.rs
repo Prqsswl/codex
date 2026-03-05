@@ -123,7 +123,13 @@ impl EscalationPolicy for McpEscalationPolicy {
                 let result = self
                     .prompt(file, argv, workdir, self.context.clone())
                     .await?;
-                // TODO: Extract reason from `result.content`.
+
+                let reason = result
+                    .content
+                    .as_ref()
+                    .and_then(|c| c.get("reason"))
+                    .and_then(|v| v.as_str().map(ToString::to_string));
+
                 match result.action {
                     ElicitationAction::Accept => {
                         if sandbox_permissions.requires_escalated_permissions() {
@@ -133,10 +139,10 @@ impl EscalationPolicy for McpEscalationPolicy {
                         }
                     }
                     ElicitationAction::Decline => EscalateAction::Deny {
-                        reason: Some("User declined execution".to_string()),
+                        reason: Some(reason.unwrap_or_else(|| "User declined execution".to_string())),
                     },
                     ElicitationAction::Cancel => EscalateAction::Deny {
-                        reason: Some("User cancelled execution".to_string()),
+                        reason: Some(reason.unwrap_or_else(|| "User cancelled execution".to_string())),
                     },
                 }
             }
