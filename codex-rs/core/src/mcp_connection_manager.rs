@@ -163,6 +163,10 @@ impl ElicitationRequestManager {
                             server_name,
                             id,
                             message: elicitation.message,
+                            requested_schema: serde_json::from_value(
+                                serde_json::to_value(elicitation.requested_schema).unwrap(),
+                            )
+                            .unwrap(),
                         }),
                     })
                     .await;

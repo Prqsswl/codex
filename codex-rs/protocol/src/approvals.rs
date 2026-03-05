@@ -3,6 +3,7 @@ use std::path::PathBuf;
 
 use crate::parse_command::ParsedCommand;
 use crate::protocol::FileChange;
+use mcp_types::ElicitRequestParamsRequestedSchema;
 use mcp_types::RequestId;
 use schemars::JsonSchema;
 use serde::Deserialize;
@@ -64,9 +65,7 @@ pub struct ElicitationRequestEvent {
     pub server_name: String,
     pub id: RequestId,
     pub message: String,
-    // TODO: MCP servers can request we fill out a schema for the elicitation. We don't support
-    // this yet.
-    // pub requested_schema: ElicitRequestParamsRequestedSchema,
+    pub requested_schema: ElicitRequestParamsRequestedSchema,
 }
 
 #[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq, JsonSchema, TS)]
