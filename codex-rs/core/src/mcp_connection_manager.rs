@@ -156,6 +156,12 @@ impl ElicitationRequestManager {
                     let mut lock = elicitation_requests.lock().await;
                     lock.insert((server_name.clone(), id.clone()), tx);
                 }
+
+                let requested_schema_json = serde_json::to_value(elicitation.requested_schema)
+                    .context("failed to serialize elicitation.requested_schema")?;
+                let requested_schema = serde_json::from_value(requested_schema_json)
+                    .context("failed to deserialize into ElicitRequestParamsRequestedSchema")?;
+
                 let _ = tx_event
                     .send(Event {
                         id: "mcp_elicitation_request".to_string(),
@@ -163,10 +169,7 @@ impl ElicitationRequestManager {
                             server_name,
                             id,
                             message: elicitation.message,
-                            requested_schema: serde_json::from_value(
-                                serde_json::to_value(elicitation.requested_schema).unwrap(),
-                            )
-                            .unwrap(),
+                            requested_schema,
                         }),
                     })
                     .await;
