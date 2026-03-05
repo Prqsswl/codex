@@ -82,6 +82,8 @@ def resolve_release_workflow(version: str) -> dict:
             WORKFLOW_NAME,
             "--jq",
             "first(.[])",
+            "--repo",
+            GITHUB_REPO,
         ],
         cwd=REPO_ROOT,
         text=True,
