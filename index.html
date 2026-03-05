@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולטור גיטהאב למתחילים</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .github-border { border: 1px solid #30363d; }
+        .github-bg-secondary { background-color: #161b22; }
+        .github-text-link { color: #58a6ff; }
+        .github-btn-primary { background-color: #238636; color: white; }
+        .github-btn-primary:hover { background-color: #2ea043; }
+        .github-tab-active { border-bottom: 2px solid #f78166; color: #f0f6fc; }
+
+        .modal-enter { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #58a6ff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .sparkle-btn {
+            background: linear-gradient(45deg, #238636, #2ea043);
+            position: relative;
+            overflow: hidden;
+        }
+        .sparkle-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+        .sparkle-btn:hover::after {
+            left: 120%;
+        }
+
+        .highlight-tour {
+            position: relative;
+            z-index: 60;
+            box-shadow: 0 0 0 4px #58a6ff, 0 0 0 9999px rgba(0,0,0,0.8);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .tour-tooltip {
+            position: absolute;
+            background: white;
+            color: #24292f;
+            padding: 16px;
+            border-radius: 8px;
+            width: 300px;
+            z-index: 61;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            pointer-events: auto;
+            border-bottom: 4px solid #58a6ff;
+        }
+
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .interactive-element:hover {
+            box-shadow: 0 0 0 2px #58a6ff;
+            border-radius: 4px;
+        }
+
+        .interactive-element::after {
+            content: '❓ לחץ להסבר';
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #58a6ff;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .interactive-element:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="github-bg-secondary github-border p-4 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-4">
+            <svg class="interactive-element" onclick="askAI('הסמליל (לוגו) של גיטהאב')" height="32" viewBox="0 0 16 16" width="32" fill="#f0f6fc"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+            <div class="hidden sm:block text-[#8b949e] border border-[#30363d] rounded-md px-4 py-1 text-sm interactive-element" onclick="askAI('שורת החיפוש העליונה')">
+                חיפוש פרויקטים...
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+             <button onclick="startTour()" class="sparkle-btn text-white text-sm font-bold px-4 py-2 rounded-full flex items-center gap-2 shadow-lg animate-pulse">
+                🗺️ התחל סיור מודרך למתחילים
+            </button>
+            <div class="w-8 h-8 rounded-full bg-blue-600 border border-white/20 interactive-element" onclick="askAI('תמונת הפרופיל (אזור המשתמש שלך)')"></div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- Project Title -->
+        <div class="mb-6">
+            <div class="flex items-center gap-2 text-xl mb-4">
+                <span class="text-[#8b949e] interactive-element" onclick="askAI('שם היוצר של הפרויקט')">ai-mobile-lab /</span>
+                <span class="font-bold text-white text-2xl interactive-element" onclick="askAI('שם הפרויקט (Repository)')">super-smart-model-mobile</span>
+                <span class="text-xs border border-[#30363d] rounded-full px-2 py-0.5 text-[#8b949e] interactive-element" onclick="askAI('תגית ציבורי (Public)')">ציבורי</span>
+            </div>
+
+            <p class="text-[#8b949e] mb-4 text-lg">מודל בינה מלאכותית מטורף שרץ ישירות על הטלפון הנייד שלך (ממש על המכשיר עצמו)!</p>
+
+            <!-- Main Navigation Tabs -->
+            <div class="flex gap-6 border-b border-[#30363d] overflow-x-auto pb-2" id="nav-tabs">
+                <button onclick="askAI('לשונית קוד (Code)')" class="pb-2 px-2 github-tab-active flex items-center gap-2 text-sm font-semibold whitespace-nowrap">
+                    <svg class="w-4 h-4 fill-current text-[#8b949e]" viewBox="0 0 16 16"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg>
+                    קוד (Code)
+                </button>
+                <button onclick="askAI('לשונית דיווחים (Issues)')" class="pb-2 px-2 text-[#8b949e] flex items-center gap-2 text-sm hover:text-white transition-colors interactive-element whitespace-nowrap">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>
+                    דיווחים (Issues)
+                </button>
+                <button onclick="askAI('לשונית בקשות שינוי (Pull Requests)')" class="pb-2 px-2 text-[#8b949e] flex items-center gap-2 text-sm hover:text-white transition-colors interactive-element whitespace-nowrap">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"></path></svg>
+                    בקשות שינוי (Pull requests)
+                </button>
+                <button onclick="askAI('לשונית דיונים (Discussions)')" class="pb-2 px-2 text-[#8b949e] flex items-center gap-2 text-sm hover:text-white transition-colors interactive-element whitespace-nowrap">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M1.75 1h12.5c.966 0 1.75.784 1.75 1.75v9.5A1.75 1.75 0 0 1 14.25 14H8.061l-2.574 2.573A1.458 1.458 0 0 1 3 15.543V14H1.75A1.75 1.75 0 0 1 0 12.25v-9.5C0 1.784.784 1 1.75 1ZM1.5 2.75v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"></path></svg>
+                    דיונים (Discussions)
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-3">
+                <!-- Action Buttons -->
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <button class="github-bg-secondary github-border px-3 py-1.5 rounded-md text-sm font-semibold interactive-element" onclick="askAI('כפתור בחירת ענף (Branch)')">
+                            ענף: <span class="text-white">ראשי (main)</span>
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="askAI('כפתור קוד ירוק (Code - כפתור להורדה)')" id="download-code-btn" class="github-btn-primary px-4 py-1.5 rounded-md text-sm font-semibold flex items-center gap-2 shadow-lg interactive-element">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"></path><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"></path></svg>
+                            קוד (Code) ▼
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Table -->
+                <div class="github-border rounded-md bg-[#0d1117] mb-8" id="file-table">
+                    <div class="github-bg-secondary p-3 border-b github-border flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 interactive-element" onclick="askAI('שם המשתמש שהעלה את העדכון האחרון')"></div>
+                            <span class="font-bold hover:text-blue-400 cursor-pointer interactive-element" onclick="askAI('שם המשתמש שהעלה את העדכון האחרון')">ai-mobile-lab</span>
+                            <span class="text-[#8b949e] interactive-element" onclick="askAI('ההודעה המצורפת לעדכון קבצים (Commit message)')">הוספת תמיכה לאנדרואיד ואייפון</span>
+                        </div>
+                        <div class="text-[#8b949e] text-xs interactive-element" onclick="askAI('זמן העדכון האחרון')">לפני יומיים</div>
+                    </div>
+                    <div class="divide-y border-[#30363d] text-sm">
+                        <div class="p-3 flex items-center hover:bg-[#161b22] group cursor-pointer interactive-element" onclick="askAI('תיקייה (Folder) בתוך הפרויקט')">
+                            <svg class="ml-3 w-4 h-4 fill-[#8b949e]" viewBox="0 0 16 16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.543L5.426 1.146A1.75 1.75 0 0 0 4.25 1h-2.5Zm-.25 1.75c0-.138.112-.25.25-.25H4.25c.306 0 .597.135.8.369L6.603 4.5h7.647c.138 0 .25.112.25.25v8.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25v-10.5Z"></path></svg>
+                            <span class="github-text-link">android-app</span>
+                            <span class="mr-auto text-xs text-[#8b949e]">עדכון קבצי אנדרואיד</span>
+                        </div>
+                        <div class="p-3 flex items-center hover:bg-[#161b22] group cursor-pointer interactive-element" onclick="askAI('תיקייה (Folder) בתוך הפרויקט')">
+                            <svg class="ml-3 w-4 h-4 fill-[#8b949e]" viewBox="0 0 16 16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.543L5.426 1.146A1.75 1.75 0 0 0 4.25 1h-2.5Zm-.25 1.75c0-.138.112-.25.25-.25H4.25c.306 0 .597.135.8.369L6.603 4.5h7.647c.138 0 .25.112.25.25v8.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25v-10.5Z"></path></svg>
+                            <span class="github-text-link">ios-app</span>
+                            <span class="mr-auto text-xs text-[#8b949e]">תיקון באגים לאייפון</span>
+                        </div>
+                        <div class="p-3 flex items-center hover:bg-[#161b22] group cursor-pointer interactive-element" onclick="askAI('מה זה קובץ README.md? למה הוא כל כך חשוב?')">
+                            <svg class="ml-3 w-4 h-4 fill-[#8b949e]" viewBox="0 0 16 16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z"></path></svg>
+                            <span class="github-text-link">README.md</span>
+                            <span class="mr-auto text-xs text-[#8b949e]">עדכון מדריך התקנה</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- README section with AI Chat -->
+                <div class="github-border rounded-md bg-white text-gray-900 overflow-hidden shadow-xl" dir="rtl" id="readme-section">
+                    <div class="p-8">
+                        <div class="flex items-center gap-2 border-b-2 border-[#58a6ff] pb-4 mb-6">
+                            <h2 class="text-3xl font-bold interactive-element" onclick="askAI('קובץ ההסבר של הפרויקט - README')">מדריך: מודל AI חכם לנייד! 📱🤖</h2>
+                        </div>
+
+                        <p class="text-lg leading-relaxed mb-6 interactive-element" onclick="askAI('הפסקה הראשונה שמסבירה על מה הפרויקט (ב-README)')">
+                            הגעתם לפרויקט פתוח (Open Source) שמאפשר לכם להריץ מודל שפה חכם ישירות על מכשיר האנדרואיד או האייפון שלכם, ללא צורך באינטרנט!
+                        </p>
+
+                        <h3 class="text-xl font-bold mb-3 mt-8">איך אני פשוט מוריד ומשתמש בזה?</h3>
+                        <p class="mb-4">אם אתם לא מתכנתים, אתם לא צריכים להוריד את הקוד של הפרויקט. פשוט לכו לאזור שנקרא <strong>Releases (שחרורים)</strong> בצד שמאל (או תחתית הדף בנייד) והורידו את האפליקציה המוכנה! קובץ APK לאנדרואיד זמין שם.</p>
+
+                        <!-- Mini AI Chat Box -->
+                        <div class="bg-blue-50 border-r-4 border-blue-500 p-6 rounded-lg mt-10">
+                            <h4 class="font-bold text-blue-800 mb-2">✨ אני עדיין מבולבל, אפשר לשאול שאלה?</h4>
+                            <p class="text-sm text-blue-700 mb-4">כתוב כל מה שלא ברור לך, והבוט החכם שלנו יענה בעברית פשוטה.</p>
+                            <div class="flex gap-2">
+                                <input id="user-ai-query" type="text" placeholder="למשל: איך אני מוריד את האפליקציה לאייפון?" class="flex-1 px-4 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-gray-800">
+                                <button onclick="handleUserQuery()" class="bg-blue-600 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-700 transition-colors shadow-sm">שאל ✨</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- About section -->
+                <div class="border-b border-[#30363d] pb-6">
+                    <h3 class="font-bold text-sm mb-3 interactive-element" onclick="askAI('אזור ה-About (אודות הפרויקט)')">אודות (About)</h3>
+                    <p class="text-[#8b949e] text-sm mb-4">
+                        אפליקציית בינה מלאכותית מטורפת שפועלת בלי אינטרנט על המכשיר הנייד שלך. פרויקט קוד פתוח לקהילה.
+                    </p>
+                    <div class="flex items-center gap-2 text-sm text-[#8b949e] mb-2 interactive-element" onclick="askAI('רישיון (License) של הפרויקט')">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M8.75.75V2h-1.5V.75a.75.75 0 0 1 1.5 0ZM6 2.75A2.75 2.75 0 0 0 8.75 5.5h-1.5a1.25 1.25 0 0 1-1.25-1.25H6Zm-3 0a5.75 5.75 0 0 0 5.75 5.75h1.5A7.25 7.25 0 0 1 3 2.75v-1.5a.75.75 0 0 1 1.5 0v1.5Zm5.75 6V10h-1.5V8.75h1.5Zm0 3.25v2.25h-1.5V12h1.5Z"></path></svg>
+                        MIT License (חינמי לשימוש)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-[#8b949e] interactive-element" onclick="askAI('כוכבים (Stars)')">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                        <strong>14.2k</strong> כוכבים
+                    </div>
+                </div>
+
+                <!-- Releases Section -->
+                <div id="releases-section">
+                    <h3 class="font-bold text-sm mb-3 interactive-element" onclick="askAI('אזור שחרורים (Releases) - כאן מורידים את התוכנה!')">שחרורים (Releases) <span class="bg-[#30363d] text-white text-xs px-2 py-0.5 rounded-full ml-1">5</span></h3>
+                    <div onclick="askAI('הגרסה הכי עדכנית להורדה (Latest Release)')" class="cursor-pointer bg-[#161b22] border border-[#30363d] p-3 rounded-lg hover:border-green-500 transition-all interactive-element">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-green-400 font-bold text-xs bg-green-400/10 border border-green-400/30 rounded-full px-2">הכי עדכני</span>
+                            <span class="text-white font-bold">גרסה v1.0.4 (אנדרואיד)</span>
+                        </div>
+                        <p class="text-xs text-[#8b949e] mb-2">תוקן באג קריסות במכשירים חלשים.</p>
+                        <div class="text-blue-400 text-xs flex items-center gap-1 font-semibold">
+                            <svg class="w-3 h-3 fill-current" viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"></path><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"></path></svg>
+                            להורדת קובץ APK
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contributors -->
+                <div>
+                    <h3 class="font-bold text-sm mb-3 interactive-element" onclick="askAI('תורמים (Contributors) - מי כתב את הקוד')">תורמים (Contributors) <span class="bg-[#30363d] text-white text-xs px-2 py-0.5 rounded-full ml-1">24</span></h3>
+                    <div class="flex -space-x-2 space-x-reverse interactive-element" onclick="askAI('תורמים (Contributors) - מי כתב את הקוד')">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-yellow-500 border-2 border-[#0d1117]"></div>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-blue-500 border-2 border-[#0d1117]"></div>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-2 border-[#0d1117]"></div>
+                        <div class="w-8 h-8 rounded-full bg-[#21262d] border-2 border-[#0d1117] flex items-center justify-center text-xs text-[#8b949e] font-bold">+21</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal AI -->
+    <div id="ai-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden p-4 z-50 backdrop-blur-sm">
+        <div class="github-bg-secondary github-border w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden modal-enter relative">
+            <div class="p-5 border-b border-[#30363d] flex items-center justify-between bg-[#1f242c]">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <h2 class="font-bold text-lg text-white">✨ הסוכן מסביר בעברית פשוטה:</h2>
+                </div>
+                <button onclick="closeModal()" class="text-[#8b949e] hover:text-white text-2xl font-bold">✕</button>
+            </div>
+            <div class="p-8">
+                <div id="ai-loading" class="flex flex-col items-center justify-center py-6 hidden">
+                    <div class="spinner mb-4"></div>
+                    <p class="text-sm text-[#8b949e] animate-pulse">מנתח את כוונת המשורר וחושב על הסבר פשוט...</p>
+                </div>
+                <div id="ai-content" class="text-right leading-relaxed text-lg text-white">
+                </div>
+            </div>
+            <div class="p-4 bg-[#0d1117] flex justify-center border-t border-[#30363d]">
+                <button onclick="closeModal()" id="modal-close-btn" class="github-btn-primary px-8 py-2 rounded-full text-sm font-bold shadow-lg transition-transform hover:scale-105">הבנתי, תודה!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="api-key-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-[60] backdrop-blur-sm">
+        <div class="github-bg-secondary github-border w-full max-w-md rounded-2xl shadow-2xl overflow-hidden modal-enter relative">
+            <div class="p-5 border-b border-[#30363d] flex items-center gap-3 bg-[#1f242c]">
+                <h2 class="font-bold text-lg text-white">🔑 הגדרת חיבור לבינה מלאכותית</h2>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-[#c9d1d9] mb-4">
+                    כדי שהבוט יוכל לענות על שאלות בזמן אמת, אנא הזן מפתח API של Google Gemini.
+                    <br><span class="text-xs text-[#8b949e]">(המפתח נשמר רק מקומית בדפדפן שלך ולא נשלח לשום מקום אחר)</span>
+                </p>
+                <input type="password" id="api-key-input" placeholder="הדבק כאן את מפתח ה-API שלך..."
+                    class="w-full px-4 py-2 bg-[#0d1117] border border-[#30363d] rounded-md text-white focus:outline-none focus:border-[#58a6ff] mb-4">
+            </div>
+            <div class="p-4 bg-[#0d1117] flex justify-end gap-3 border-t border-[#30363d]">
+                <button onclick="saveApiKey()" class="github-btn-primary px-6 py-2 rounded-md text-sm font-bold shadow-lg">שמור והתחל</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tour Overlay Template -->
+    <div id="tour-overlay" class="fixed inset-0 z-50 hidden"></div>
+
+    <script>
+        // API Configuration
+        let apiKey = localStorage.getItem("gemini_api_key") || "";
+        let apiUrl = "";
+
+        // Check API Key on load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!apiKey) {
+                document.getElementById('api-key-modal').classList.remove('hidden');
+            } else {
+                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                document.getElementById('api-key-modal').classList.add('hidden');
+            }
+        });
+
+        function saveApiKey() {
+            const input = document.getElementById('api-key-input').value.trim();
+            if (input) {
+                apiKey = input;
+                localStorage.setItem("gemini_api_key", apiKey);
+                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                document.getElementById('api-key-modal').classList.add('hidden');
+            } else {
+                alert("אנא הזן מפתח תקין");
+            }
+        }
+
+        // Add a simple error message to the UI if fetch fails
+        function showError(message) {
+             const content = document.getElementById('ai-content');
+             const loading = document.getElementById('ai-loading');
+             loading.classList.add('hidden');
+             content.innerHTML = `<div class="bg-red-900/30 border border-red-500/50 p-4 rounded-md text-red-200">
+                <strong>אופס!</strong> ${message}
+             </div>`;
+        }
+
+        async function askAI(elementName) {
+            if(tourActive) return; // Prevent clicking while tour is active
+
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-content');
+            const loading = document.getElementById('ai-loading');
+
+            modal.classList.remove('hidden');
+            content.innerHTML = '';
+            loading.classList.remove('hidden');
+
+            const systemPrompt = `אתה בוט הדרכה חכם וידידותי בגיטהאב לאנשים שאין להם שום מושג מה זה קוד או תכנות.
+המטרה שלך היא להסביר במילים פשוטות מאוד (עברית יומיומית), ללא מונחים טכניים מסובכים, מה המשמעות של הכפתור או האזור שהמשתמש לחץ עליו במסך.
+השתמש באנלוגיות מחיי היומיום אם אפשר.
+המשתמש הגיע לפרויקט של אפליקציית בינה מלאכותית לנייד, ומנסה להבין איך להוריד או להשתמש בזה.
+התשובה צריכה להיות ברורה, קצרה (עד 3-4 משפטים), חמה, מעודדת, ולתת תחושה ש"הכל בסדר, זה פשוט".`;
+
+            const userQuery = `לחצתי עכשיו על אזור שנקרא: "${elementName}". מה זה אומר עבורי כמישהו שלא יודע לתכנת? למה שאני אלחץ על זה?`;
+
+            await callGemini(userQuery, systemPrompt);
+        }
+
+        async function handleUserQuery() {
+            const input = document.getElementById('user-ai-query');
+            const query = input.value;
+            if (!query) return;
+
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-content');
+            const loading = document.getElementById('ai-loading');
+
+            modal.classList.remove('hidden');
+            content.innerHTML = '';
+            loading.classList.remove('hidden');
+
+            const systemPrompt = `אתה בוט תמיכה ידידותי שמסייע לאנשים לא טכניים לנווט בגיטהאב ולהבין פרויקטים של קוד פתוח.
+המשתמש שואל כרגע שאלה חופשית על הפרויקט המוצג (אפליקציית AI למובייל).
+ענה בעברית ברורה, פשוטה ולא טכנית. אם הוא שואל על הורדה, כוון אותו ל-Releases בצד שמאל.
+אורך התשובה רצוי שיהיה קצר ולעניין.`;
+
+            await callGemini(query, systemPrompt);
+            input.value = '';
+        }
+
+        async function callGemini(query, systemPrompt) {
+            const content = document.getElementById('ai-content');
+            const loading = document.getElementById('ai-loading');
+
+            const payload = {
+                contents: [{ parts: [{ text: query }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: { temperature: 0.7 }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("API Error Details:", errorData);
+                    throw new Error(`שגיאה בגישה ל-API (${response.status})`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
+                    const aiText = result.candidates[0].content.parts[0].text;
+                    loading.classList.add('hidden');
+
+                    // Add some simple formatting: replace newlines with <br>, make bold text HTML bold
+                    let formattedText = aiText
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n/g, '<br/>');
+
+                    content.innerHTML = `<p>${formattedText}</p>`;
+                } else {
+                     throw new Error("המבנה של התשובה לא תקין");
+                }
+            } catch (error) {
+                console.error("Detailed Error:", error);
+                loading.classList.add('hidden');
+
+                // fallback response directly instead of throwing an error modal if network fails
+                content.innerHTML = `<div class="bg-red-900/30 border border-red-500/50 p-4 rounded-md text-red-200">
+                    <strong>אופס!</strong> נראה שיש בעיה בחיבור לבינה המלאכותית (שגיאה: ${error.message}). <br/>
+                    אבל אל דאגה! בגדול, האזור שלחצת עליו בגיטהאב נועד לעזור למתכנתים לעבוד יחד. אם אתה רק מחפש להוריד את האפליקציה, חפש את אזור ה-<strong>Releases (שחרורים)</strong> בצד.
+                </div>`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('ai-modal').classList.add('hidden');
+
+            // If we are in the tour, go to next step when modal closes
+            if (tourActive && currentTourStep >= 0 && currentTourStep < tourSteps.length) {
+                setTimeout(nextTourStep, 300);
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('ai-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ----------------------------------------------------
+        // GUIDED TOUR LOGIC
+        // ----------------------------------------------------
+        let tourActive = false;
+        let currentTourStep = -1;
+
+        const tourSteps = [
+            {
+                elementId: 'releases-section',
+                title: 'הסוד הכי גדול: אזור ה-Releases (שחרורים)',
+                text: 'הגעת לאתר של מתכנתים (גיטהאב). רוב הדברים פה הם שורות קוד מסובכות. אבל! אם אתה רק רוצה "להוריד את התוכנה שמוכנה לשימוש", זה המקום היחיד שמעניין אותך. כאן מחכה קובץ ההתקנה לאפליקציה.',
+                position: 'left' // For tooltip
+            },
+            {
+                elementId: 'download-code-btn',
+                title: 'כפתור ה"קוד" הירוק והמבלבל',
+                text: 'אנשים רבים לוחצים על הכפתור הירוק הזה בניסיון להוריד את התוכנה, אבל זה מוריד את קבצי ה*קוד המקורי* (כמו לקבל את כל הלבנים, המלט והמסמרים במקום לקבל בית מוכן). אל תלחץ עליו אלא אם אתה רוצה לתכנת!',
+                position: 'bottom'
+            },
+            {
+                elementId: 'readme-section',
+                title: 'ספר ההוראות: README (קרא אותי)',
+                text: 'ממש כמו חוברת הוראות של איקאה, זהו המסמך הראשי של הפרויקט. היוצרים מסבירים פה בשפה רגילה (יחסית) על מה הפרויקט, איך משתמשים בו, והאם הוא בכלל בחינם.',
+                position: 'top'
+            },
+            {
+                elementId: 'file-table',
+                title: 'רשימת הקבצים: ה"מנוע" שמאחורי הקלעים',
+                text: 'כל התיקיות והקבצים שאתה רואה כאן הם ה"קרביים" של האפליקציה. מתכנתים נכנסים לפה כדי לקרוא את הקוד, למצוא באגים ולתקן אותם. בתור משתמש רגיל, אתה יכול פשוט להתעלם מזה לגמרי!',
+                position: 'bottom'
+            }
+        ];
+
+        function startTour() {
+            tourActive = true;
+            currentTourStep = 0;
+            document.getElementById('tour-overlay').classList.remove('hidden');
+            showTourStep();
+        }
+
+        function showTourStep() {
+            // Remove previous highlights
+            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+            const existingTooltip = document.querySelector('.tour-tooltip');
+            if (existingTooltip) existingTooltip.remove();
+
+            if (currentTourStep >= tourSteps.length) {
+                endTour();
+                return;
+            }
+
+            const step = tourSteps[currentTourStep];
+            const targetElement = document.getElementById(step.elementId);
+
+            if (targetElement) {
+                // Scroll element into view safely
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                setTimeout(() => {
+                    targetElement.classList.add('highlight-tour');
+
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tour-tooltip modal-enter';
+                    tooltip.innerHTML = `
+                        <h3 class="font-bold text-lg mb-2 text-blue-600">${step.title}</h3>
+                        <p class="text-sm mb-4 leading-relaxed">${step.text}</p>
+                        <div class="flex justify-between items-center border-t pt-3">
+                            <span class="text-xs text-gray-500">שלב ${currentTourStep + 1} מתוך ${tourSteps.length}</span>
+                            <div class="flex gap-2">
+                                <button onclick="endTour()" class="px-3 py-1 text-sm text-gray-500 hover:text-gray-800">סיים סיור</button>
+                                <button onclick="nextTourStep()" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-bold shadow hover:bg-blue-700">הבנתי, המשך</button>
+                            </div>
+                        </div>
+                    `;
+
+                    document.body.appendChild(tooltip);
+
+                    // Position tooltip (simplified positioning)
+                    const rect = targetElement.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect();
+
+                    let top, left;
+
+                    if (step.position === 'top') {
+                        top = rect.top + window.scrollY - tooltipRect.height - 15;
+                        left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+                    } else if (step.position === 'bottom') {
+                        top = rect.bottom + window.scrollY + 15;
+                        left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+                    } else if (step.position === 'left') { // because RTL
+                        top = rect.top + window.scrollY + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = rect.left + window.scrollX - tooltipRect.width - 15;
+                    } else { // right
+                        top = rect.top + window.scrollY + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = rect.right + window.scrollX + 15;
+                    }
+
+                    // Simple boundaries check to keep tooltip on screen
+                    if (left < 10) left = 10;
+                    if (left + tooltipRect.width > window.innerWidth - 10) left = window.innerWidth - tooltipRect.width - 10;
+                    if (top < window.scrollY + 10) top = Math.max(10, rect.bottom + window.scrollY + 15); // If off top, move below
+
+                    tooltip.style.top = `${top}px`;
+                    tooltip.style.left = `${left}px`;
+
+                }, 500); // Wait for scroll
+            }
+        }
+
+        function nextTourStep() {
+            currentTourStep++;
+            showTourStep();
+        }
+
+        function endTour() {
+            tourActive = false;
+            currentTourStep = -1;
+            document.getElementById('tour-overlay').classList.add('hidden');
+            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+            const existingTooltip = document.querySelector('.tour-tooltip');
+            if (existingTooltip) existingTooltip.remove();
+        }
+    </script>
+</body>
+</html>
