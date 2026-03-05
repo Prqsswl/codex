@@ -23,7 +23,15 @@ pub fn assert_regex_match<'s>(pattern: &str, actual: &'s str) -> regex_lite::Cap
     });
     regex
         .captures(actual)
-        .unwrap_or_else(|| panic!("regex {pattern:?} did not match {actual:?}"))
+        .unwrap_or_else(|| {
+            // Include actual length and character info for debugging empty strings
+            let actual_debug = if actual.is_empty() {
+                "\"\" (empty string)".to_string()
+            } else {
+                format!("{:?} (length: {})", actual, actual.len())
+            };
+            panic!("regex {pattern:?} did not match {actual_debug}")
+        })
 }
 
 pub fn test_path_buf_with_windows(unix_path: &str, windows_path: Option<&str>) -> PathBuf {
