@@ -59,9 +59,8 @@ pub fn extract_chatgpt_account_id(token: &str) -> Option<String> {
         .map(str::to_string)
 }
 
-pub async fn load_auth_manager() -> Option<AuthManager> {
-    // TODO: pass in cli overrides once cloud tasks properly support them.
-    let config = Config::load_with_cli_overrides(Vec::new()).await.ok()?;
+pub async fn load_auth_manager(overrides: Vec<(String, toml::Value)>) -> Option<AuthManager> {
+    let config = Config::load_with_cli_overrides(overrides).await.ok()?;
     Some(AuthManager::new(
         config.codex_home,
         false,
@@ -71,7 +70,7 @@ pub async fn load_auth_manager() -> Option<AuthManager> {
 
 /// Build headers for ChatGPT-backed requests: `User-Agent`, optional `Authorization`,
 /// and optional `ChatGPT-Account-Id`.
-pub async fn build_chatgpt_headers() -> HeaderMap {
+pub async fn build_chatgpt_headers(overrides: Vec<(String, toml::Value)>) -> HeaderMap {
     use reqwest::header::AUTHORIZATION;
     use reqwest::header::HeaderName;
     use reqwest::header::HeaderValue;
@@ -84,7 +83,7 @@ pub async fn build_chatgpt_headers() -> HeaderMap {
         USER_AGENT,
         HeaderValue::from_str(&ua).unwrap_or(HeaderValue::from_static("codex-cli")),
     );
-    if let Some(am) = load_auth_manager().await
+    if let Some(am) = load_auth_manager(overrides).await
         && let Some(auth) = am.auth()
         && let Ok(tok) = auth.get_token().await
         && !tok.is_empty()
