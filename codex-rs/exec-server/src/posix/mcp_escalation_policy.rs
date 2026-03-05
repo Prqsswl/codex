@@ -139,10 +139,14 @@ impl EscalationPolicy for McpEscalationPolicy {
                         }
                     }
                     ElicitationAction::Decline => EscalateAction::Deny {
-                        reason: Some(reason.unwrap_or_else(|| "User declined execution".to_string())),
+                        reason: Some(
+                            reason.unwrap_or_else(|| "User declined execution".to_string()),
+                        ),
                     },
                     ElicitationAction::Cancel => EscalateAction::Deny {
-                        reason: Some(reason.unwrap_or_else(|| "User cancelled execution".to_string())),
+                        reason: Some(
+                            reason.unwrap_or_else(|| "User cancelled execution".to_string()),
+                        ),
                     },
                 }
             }
