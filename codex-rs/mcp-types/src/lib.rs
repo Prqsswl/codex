@@ -183,12 +183,18 @@ pub struct ClientCapabilitiesRoots {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize, JsonSchema, TS)]
-#[serde(untagged)]
+#[serde(tag = "method", content = "params")]
 pub enum ClientNotification {
-    CancelledNotification(CancelledNotification),
-    InitializedNotification(InitializedNotification),
-    ProgressNotification(ProgressNotification),
-    RootsListChangedNotification(RootsListChangedNotification),
+    #[serde(rename = "notifications/cancelled")]
+    CancelledNotification(<CancelledNotification as ModelContextProtocolNotification>::Params),
+    #[serde(rename = "notifications/initialized")]
+    InitializedNotification(<InitializedNotification as ModelContextProtocolNotification>::Params),
+    #[serde(rename = "notifications/progress")]
+    ProgressNotification(<ProgressNotification as ModelContextProtocolNotification>::Params),
+    #[serde(rename = "notifications/roots/list_changed")]
+    RootsListChangedNotification(
+        <RootsListChangedNotification as ModelContextProtocolNotification>::Params,
+    ),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize, JsonSchema, TS)]
@@ -1359,12 +1365,16 @@ pub enum ServerNotification {
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize, JsonSchema, TS)]
-#[serde(untagged)]
+#[serde(tag = "method", content = "params")]
 pub enum ServerRequest {
-    PingRequest(PingRequest),
-    CreateMessageRequest(CreateMessageRequest),
-    ListRootsRequest(ListRootsRequest),
-    ElicitRequest(ElicitRequest),
+    #[serde(rename = "ping")]
+    PingRequest(<PingRequest as ModelContextProtocolRequest>::Params),
+    #[serde(rename = "sampling/createMessage")]
+    CreateMessageRequest(<CreateMessageRequest as ModelContextProtocolRequest>::Params),
+    #[serde(rename = "roots/list")]
+    ListRootsRequest(<ListRootsRequest as ModelContextProtocolRequest>::Params),
+    #[serde(rename = "elicitation/create")]
+    ElicitRequest(<ElicitRequest as ModelContextProtocolRequest>::Params),
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize, JsonSchema, TS)]

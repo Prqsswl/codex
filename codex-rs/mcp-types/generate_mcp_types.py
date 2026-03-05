@@ -547,7 +547,7 @@ def define_any_of(name: str, list_of_refs: list[Any], description: str | None = 
         emit_doc_comment(description, out)
     out.append(STANDARD_DERIVE)
 
-    if serde := get_serde_annotation_for_anyof_type(name):
+    if serde := get_serde_annotation_for_anyof_type(list_of_refs):
         out.append(serde + "\n")
 
     if name in LARGE_ENUMS:
@@ -576,18 +576,20 @@ def define_any_of(name: str, list_of_refs: list[Any], description: str | None = 
             else ref_name
         )
 
-        # Special-case for `ClientRequest` and `ServerNotification` so the enum
-        # variant's payload is the *Params type rather than the full *Request /
-        # *Notification marker type.
-        if name in ("ClientRequest", "ServerNotification"):
+        # If the enum is using the tag="method", content="params" representation,
+        # the variant's payload should be the *Params type rather than the full
+        # *Request / *Notification marker type.
+        if serde == '#[serde(tag = "method", content = "params")]':
             # Rely on the trait implementation to tell us the exact Rust type
             # of the `params` payload. This guarantees we stay in sync with any
             # special-case logic used elsewhere (e.g. objects with
             # `additionalProperties` mapping to `serde_json::Value`).
-            if name == "ClientRequest":
+            if implements_request_trait(ref_name):
                 payload_type = f"<{ref_name} as ModelContextProtocolRequest>::Params"
-            else:
+            elif implements_notification_trait(ref_name):
                 payload_type = f"<{ref_name} as ModelContextProtocolNotification>::Params"
+            else:
+                payload_type = ref_name
 
             # Determine the wire value for `method` so we can annotate the
             # variant appropriately. If for some reason the schema does not
@@ -608,15 +610,32 @@ def define_any_of(name: str, list_of_refs: list[Any], description: str | None = 
     return out
 
 
-def get_serde_annotation_for_anyof_type(type_name: str) -> str | None:
-    # TODO: Solve this in a more generic way.
-    match type_name:
-        case "ClientRequest":
-            return '#[serde(tag = "method", content = "params")]'
-        case "ServerNotification":
-            return '#[serde(tag = "method", content = "params")]'
-        case _:
-            return "#[serde(untagged)]"
+def get_serde_annotation_for_anyof_type(list_of_refs: list[Any]) -> str | None:
+    # Check if all variants are objects with a constant `method` property and a `params` property.
+    all_have_method = True
+    for item in list_of_refs:
+        if not isinstance(item, dict) or "$ref" not in item:
+            all_have_method = False
+            break
+        ref = item["$ref"]
+        ref_name = type_from_ref(ref)
+        ref_def = DEFINITIONS.get(ref_name, {})
+        properties = ref_def.get("properties", {})
+        method_prop = properties.get("method", {})
+        params_prop = properties.get("params")
+        if not method_prop or "const" not in method_prop:
+            all_have_method = False
+            break
+        if params_prop is None:
+            # We enforce that a `params` property exists (even if optional)
+            # to be safely mapped via `content = "params"`.
+            all_have_method = False
+            break
+
+    if all_have_method:
+        return '#[serde(tag = "method", content = "params")]'
+    else:
+        return "#[serde(untagged)]"
 
 
 def map_type(
