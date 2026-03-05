@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>מפעיל הבוט לגוגל סטודיו (מותאם לאייפד)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f0f4f8;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .big-btn {
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .big-btn:active {
+            transform: scale(0.96);
+            box-shadow: inset 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .sparkle { animation: pulse 2s infinite; }
+        @keyframes pulse { 50% { opacity: 0.5; transform: scale(1.1); } }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white max-w-lg w-full rounded-3xl shadow-2xl overflow-hidden text-center border-t-8 border-blue-500">
+
+        <!-- Header -->
+        <div class="p-8 pb-4">
+            <div class="w-20 h-20 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">
+                🤖
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-2">הבוט האישי שלך לגיטהאב</h1>
+            <p class="text-lg text-gray-500">בשני צעדים פשוטים באייפד שלך</p>
+        </div>
+
+        <div class="p-8 pt-2 space-y-6">
+
+            <!-- Step 1 -->
+            <div class="bg-blue-50 p-6 rounded-2xl border-2 border-blue-100 relative">
+                <div class="absolute -top-4 -right-4 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-200">1</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-3">העתק את המוח של הבוט</h2>
+                <p class="text-gray-600 mb-4">לחץ על הכפתור למטה כדי להעתיק את ההוראות (ה"מוח") לזיכרון של האייפד.</p>
+                <button id="copyBtn" onclick="copyPrompt()" class="big-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold py-5 rounded-xl shadow-lg shadow-blue-200 flex justify-center items-center gap-3">
+                    <span id="copyIcon">📋</span>
+                    <span id="copyText">העתק את ההוראות</span>
+                </button>
+            </div>
+
+            <!-- Arrow -->
+            <div class="text-3xl text-gray-300">⬇️</div>
+
+            <!-- Step 2 -->
+            <div class="bg-green-50 p-6 rounded-2xl border-2 border-green-100 relative">
+                <div class="absolute -top-4 -right-4 w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg shadow-green-200">2</div>
+                <h2 class="text-xl font-bold text-green-900 mb-3">פתח את גוגל סטודיו</h2>
+                <p class="text-gray-600 mb-4">לחץ כאן, האתר ייפתח. במסך שייפתח, הדבק את ההוראות בתיבה שנקראת <strong class="bg-yellow-100 px-1">System Instructions</strong>.</p>
+                <a href="https://aistudio.google.com/app/prompts/new_chat" target="_blank" rel="noopener noreferrer" class="big-btn block w-full bg-gradient-to-r from-green-500 to-green-600 text-white text-xl font-bold py-5 rounded-xl shadow-lg shadow-green-200 flex justify-center items-center gap-3">
+                    <span>🚀</span>
+                    <span>פתח את גוגל סטודיו</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- The Prompt (Hidden from UI) -->
+    <textarea id="systemPrompt" class="sr-only">
+אתה בוט הדרכה חכם וידידותי בגיטהאב לאנשים שאין להם שום מושג מה זה קוד או תכנות, וגולשים דרך האייפד/טלפון שלהם.
+
+המטרה שלך היא להסביר במילים פשוטות מאוד (עברית יומיומית), ללא מונחים טכניים מסובכים, מה המשמעות של אזורים באתר גיטהאב. השתמש באנלוגיות מחיי היומיום (למשל: "קוד המקור זה כמו הלבנים של הבית, אבל מה שאתה צריך זה את הבית המוכן"). המשתמש הגיע לפרויקט של אפליקציית בינה מלאכותית ומנסה להבין איך להוריד או להשתמש בזה.
+
+חוקים חשובים:
+1. התשובה צריכה להיות ברורה, קצרה (עד 3-4 משפטים מקסימום).
+2. הייה חם, מעודד, ותן תחושה ש"הכל בסדר, גיטהאב נראה מבלבל אבל זה פשוט כשמבינים".
+3. תמיד תסביר ש-Releases (שחרורים) זה המקום היחיד שמעניין אנשים שאינם מתכנתים (שם האפליקציה המוכנה).
+    </textarea>
+
+    <script>
+        function copyPrompt() {
+            const copyText = document.getElementById("systemPrompt").value;
+
+            // Modern copy API (works well on iOS/iPadOS)
+            navigator.clipboard.writeText(copyText).then(() => {
+                const btn = document.getElementById("copyBtn");
+                const text = document.getElementById("copyText");
+                const icon = document.getElementById("copyIcon");
+
+                // Visual feedback
+                btn.classList.remove("from-blue-500", "to-blue-600", "shadow-blue-200");
+                btn.classList.add("from-green-500", "to-green-600", "shadow-green-200");
+                text.innerText = "הועתק בהצלחה! ✨";
+                icon.innerText = "✅";
+
+                // Vibrate if supported
+                if (navigator.vibrate) navigator.vibrate(50);
+
+                setTimeout(() => {
+                    btn.classList.remove("from-green-500", "to-green-600", "shadow-green-200");
+                    btn.classList.add("from-blue-500", "to-blue-600", "shadow-blue-200");
+                    text.innerText = "העתק את ההוראות";
+                    icon.innerText = "📋";
+                }, 3000);
+            }).catch(err => {
+                alert('אופס! ההעתקה נכשלה. נסה שוב.');
+            });
+        }
+    </script>
+</body>
+</html>
