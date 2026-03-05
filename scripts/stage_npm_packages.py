@@ -69,14 +69,11 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    # First attempt: exact branch match
     stdout = subprocess.check_output(
         [
             "gh",
             "run",
             "list",
-            "--repo",
-            GITHUB_REPO,
             "--branch",
             f"rust-v{version}",
             "--json",
@@ -90,30 +87,6 @@ def resolve_release_workflow(version: str) -> dict:
         text=True,
     )
     workflow = json.loads(stdout or "null")
-
-    # Second attempt: fallback to recent runs and filter by headBranch
-    if not workflow:
-        stdout = subprocess.check_output(
-            [
-                "gh",
-                "run",
-                "list",
-                "--repo",
-                GITHUB_REPO,
-                "--limit",
-                "100",
-                "--json",
-                "workflowName,url,headSha,headBranch",
-                "--workflow",
-                WORKFLOW_NAME,
-                "--jq",
-                f"map(select(.headBranch == \"rust-v{version}\")) | first",
-            ],
-            cwd=REPO_ROOT,
-            text=True,
-        )
-        workflow = json.loads(stdout or "null")
-
     if not workflow:
         raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
     return workflow
