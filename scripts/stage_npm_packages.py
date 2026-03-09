@@ -71,7 +71,7 @@ def collect_native_components(packages: list[str]) -> set[str]:
 def resolve_release_workflow(version: str) -> dict:
     stdout = subprocess.check_output(
         [
-            "gh",
+            "gh", "--repo", GITHUB_REPO,
             "run",
             "list",
             "--branch",
