@@ -1,0 +1,1 @@
+## 2026-03-09 - Surface line-editing shortcuts\n**Learning:** Standard terminal shortcuts for line deletion (Ctrl+u, Ctrl+k) lack discoverability unless surfaced in UI overlays.\n**Action:** Add these standard terminal line-editing shortcuts to the bottom pane's help overlay so users know they are available, improving accessibility for keyboard-focused users.
