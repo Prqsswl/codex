@@ -60,6 +60,7 @@ pub struct McpProcess {
     stdin: ChildStdin,
     stdout: BufReader<ChildStdout>,
     pending_user_messages: VecDeque<JSONRPCNotification>,
+    pending_responses: VecDeque<JSONRPCResponse>,
 }
 
 impl McpProcess {
@@ -127,6 +128,7 @@ impl McpProcess {
             stdin,
             stdout,
             pending_user_messages: VecDeque::new(),
+            pending_responses: VecDeque::new(),
         })
     }
 
@@ -563,6 +565,10 @@ impl McpProcess {
     ) -> anyhow::Result<JSONRPCResponse> {
         eprintln!("in read_stream_until_response_message({request_id:?})");
 
+        if let Some(pos) = self.pending_responses.iter().position(|r| r.id == request_id) {
+            return Ok(self.pending_responses.remove(pos).unwrap());
+        }
+
         loop {
             let message = self.read_jsonrpc_message().await?;
             match message {
@@ -636,8 +642,8 @@ impl McpProcess {
                 JSONRPCMessage::Error(_) => {
                     anyhow::bail!("unexpected JSONRPCMessage::Error: {message:?}");
                 }
-                JSONRPCMessage::Response(_) => {
-                    anyhow::bail!("unexpected JSONRPCMessage::Response: {message:?}");
+                JSONRPCMessage::Response(resp) => {
+                    self.pending_responses.push_back(resp);
                 }
             }
         }
