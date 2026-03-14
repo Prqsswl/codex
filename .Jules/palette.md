@@ -1,0 +1,3 @@
+## 2024-05-17 - Exposing standard terminal shortcuts
+**Learning:** Standard terminal shortcuts (like `Ctrl+u` and `Ctrl+k`) are often expected by advanced users, but discovering them without explicit hints is hard for regular users.
+**Action:** When working on text areas or input prompts that implement standard text editing behaviors, ensure standard shortcuts are surfaced in help overlays (e.g., the `?` shortcuts menu) to improve discoverability and usability.
