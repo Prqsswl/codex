@@ -1,0 +1,3 @@
+## 2024-05-15 - Add standard deletion shortcuts to UI hints
+**Learning:** Users do not automatically know or try standard terminal keyboard shortcuts (like `Ctrl+u` and `Ctrl+k` for deletion) unless they are explicitly surfaced in the UI.
+**Action:** Added `Ctrl+u` ("to clear to start") to the TUI's primary shortcut overlay so users know they can quickly clear their prompt without holding backspace.
