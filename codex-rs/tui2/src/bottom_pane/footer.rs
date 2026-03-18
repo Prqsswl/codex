@@ -189,6 +189,7 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut paste_image = Line::from("");
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
+    let mut cut_to_start = Line::from("");
     let mut show_transcript = Line::from("");
 
     for descriptor in SHORTCUTS {
@@ -200,6 +201,7 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::PasteImage => paste_image = text,
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
+                ShortcutId::CutToStart => cut_to_start = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
             }
         }
@@ -212,7 +214,7 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         paste_image,
         edit_previous,
         quit,
-        Line::from(""),
+        cut_to_start,
         show_transcript,
     ];
 
@@ -288,6 +290,7 @@ enum ShortcutId {
     PasteImage,
     EditPrevious,
     Quit,
+    CutToStart,
     ShowTranscript,
 }
 
@@ -363,7 +366,7 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
             condition: DisplayCondition::Always,
         }],
         prefix: "",
-        label: " for commands",
+        label: " to pick commands",
     },
     ShortcutDescriptor {
         id: ShortcutId::InsertNewline,
@@ -378,7 +381,7 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
             },
         ],
         prefix: "",
-        label: " for newline",
+        label: " to insert newline",
     },
     ShortcutDescriptor {
         id: ShortcutId::FilePaths,
@@ -387,7 +390,7 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
             condition: DisplayCondition::Always,
         }],
         prefix: "",
-        label: " for file paths",
+        label: " to add file paths",
     },
     ShortcutDescriptor {
         id: ShortcutId::PasteImage,
@@ -423,6 +426,15 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: " to exit",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::CutToStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to cut to start",
     },
     ShortcutDescriptor {
         id: ShortcutId::ShowTranscript,
