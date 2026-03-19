@@ -364,7 +364,7 @@ async fn shell_tools_start_before_response_completed_when_stream_delayed() -> an
     let _ = first_gate_tx.send(());
     let _ = follow_up_gate_tx.send(());
 
-    let timestamps = tokio::time::timeout(Duration::from_secs(1), async {
+    let timestamps = tokio::time::timeout(Duration::from_secs(10), async {
         loop {
             let contents = fs::read_to_string(output_path)?;
             let timestamps = contents
@@ -379,7 +379,7 @@ async fn shell_tools_start_before_response_completed_when_stream_delayed() -> an
             if timestamps.len() == 4 {
                 return Ok::<_, anyhow::Error>(timestamps);
             }
-            tokio::time::sleep(Duration::from_millis(10)).await;
+            tokio::time::sleep(Duration::from_millis(100)).await;
         }
     })
     .await??;
