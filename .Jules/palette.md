@@ -1,0 +1,3 @@
+## 2025-02-14 - Expose Keyboard Navigation/Deletion
+**Learning:** Terminal inputs natively support rich keyboard operations like `ctrl+u` to clear line, but users from GUI applications rarely discover these without explicit hints.
+**Action:** When working on CLI/TUI applications, explicitly surface standard terminal shortcuts (like `ctrl+u` or `ctrl+k`) in help menus and footers rather than assuming they are known implicit behaviors.
