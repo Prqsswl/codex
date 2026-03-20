@@ -74,10 +74,12 @@ def resolve_release_workflow(version: str) -> dict:
             "gh",
             "run",
             "list",
+            "--repo",
+            GITHUB_REPO,
             "--branch",
             f"rust-v{version}",
             "--json",
-            "workflowName,url,headSha",
+            "workflowName,url,headSha,headBranch",
             "--workflow",
             WORKFLOW_NAME,
             "--jq",
@@ -87,9 +89,33 @@ def resolve_release_workflow(version: str) -> dict:
         text=True,
     )
     workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    if workflow:
+        return workflow
+
+    stdout = subprocess.check_output(
+        [
+            "gh",
+            "run",
+            "list",
+            "--repo",
+            GITHUB_REPO,
+            "--limit",
+            "500",
+            "--json",
+            "workflowName,url,headSha,headBranch",
+            "--workflow",
+            WORKFLOW_NAME,
+        ],
+        cwd=REPO_ROOT,
+        text=True,
+    )
+    workflows = json.loads(stdout or "[]")
+    target_branches = {f"rust-v{version}", f"v{version}", version}
+    for wf in workflows:
+        if wf.get("headBranch") in target_branches:
+            return wf
+
+    raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:
