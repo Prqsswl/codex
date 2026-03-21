@@ -89,6 +89,7 @@ impl From<&KeyBinding> for Span<'static> {
             KeyCode::Right => "→".to_string(),
             KeyCode::PageUp => "pgup".to_string(),
             KeyCode::PageDown => "pgdn".to_string(),
+            KeyCode::Delete => "del".to_string(),
             _ => format!("{key}").to_ascii_lowercase(),
         };
         Span::styled(format!("{modifiers}{key}"), key_hint_style())
