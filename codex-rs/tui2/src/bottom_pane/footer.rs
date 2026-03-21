@@ -190,6 +190,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
     let mut edit_previous = Line::from("");
     let mut quit = Line::from("");
     let mut show_transcript = Line::from("");
+    let mut clear_to_start = Line::from("");
+    let mut clear_to_end = Line::from("");
+    let mut delete_word_forward = Line::from("");
+    let mut delete_word_backward = Line::from("");
 
     for descriptor in SHORTCUTS {
         if let Some(text) = descriptor.overlay_entry(state) {
@@ -201,6 +205,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
                 ShortcutId::EditPrevious => edit_previous = text,
                 ShortcutId::Quit => quit = text,
                 ShortcutId::ShowTranscript => show_transcript = text,
+                ShortcutId::ClearToStart => clear_to_start = text,
+                ShortcutId::ClearToEnd => clear_to_end = text,
+                ShortcutId::DeleteWordForward => delete_word_forward = text,
+                ShortcutId::DeleteWordBackward => delete_word_backward = text,
             }
         }
     }
@@ -214,6 +222,10 @@ fn shortcut_overlay_lines(state: ShortcutsState) -> Vec<Line<'static>> {
         quit,
         Line::from(""),
         show_transcript,
+        clear_to_start,
+        clear_to_end,
+        delete_word_backward,
+        delete_word_forward,
     ];
 
     build_columns(ordered)
@@ -289,6 +301,10 @@ enum ShortcutId {
     EditPrevious,
     Quit,
     ShowTranscript,
+    ClearToStart,
+    ClearToEnd,
+    DeleteWordForward,
+    DeleteWordBackward,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -432,6 +448,42 @@ const SHORTCUTS: &[ShortcutDescriptor] = &[
         }],
         prefix: "",
         label: " to view transcript",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::ClearToStart,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('u')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to clear to start",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::ClearToEnd,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('k')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to clear to end",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::DeleteWordBackward,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Char('w')),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to delete word backward",
+    },
+    ShortcutDescriptor {
+        id: ShortcutId::DeleteWordForward,
+        bindings: &[ShortcutBinding {
+            key: key_hint::ctrl(KeyCode::Delete),
+            condition: DisplayCondition::Always,
+        }],
+        prefix: "",
+        label: " to delete word forward",
     },
 ];
 
