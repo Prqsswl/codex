@@ -1,0 +1,3 @@
+## 2025-02-09 - Terminal Deletion Shortcuts Discoverability
+**Learning:** Terminal environments often have standard but hidden keyboard shortcuts for text editing (like `Ctrl+u` and `Ctrl+k`). Users who are not experienced terminal power-users may not know these exist, leading to a frustrating experience having to manually backspace or delete long text strings character by character.
+**Action:** Always proactively surface implicit or "standard" terminal editing shortcuts in the application's help menu, tooltips, or shortcut overlays. Don't assume users know them. Make them explicit to enhance discoverability and improve the overall text-editing UX in a terminal context.
