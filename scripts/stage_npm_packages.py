@@ -69,11 +69,14 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
+    repo = os.environ.get("GITHUB_REPO", GITHUB_REPO)
     stdout = subprocess.check_output(
         [
             "gh",
             "run",
             "list",
+            "--repo",
+            repo,
             "--branch",
             f"rust-v{version}",
             "--json",
@@ -88,7 +91,37 @@ def resolve_release_workflow(version: str) -> dict:
     )
     workflow = json.loads(stdout or "null")
     if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
+
+        # Fallback query for older or differently named releases
+        stdout = subprocess.check_output(
+            [
+                "gh",
+                "run",
+                "list",
+                "--repo",
+                repo,
+                "--limit",
+                "500",
+                "--json",
+                "workflowName,url,headSha,headBranch",
+                "--workflow",
+                WORKFLOW_NAME,
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        runs = json.loads(stdout or "[]")
+
+        expected_branches = {f"rust-v{version}", f"v{version}", f"{version}"}
+
+        for run in runs:
+            if run.get("headBranch") in expected_branches:
+                workflow = run
+                break
+
+        if not workflow:
+            raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
+
     return workflow
 
 
