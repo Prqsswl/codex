@@ -34,10 +34,11 @@ jobs:
         id: stage_npm_package
         env:
           GH_TOKEN: ${{ github.token }}
+          GITHUB_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
           # Use a rust-release version that includes all native binaries.
-          CODEX_VERSION=0.116.0
+          CODEX_VERSION=0.74.0
           OUTPUT_DIR="${RUNNER_TEMP}"
           python3 ./scripts/stage_npm_packages.py \
             --release-version "$CODEX_VERSION" \

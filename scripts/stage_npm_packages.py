@@ -69,27 +69,61 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-    )
-    workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    repo = os.environ.get("GITHUB_REPO", "openai/codex")
+    for branch_name in [f"rust-v{version}", f"v{version}", version]:
+        try:
+            stdout = subprocess.check_output(
+                [
+                    "gh",
+                    "run",
+                    "list",
+                    "--repo",
+                    repo,
+                    "--branch",
+                    branch_name,
+                    "--json",
+                    "workflowName,url,headSha",
+                    "--workflow",
+                    WORKFLOW_NAME,
+                    "--jq",
+                    "first(.[])",
+                ],
+                cwd=REPO_ROOT,
+                text=True,
+            )
+            workflow = json.loads(stdout or "null")
+            if workflow:
+                return workflow
+        except subprocess.CalledProcessError:
+            continue
+
+    # Fallback to listing recent runs and filtering by headBranch
+    try:
+        stdout = subprocess.check_output(
+            [
+                "gh",
+                "run",
+                "list",
+                "--repo",
+                repo,
+                "--limit",
+                "500",
+                "--json",
+                "workflowName,url,headSha,headBranch",
+                "--workflow",
+                WORKFLOW_NAME,
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        runs = json.loads(stdout or "[]")
+        for run in runs:
+            if run.get("headBranch") in [f"rust-v{version}", f"v{version}", version]:
+                return run
+    except subprocess.CalledProcessError:
+        pass
+
+    raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:

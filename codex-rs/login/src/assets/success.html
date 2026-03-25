@@ -104,7 +104,6 @@
         align-items: center;
         gap: 4px;
         display: flex;
-        text-decoration: none;
       }
       .close-button,
       .redirect-text {
@@ -134,7 +133,7 @@
       <div class="inner-container">
         <div class="content">
           <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32" aria-label="Codex Logo" role="img"><path stroke="#000" stroke-linecap="round" stroke-width="2.484" d="M22.356 19.797H17.17M9.662 12.29l1.979 3.576a.511.511 0 0 1-.005.504l-1.974 3.409M30.758 16c0 8.15-6.607 14.758-14.758 14.758-8.15 0-14.758-6.607-14.758-14.758C1.242 7.85 7.85 1.242 16 1.242c8.15 0 14.758 6.608 14.758 14.758Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32"><path stroke="#000" stroke-linecap="round" stroke-width="2.484" d="M22.356 19.797H17.17M9.662 12.29l1.979 3.576a.511.511 0 0 1-.005.504l-1.974 3.409M30.758 16c0 8.15-6.607 14.758-14.758 14.758-8.15 0-14.758-6.607-14.758-14.758C1.242 7.85 7.85 1.242 16 1.242c8.15 0 14.758 6.608 14.758 14.758Z"></path></svg>
           </div>
           <div class="title">Signed in to Codex</div>
         </div>
@@ -148,9 +147,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <a href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button" aria-label="Redirect to setup page">
-                <span class="redirect-text">Redirecting in 3s...</span>
-              </a>
+              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+                <div class="redirect-text">Redirecting in 3s...</div>
+              </div>
             </div>
           </div>
         </div>
@@ -175,8 +174,6 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
-          const redirectButton = document.querySelector('.redirect-button');
-          redirectButton.href = redirectUrl;
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
