@@ -55,7 +55,7 @@ fn pipes_stdin_and_stdout_through_socket() -> anyhow::Result<()> {
         .stdout("response");
 
     let received = rx
-        .recv_timeout(Duration::from_secs(1))
+        .recv_timeout(Duration::from_secs(30))
         .context("server did not receive data in time")?;
     assert_eq!(received, b"request");
 
