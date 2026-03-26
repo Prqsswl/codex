@@ -1,0 +1,4 @@
+
+## 2024-03-25 - [Semantic Anchor Tags for JS Redirects]
+**Learning:** Pure JS redirects (like `div` with a click handler or timeout) break accessibility because screen readers don't announce them as links, and they provide no fallback if JS fails. Adding `aria-role="link"` to a `div` isn't enough; using a semantic `<a>` tag makes the element focusable, exposes it properly to accessibility APIs, and allows users to natively interact with it (e.g., right-click to copy link, middle-click to open in new tab).
+**Action:** When implementing timed or JS-driven redirects, always use a semantic `<a>` tag with its `href` attribute dynamically set. This acts as an accessible, functional fallback link. Apply minimal CSS resets (e.g., `text-decoration: none`) to visually mask the anchor tag if needed.
