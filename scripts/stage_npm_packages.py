@@ -69,11 +69,14 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
+    repo = os.environ.get("GITHUB_REPOSITORY", "openai/codex")
     stdout = subprocess.check_output(
         [
             "gh",
             "run",
             "list",
+            "--repo",
+            repo,
             "--branch",
             f"rust-v{version}",
             "--json",
