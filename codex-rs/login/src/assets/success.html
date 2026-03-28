@@ -129,7 +129,7 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <main class="container">
       <div class="inner-container">
         <div class="content">
           <div class="logo">
@@ -140,7 +140,7 @@
         <div class="close-box" style="display: none;">
           <div class="setup-description">You may now close this page</div>
         </div>
-        <div class="setup-box" style="display: none;">
+        <div class="setup-box" style="display: none;" aria-live="polite" aria-atomic="true">
           <div class="setup-content">
             <div class="setup-text">
               <div class="setup-title">Finish setting up your API organization</div>
@@ -148,13 +148,13 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text" aria-live="assertive">Redirecting in 3s...</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
     <script>
       (function () {
         const params = new URLSearchParams(window.location.search);
