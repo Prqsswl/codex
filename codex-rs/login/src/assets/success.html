@@ -96,6 +96,7 @@
       }
       .close-button,
       .redirect-button {
+        text-decoration: none;
         height: 28px;
         padding: 8px 16px;
         background: var(--interactive-bg-primary-default, #0D0D0D);
@@ -137,19 +138,19 @@
           </div>
           <div class="title">Signed in to Codex</div>
         </div>
-        <div class="close-box" style="display: none;">
+        <div class="close-box" style="display: none;" aria-live="polite" aria-atomic="true">
           <div class="setup-description">You may now close this page</div>
         </div>
-        <div class="setup-box" style="display: none;">
+        <div class="setup-box" style="display: none;" aria-live="polite" aria-atomic="true">
           <div class="setup-content">
             <div class="setup-text">
               <div class="setup-title">Finish setting up your API organization</div>
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -174,6 +175,8 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
+          const redirectButton = document.querySelector('.redirect-button');
+          if (redirectButton) redirectButton.href = redirectUrl;
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
