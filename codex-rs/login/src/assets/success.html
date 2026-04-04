@@ -126,9 +126,21 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
     </style>
   </head>
   <body>
+    <div id="announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -137,10 +149,10 @@
           </div>
           <div class="title">Signed in to Codex</div>
         </div>
-        <div class="close-box" style="display: none;" aria-live="polite" aria-atomic="true">
+        <div class="close-box" style="display: none;">
           <div class="setup-description">You may now close this page</div>
         </div>
-        <div class="setup-box" style="display: none;" aria-live="polite" aria-atomic="true">
+        <div class="setup-box" style="display: none;">
           <div class="setup-content">
             <div class="setup-text">
               <div class="setup-title">Finish setting up your API organization</div>
@@ -165,9 +177,11 @@
         const planType = params.get('plan_type');
         const idToken = params.get('id_token');
         // Show different message and optional redirect when setup is required
+        const announcer = document.getElementById('announcer');
         if (needsSetup) {
           const setupBox = document.querySelector('.setup-box');
           setupBox.style.display = 'flex';
+
           const redirectUrlObj = new URL('/org-setup', platformUrl);
           redirectUrlObj.searchParams.set('p', planType);
           redirectUrlObj.searchParams.set('t', idToken);
@@ -177,8 +191,10 @@
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
+            const announcementText = 'Redirecting in ' + countdown + ' seconds…';
             message.textContent =
               'Redirecting in ' + countdown + 's…';
+            announcer.textContent = announcementText;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -186,10 +202,12 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          announcer.textContent = 'Finish setting up your API organization. Add a payment method to use your organization.';
+          setTimeout(tick, 2000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
+          announcer.textContent = 'You may now close this page';
         }
       })();
     </script>
