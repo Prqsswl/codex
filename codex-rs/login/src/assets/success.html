@@ -146,7 +146,7 @@
               <div class="setup-title">Finish setting up your API organization</div>
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
-            <div class="redirect-box">
+            <div class="redirect-box" aria-live="polite" aria-atomic="true">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
                 <div class="redirect-text">Redirecting in 3s...</div>
               </div>
@@ -186,7 +186,7 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 2000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
