@@ -1,3 +1,0 @@
-## 2025-04-07 - Add accessibility context to countdowns
-**Learning:** When displaying dynamic countdowns or status changes (like "Redirecting in 3s..."), screen readers may not announce the initial content if it updates too quickly, or they may not announce it at all if not properly marked as an ARIA live region.
-**Action:** Always add `aria-live="polite"` or `aria-live="assertive"` to elements that contain dynamic text updates like countdowns or status messages to ensure they are announced to screen readers. For initial updates, consider a small delay before the first tick so the initial context is read.
