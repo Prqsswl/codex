@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div id="sr-announcer" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -164,8 +165,10 @@
         const projectId = params.get('project_id');
         const planType = params.get('plan_type');
         const idToken = params.get('id_token');
+        const announcer = document.getElementById('sr-announcer');
         // Show different message and optional redirect when setup is required
         if (needsSetup) {
+          announcer.textContent = 'Finish setting up your API organization. Redirecting in 3 seconds…';
           const setupBox = document.querySelector('.setup-box');
           setupBox.style.display = 'flex';
           const redirectUrlObj = new URL('/org-setup', platformUrl);
@@ -175,10 +178,12 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
-          let countdown = 3;
+          let countdown = 2;
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
+            announcer.textContent =
+              'Redirecting in ' + countdown + ' seconds…';
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -186,8 +191,9 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
+          announcer.textContent = 'Signed in to Codex. You may now close this page.';
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
         }
