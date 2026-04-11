@@ -126,9 +126,21 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
     </style>
   </head>
   <body>
+    <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -176,9 +188,14 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
+          const announcer = document.getElementById('a11y-announcer');
+          announcer.textContent = 'Finish setting up your API organization. Add a payment method to use your organization. Redirecting in ' + countdown + 's…';
+          message.textContent = 'Redirecting in ' + countdown + 's…';
+          countdown -= 1;
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
+            announcer.textContent = 'Redirecting in ' + countdown + 's…';
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -186,7 +203,7 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
