@@ -181,19 +181,20 @@
           button.href = redirectUrl;
           const announcer = document.getElementById('sr-announcer');
           let countdown = 3;
+          // Set initial screen reader context
+          announcer.textContent = 'Redirecting in ' + countdown + 's…';
+
           function tick() {
-            message.textContent = 'Redirecting in ' + countdown + 's…';
-            announcer.textContent = 'Redirecting in ' + countdown + 's…';
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
               countdown -= 1;
+              message.textContent = 'Redirecting in ' + countdown + 's…';
+              announcer.textContent = 'Redirecting in ' + countdown + 's…';
               setTimeout(tick, 1000);
             }
           }
-          // Set initial screen reader context but trigger the first visual update immediately
-          announcer.textContent = 'Redirecting in ' + countdown + 's…';
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
