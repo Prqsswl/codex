@@ -1,0 +1,3 @@
+## 2024-04-14 - ARIA Live Regions for Dynamic Countdowns
+**Learning:** When creating a dynamic redirect countdown, using `setTimeout` to delay the first tick introduces a logic bug that extends the wait time by freezing the UI on the initial state for an extra cycle. The `aria-live` region must be placed on a permanently present DOM element, rather than toggled via `display: none`, and its text content can be updated simultaneously with the visible countdown.
+**Action:** Initialize the state correctly before triggering the timeout loop, and ensure `aria-live` attributes are on a dedicated, visually hidden (`sr-only`) permanently present element.
