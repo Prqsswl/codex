@@ -114,6 +114,17 @@
         word-wrap: break-word;
         text-decoration: none;
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
       .logo {
         display: flex;
         align-items: center;
@@ -129,6 +140,7 @@
     </style>
   </head>
   <body>
+    <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -147,9 +159,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button" style="text-decoration: none; color: inherit;">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -164,6 +176,7 @@
         const projectId = params.get('project_id');
         const planType = params.get('plan_type');
         const idToken = params.get('id_token');
+        const announcer = document.getElementById('a11y-announcer');
         // Show different message and optional redirect when setup is required
         if (needsSetup) {
           const setupBox = document.querySelector('.setup-box');
@@ -175,7 +188,12 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const redirectLink = document.querySelector('.redirect-button');
+          if (redirectLink) {
+              redirectLink.href = redirectUrl;
+          }
           let countdown = 3;
+          announcer.textContent = 'Finish setting up your API organization. Add a payment method to use your organization. Redirecting in 3 seconds...';
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
@@ -190,6 +208,7 @@
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
+          announcer.textContent = 'Signed in to Codex. You may now close this page.';
         }
       })();
     </script>
