@@ -114,6 +114,17 @@
         word-wrap: break-word;
         text-decoration: none;
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
       .logo {
         display: flex;
         align-items: center;
@@ -148,13 +159,14 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text" aria-hidden="true">Redirecting in 3s...</div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <script>
       (function () {
         const params = new URLSearchParams(window.location.search);
@@ -175,18 +187,25 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const announcer = document.getElementById('a11y-announcer');
           let countdown = 3;
+
+          // Initial text is already in the HTML for '3s...'
+          announcer.textContent = 'Redirecting in ' + countdown + 's…';
+
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            countdown -= 1;
+            const text = 'Redirecting in ' + countdown + 's…';
+            message.textContent = text;
+            announcer.textContent = text;
+
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
-              countdown -= 1;
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
