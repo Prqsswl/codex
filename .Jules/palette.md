@@ -1,0 +1,3 @@
+## 2024-04-20 - Accessible Dynamic Countdown and Keyboard Focus
+**Learning:** For dynamic redirect countdowns, using a visually hidden `aria-live` region avoids announcement issues. Additionally, initializing the text state simultaneously with a `setTimeout` loop prevents an extra cycle of frozen UI. Changing actionable divs to `a` tags adds essential keyboard focusability, though inline CSS (`text-decoration: none`) is needed to maintain style consistency.
+**Action:** Always implement dynamic text updates with synchronized `aria-live` regions and use semantic HTML elements (like `a` or `button`) for interactive components to ensure keyboard navigation.
