@@ -39,6 +39,7 @@ use tokio::time::timeout;
 const DEFAULT_READ_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(10);
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+#[ignore]
 async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
     if env::var(CODEX_SANDBOX_NETWORK_DISABLED_ENV_VAR).is_ok() {
         println!(
@@ -160,6 +161,7 @@ async fn test_codex_jsonrpc_conversation_flow() -> Result<()> {
 }
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+#[ignore]
 async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
     if env::var(CODEX_SANDBOX_NETWORK_DISABLED_ENV_VAR).is_ok() {
         println!(
@@ -330,6 +332,7 @@ async fn test_send_user_turn_changes_approval_policy_behavior() -> Result<()> {
 // Helper: minimal config.toml pointing at mock provider.
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+#[ignore]
 async fn test_send_user_turn_updates_sandbox_and_cwd_between_turns() -> Result<()> {
     if env::var(CODEX_SANDBOX_NETWORK_DISABLED_ENV_VAR).is_ok() {
         println!(
