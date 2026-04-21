@@ -104,6 +104,8 @@
         align-items: center;
         gap: 4px;
         display: flex;
+        text-decoration: none;
+        color: inherit;
       }
       .close-button,
       .redirect-text {
@@ -126,6 +128,17 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
     </style>
   </head>
   <body>
@@ -147,14 +160,15 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a id="redirect-link" href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div id="aria-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <script>
       (function () {
         const params = new URLSearchParams(window.location.search);
@@ -175,10 +189,16 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
-          let countdown = 3;
+          const redirectLink = document.getElementById('redirect-link');
+          const liveRegion = document.getElementById('aria-live-region');
+          if (redirectLink) redirectLink.href = redirectUrl;
+
+          let countdown = 2;
+          liveRegion.textContent = 'Redirecting in 3 seconds.';
+
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            message.textContent = 'Redirecting in ' + countdown + 's…';
+            liveRegion.textContent = 'Redirecting in ' + countdown + ' seconds.';
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -186,7 +206,7 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
