@@ -1,0 +1,3 @@
+## 2024-05-15 - Improved Accessibility of Redirect Countdown
+**Learning:** Some screen readers miss rapid sequential updates to visual elements or fail to announce elements that transition from hidden to visible. Adding a dedicated, visually hidden `aria-live` region outside of conditionally displayed containers ensures reliable announcements. Furthermore, semantic `<a>` tags with `href` are better for redirect links than `<div>` elements.
+**Action:** When implementing countdowns or redirects, explicitly set up a persistent `aria-live` element in the DOM and use `<a>` tags for redirect buttons, ensuring proper initialization of the countdown text before the first timeout tick.
