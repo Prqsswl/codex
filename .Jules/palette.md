@@ -1,0 +1,3 @@
+## 2024-04-26 - Accessibility fix for dynamic redirect countdown
+**Learning:** When using JavaScript to update text that acts as a redirect countdown, screen readers won't announce the initial state or dynamic updates if the container lacks `aria-live`. Also, hiding the initial state with `display: none` and then toggling it visible can cause screen readers to miss the text completely.
+**Action:** Always add `aria-live="polite"` and `aria-atomic="true"` to dynamic text regions and rely on CSS classes (like `.sr-only`) or proper semantic structures rather than `display: none` if possible. In this success page, I'll add ARIA attributes to the `redirect-text` div to announce the countdown.
