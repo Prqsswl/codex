@@ -1,0 +1,3 @@
+## 2025-04-27 - Dynamic Redirect Accessibility
+**Learning:** Screen readers often fail to reliably announce elements (like a countdown) transitioning from hidden to visible when using `display: none`. Additionally, semantic interactable elements (`<a>` rather than `<div>`) provide a fallback for users if JS fails or if they wish to interact immediately.
+**Action:** Place ARIA live regions (`aria-live="polite" aria-atomic="true"`) on dedicated, visually hidden, permanently present DOM elements rather than toggling visibility on their containers. Convert `<div>` buttons to `<a>` semantic links, ensuring proper CSS resets (like `text-decoration: none`) are applied to avoid visual regressions.
