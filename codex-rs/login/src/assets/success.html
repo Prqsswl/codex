@@ -96,8 +96,6 @@
       }
       .close-button,
       .redirect-button {
-        text-decoration: none;
-        color: inherit;
         height: 28px;
         padding: 8px 16px;
         background: var(--interactive-bg-primary-default, #0D0D0D);
@@ -149,10 +147,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;" aria-live="polite" aria-atomic="true" id="redirect-live-region"></div>
-              <a href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button" id="redirect-link">
+              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
@@ -178,16 +175,10 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
-          const liveRegion = document.getElementById('redirect-live-region');
-          const redirectLink = document.getElementById('redirect-link');
-          if (redirectLink) {
-            redirectLink.href = redirectUrl;
-          }
           let countdown = 3;
           function tick() {
-            const msgText = 'Redirecting in ' + countdown + 's…';
-            message.textContent = msgText;
-            if (liveRegion) liveRegion.textContent = msgText;
+            message.textContent =
+              'Redirecting in ' + countdown + 's…';
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
