@@ -1,0 +1,3 @@
+## 2024-05-01 - Accessible Redirect Countdowns
+**Learning:** Dynamically shown redirect countdowns must use persistent, visually hidden `aria-live` regions to ensure screen readers reliably announce the updates without relying on `display: none` container toggles. Converting generic `div` buttons to `a` tags requires inline styles like `text-decoration: none; color: inherit;` to maintain visual consistency without violating the "no custom CSS classes" rule.
+**Action:** Always use a dedicated, permanent `.sr-only` (or inline styled equivalent) DOM element for `aria-live` regions rather than toggling visibility on the parent container. When replacing `div`s with semantic tags, use inline styles for resets if class addition is restricted.
