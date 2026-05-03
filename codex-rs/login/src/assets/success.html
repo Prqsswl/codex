@@ -176,9 +176,11 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
+          const announcer = document.getElementById('a11y-announcer');
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const text = 'Redirecting in ' + countdown + 's…';
+            message.textContent = text;
+            if (announcer) { announcer.textContent = text; }
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -193,6 +195,7 @@
         }
       })();
     </script>
+    <div id="a11y-announcer" aria-live="polite" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
   </body>
   </html>
   
