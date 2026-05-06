@@ -1,0 +1,3 @@
+## 2024-05-06 - Dynamic Redirect Countdown Needs Visually Hidden ARIA Live Region
+**Learning:** Dynamically toggling `display: none` on countdown text or assuming visible text changes will be reliably announced during redirects is insufficient. Screen readers require an explicitly marked `aria-live` ('polite' or 'assertive') and `aria-atomic='true'` region, placed on a permanently present, visually hidden (e.g. `style="position: absolute;..."`) DOM element.
+**Action:** When implementing auto-redirects or countdowns in static UI pages, inject a visually hidden DOM element with `aria-live="polite"` near the root, and update its text content simultaneously with the visible countdown text to ensure screen readers read the declining count.
