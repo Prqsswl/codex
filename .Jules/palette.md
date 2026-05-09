@@ -1,0 +1,3 @@
+## 2024-05-09 - Accessible Redirect Countdowns
+**Learning:** Redirect countdowns on static login/success pages often lack `aria-live` announcements, meaning screen readers are not informed of the countdown ticks or impending redirect. Making the button an actual `<a>` tag with the final `href` ensures it can be focused and triggered manually, which is better for accessibility.
+**Action:** Always add a visually hidden `aria-live="polite" aria-atomic="true"` announcer div when implementing JS-based visual countdowns, update it alongside the visual counter, and convert redirect buttons to `<a>` links.
