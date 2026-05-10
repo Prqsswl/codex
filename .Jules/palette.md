@@ -1,0 +1,3 @@
+## 2024-06-25 - Make redirect countdowns accessible
+**Learning:** Redirect countdowns on static HTML pages often lack an explicit link and don't announce themselves to screen readers, leaving users with disabilities confused or trapped.
+**Action:** Always wrap the visible countdown text in an explicit `<a>` link (for keyboard navigation and explicit affordance) and use a visually-hidden `aria-live="polite"` element that updates alongside the visual text so screen readers announce the countdown. Also ensure to properly initialize the countdown state so `setTimeout` doesn't pause the visual timer on the initial state.

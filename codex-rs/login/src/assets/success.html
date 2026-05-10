@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;" aria-live="polite" aria-atomic="true" id="a11y-announcer"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -147,9 +148,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a id="redirect-link" href="#" style="text-decoration: none; color: inherit;" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -174,11 +175,19 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
+          const redirectLink = document.getElementById('redirect-link');
+          if (redirectLink) {
+            redirectLink.href = redirectUrl;
+          }
           const message = document.querySelector('.redirect-text');
-          let countdown = 3;
+          const announcer = document.getElementById('a11y-announcer');
+          let countdown = 2;
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const text = 'Redirecting in ' + countdown + 's...';
+            message.textContent = text;
+            if (announcer) {
+              announcer.textContent = text;
+            }
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -186,7 +195,7 @@
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
