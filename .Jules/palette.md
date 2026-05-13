@@ -1,0 +1,3 @@
+## 2026-05-13 - Accessible Countdown Redirects
+**Learning:** Screen readers often miss dynamic countdown text if it isn't explicitly marked as a live region or if the DOM change happens via a fast timeout interval that they can't catch. Furthermore, interactive redirect elements visually styled as buttons but lacking `href` properties are not keyboard navigable.
+**Action:** When implementing countdown redirects, inject a visually hidden `aria-live="polite"` `aria-atomic="true"` announcer div to explicitly declare text changes to screen readers, and convert the visual button into an `<a>` tag with a valid `href` so it is natively focusable and keyboard navigable without requiring custom JS keydown handlers.
