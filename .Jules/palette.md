@@ -1,0 +1,3 @@
+## 2024-05-14 - ARIA Live Countdown and Redirect Optimization
+**Learning:** For countdown redirects, screen readers can miss the announcement if `aria-live` is dynamically toggled. Also, putting the first state update inside the `setTimeout` function creates an extra wait cycle (freezing UI on initialization state).
+**Action:** Always place `aria-live` elements permanently in the DOM with `style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"`. Initialize the visual and ARIA text *before* starting the `setTimeout` loop.

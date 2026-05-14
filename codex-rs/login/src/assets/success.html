@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div id="aria-announcer" aria-live="polite" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -176,17 +177,26 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
+          const announcer = document.getElementById('aria-announcer');
+          function updateCountdownText() {
+            const text = 'Redirecting in ' + countdown + 's…';
+            message.textContent = text;
+            if (announcer) {
+              announcer.textContent = text;
+            }
+          }
+          // Initialize immediately
+          updateCountdownText();
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
-            if (countdown === 0) {
+            countdown -= 1;
+            updateCountdownText();
+            if (countdown <= 0) {
               window.location.replace(redirectUrl);
             } else {
-              countdown -= 1;
               setTimeout(tick, 1000);
             }
           }
-          tick();
+          setTimeout(tick, 1000);
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
