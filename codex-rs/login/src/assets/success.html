@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div id="a11y-announcer" aria-live="polite" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -175,7 +176,10 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const announcer = document.getElementById('a11y-announcer');
           let countdown = 3;
+          // Announce intent once for short countdown to avoid assertive spamming
+          announcer.textContent = 'Redirecting in ' + countdown + ' seconds…';
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
@@ -190,6 +194,8 @@
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
+          const announcer = document.getElementById('a11y-announcer');
+          announcer.textContent = 'You may now close this page';
         }
       })();
     </script>
