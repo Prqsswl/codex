@@ -1,0 +1,3 @@
+## 2024-05-15 - Dedicated ARIA Live Regions vs Inline Attributes
+**Learning:** When creating auto-updating text (like countdowns) in a dynamic HTML structure, placing `aria-live` directly on the changing element can cause screen readers to inconsistently announce changes, especially if the element's container might have `display: none` toggled during initialization.
+**Action:** Always create a dedicated, permanently present, visually hidden DOM element (e.g., `<div aria-live="polite" class="sr-only">`) to act as a stable announcer, and update its `textContent` simultaneously with the visual UI.
