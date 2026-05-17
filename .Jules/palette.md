@@ -1,0 +1,3 @@
+## 2024-05-17 - Dynamic Redirect Countdown Accessibility
+**Learning:** When using JavaScript to implement a dynamic redirect countdown, delaying the first tick with `setTimeout` artificially extends the wait time by freezing the UI on the initial state for an extra cycle. Also, dynamically toggling text on screen is not inherently announced by screen readers without a dedicated `aria-live` region.
+**Action:** Initialize the countdown state to reflect the HTML default before triggering the timeout loop, and update an invisible (`sr-only` styled) `aria-live='polite'` announcer text content simultaneously with the visible countdown. Also, make sure redirect buttons use semantic `<a>` tags with `href` set so they are keyboard navigable.
