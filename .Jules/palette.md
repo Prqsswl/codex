@@ -1,0 +1,3 @@
+## 2024-05-18 - Fix redirect countdown loop and styling
+**Learning:** When creating a dynamic redirect countdown, using `setTimeout` to delay the first tick introduces a logic bug that artificially extends the wait time by freezing the UI on the initial state for an extra cycle. Also, when changing a div to an `a` tag for semantics, explicit styles are needed (`text-decoration: none; color: inherit;`) to avoid visual regressions under strict CSS constraints.
+**Action:** Initialize the countdown state to reflect the HTML default before triggering the timeout loop, and ensure ARIA live regions are permanently present visually hidden elements rather than toggled ones. Apply minimal inline resets to `a` tags when lacking CSS class access.
