@@ -717,7 +717,7 @@ impl HistoryCell for TooltipHistoryCell {
             .max(1);
         let mut lines: Vec<Line<'static>> = Vec::new();
         append_markdown(
-            &format!("**Tip:** {}", self.tip),
+            &format!("{} **Tip:** {}", padded_emoji("💡"), self.tip),
             Some(wrap_width),
             &mut lines,
         );
