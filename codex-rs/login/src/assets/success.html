@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div aria-live="polite" aria-atomic="true" id="a11y-announcer" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -175,10 +176,12 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const announcer = document.getElementById('a11y-announcer');
           let countdown = 3;
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const text = 'Redirecting in ' + countdown + 's…';
+            message.textContent = text;
+            announcer.textContent = text;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
