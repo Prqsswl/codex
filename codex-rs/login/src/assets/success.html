@@ -137,6 +137,7 @@
           </div>
           <div class="title">Signed in to Codex</div>
         </div>
+        <div id="aria-announcer" aria-live="polite" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
         <div class="close-box" style="display: none;">
           <div class="setup-description">You may now close this page</div>
         </div>
@@ -176,9 +177,11 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
+          const announcer = document.getElementById('aria-announcer');
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
+            announcer.textContent = message.textContent;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
@@ -190,6 +193,7 @@
         } else {
           const closeBox = document.querySelector('.close-box');
           closeBox.style.display = 'flex';
+          document.getElementById('aria-announcer').textContent = 'You may now close this page';
         }
       })();
     </script>
