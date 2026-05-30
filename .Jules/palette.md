@@ -1,0 +1,3 @@
+## 2024-05-30 - Add screen reader support for redirect countdown in success page
+**Learning:** Redirect countdowns on static web pages must be announced correctly for screen readers via aria-live regions so that visually impaired users are aware the page will redirect. Using an absolute-positioned hidden element with \`aria-live="polite"\` is the proper pattern rather than creating new custom classes, adhering to Palette's constraints.
+**Action:** When adding dynamic countdowns or self-closing modals in HTML/React, always include an initialized \`aria-live\` visually-hidden text node that updates in sync with the visual countdown to ensure screen reader users are aware of automatic transitions.
