@@ -1,0 +1,3 @@
+## 2024-05-31 - [Improved screen reader accessibility for dynamic redirects]
+**Learning:** Found that dynamic UI elements using countdowns (like `success.html` in login flow) fail to announce updates properly to screen reader users because they just update standard HTML text content without `aria-live`. Screen reader users would miss the crucial context of being redirected.
+**Action:** Always add an `aria-live="polite"` and `aria-atomic="true"` announcer region for automatic countdowns/redirects, and ensure it correctly initializes its text content when the timer begins to prevent missing the first announcement. Use inline visually-hidden CSS patterns (`position: absolute; width: 1px; ...`) instead of custom classes to adhere to "no custom CSS" restrictions.
