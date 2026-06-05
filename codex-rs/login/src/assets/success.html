@@ -129,6 +129,7 @@
     </style>
   </head>
   <body>
+    <div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;" aria-live="polite" aria-atomic="true" id="aria-announcer"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -179,6 +180,7 @@
           function tick() {
             message.textContent =
               'Redirecting in ' + countdown + 's…';
+            document.getElementById('aria-announcer').textContent = message.textContent;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
