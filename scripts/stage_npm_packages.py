@@ -69,27 +69,32 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-    )
-    workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    try:
+        stdout = subprocess.check_output(
+            [
+                "gh",
+                "run",
+                "list",
+                "--branch",
+                f"rust-v{version}",
+                "--json",
+                "workflowName,url,headSha",
+                "--workflow",
+                WORKFLOW_NAME,
+                "--jq",
+                "first(.[])",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        workflow = json.loads(stdout or "null")
+        if workflow:
+            return workflow
+    except Exception:
+        pass
+
+    print(f"Warning: Unable to find rust-release workflow for version {version}. Skipping native components.")
+    return {"url": "", "headSha": ""}
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:
