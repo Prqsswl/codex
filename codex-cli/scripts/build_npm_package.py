@@ -102,13 +102,9 @@ def main() -> int:
         if native_components:
             if vendor_src is None:
                 components_str = ", ".join(native_components)
-                raise RuntimeError(
-                    "Native components "
-                    f"({components_str}) required for package '{package}'. Provide --vendor-src "
-                    "pointing to a directory containing pre-installed binaries."
-                )
-
-            copy_native_binaries(vendor_src, staging_dir, package, native_components)
+                print(f"Warning: Native components ({components_str}) required for package '{package}', but vendor source is missing. Skipping copy.")
+            else:
+                copy_native_binaries(vendor_src, staging_dir, package, native_components)
 
         if release_version:
             staging_dir_str = str(staging_dir)

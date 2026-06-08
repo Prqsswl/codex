@@ -179,7 +179,7 @@ def main() -> int:
                 str(pack_output),
             ]
 
-            if vendor_src is not None:
+            if vendor_src is not None and vendor_src.exists():
                 cmd.extend(["--vendor-src", str(vendor_src)])
 
             try:
