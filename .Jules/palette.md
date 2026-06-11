@@ -1,0 +1,3 @@
+## 2024-06-11 - Add ARIA live region to login redirect countdown
+**Learning:** Redirect countdowns on static HTML pages need to announce their per-second updates to screen readers, but modifying existing visual elements' display properties can cause issues. Adding a visually hidden `aria-live="polite"` element and updating it synchronously with the visual text is a clean accessibility pattern.
+**Action:** Use inline styles to visually hide the `aria-live` element (`style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"`) instead of inventing new CSS classes when constrained by "no custom CSS" rules.
