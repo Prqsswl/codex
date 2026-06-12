@@ -1,0 +1,3 @@
+## 2025-03-01 - Add Screen Reader Announcer for Dynamic Redirect Countdown
+**Learning:** Screen readers might miss the initial visual update or artificial delays of dynamic content like a countdown loop, especially if toggled visually but not via an ARIA live region.
+**Action:** When creating dynamic countdown states (e.g., redirecting in 3s...), add an ARIA live region (`aria-live="polite"`, `aria-atomic="true"`) to accurately announce the initial state and any updates synchronously with the visual countdown, keeping the live region visually hidden via inline styles to respect styling boundaries.
