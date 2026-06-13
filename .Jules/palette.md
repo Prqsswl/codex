@@ -1,0 +1,3 @@
+## 2025-02-15 - Accessible Redirect Countdowns
+**Learning:** Dynamic text changes during a countdown (e.g., "Redirecting in 3s...") can be missed or read artificially delayed by screen readers if not paired with an explicit `aria-live` announcer. Placing an `aria-live` region visually hidden using inline styles (to avoid custom CSS constraints) ensures screen readers properly read updates.
+**Action:** When creating or modifying dynamic redirect countdowns, pair the visible countdown element with an `aria-live="polite"` visually hidden announcer, and update both simultaneously within the countdown loop.
