@@ -1,0 +1,3 @@
+## 2024-06-21 - [Screen Reader Countdown Polling]
+**Learning:** Redirect countdowns typically update visual text strings concisely (e.g. "3s"), which reads poorly via screen readers. Modifying the string format for better enunciation ("3 seconds") directly in the visual DOM, and mirroring this exactly into a visually hidden `aria-live` region on each tick ensures clear updates without redesigning the visible element layout significantly.
+**Action:** When adding or modifying JavaScript intervals for automated redirects, ensure proper grammar pluralization is calculated per tick, injected into the visible DOM, and mirrored to a polite `aria-live` element to maintain synchronicity.
