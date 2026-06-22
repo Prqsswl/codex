@@ -1,0 +1,3 @@
+## 2024-06-25 - Dynamic Countdown Screen Reader Accessibility
+**Learning:** Automatically updating countdown timers (like "Redirecting in 3s...") can be frustrating or completely silent for screen reader users if not implemented correctly. The visual update does not automatically translate to spoken updates.
+**Action:** When implementing dynamic text like countdowns, pair the visual text (which can use `aria-hidden="true"`) with a visually hidden `aria-live="polite"` region. Update the screen reader region with more natural language (e.g., "Redirecting in 3 seconds" instead of "3s") to ensure a polite, clear experience for assistive technology users. Ensure proper grammar pluralization ("1 second" vs "X seconds").

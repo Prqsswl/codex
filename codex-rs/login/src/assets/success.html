@@ -148,8 +148,9 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text" aria-hidden="true">Redirecting in 3 seconds...</div>
               </div>
+              <div id="sr-announcer" aria-live="polite" aria-atomic="true" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"></div>
             </div>
           </div>
         </div>
@@ -175,10 +176,13 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const srAnnouncer = document.getElementById('sr-announcer');
           let countdown = 3;
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const timeText = countdown === 1 ? '1 second' : countdown + ' seconds';
+            const msg = 'Redirecting in ' + timeText + '…';
+            message.textContent = msg;
+            if (srAnnouncer) srAnnouncer.textContent = msg;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
