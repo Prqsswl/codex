@@ -92,6 +92,13 @@ def resolve_release_workflow(version: str) -> dict:
             break
 
     if not workflow:
+        # Check without rust-v prefix as fallback
+        for wf in workflows:
+            if wf.get("headBranch") == version:
+                workflow = wf
+                break
+
+    if not workflow:
         raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
     return workflow
 
