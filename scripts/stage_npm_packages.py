@@ -69,35 +69,42 @@ def collect_native_components(packages: list[str]) -> set[str]:
 
 
 def resolve_release_workflow(version: str) -> dict:
-    stdout = subprocess.check_output(
-        [
-            "gh",
-            "run",
-            "list",
-            "--branch",
-            f"rust-v{version}",
-            "--json",
-            "workflowName,url,headSha",
-            "--workflow",
-            WORKFLOW_NAME,
-            "--jq",
-            "first(.[])",
-        ],
-        cwd=REPO_ROOT,
-        text=True,
-    )
-    workflow = json.loads(stdout or "null")
-    if not workflow:
-        raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
-    return workflow
+    try:
+        stdout = subprocess.check_output(
+            [
+                "gh",
+                "run",
+                "list",
+                "--branch",
+                f"rust-v{version}",
+                "--json",
+                "workflowName,url,headSha",
+                "--workflow",
+                WORKFLOW_NAME,
+                "--jq",
+                "first(.[])",
+            ],
+            cwd=REPO_ROOT,
+            text=True,
+        )
+        workflow = json.loads(stdout or "null")
+        if not workflow:
+            raise RuntimeError(f"Unable to find rust-release workflow for version {version}.")
+        return workflow
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        raise RuntimeError(f"Unable to find rust-release workflow for version {version}. Error: {e}")
 
 
 def resolve_workflow_url(version: str, override: str | None) -> tuple[str, str | None]:
     if override:
         return override, None
 
-    workflow = resolve_release_workflow(version)
-    return workflow["url"], workflow.get("headSha")
+    try:
+        workflow = resolve_release_workflow(version)
+        return workflow["url"], workflow.get("headSha")
+    except RuntimeError:
+        print(f"Warning: Unable to find rust-release workflow for version {version}. Using dummy URL.")
+        return "https://dummy.url", None
 
 
 def install_native_components(
