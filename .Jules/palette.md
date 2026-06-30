@@ -1,0 +1,3 @@
+## 2024-03-22 - [Proper ARIA Live Regions for Redirect Countdowns]
+**Learning:** When using visual countdowns (e.g., "Redirecting in 3s..."), screen readers may not read the visual updates well. Pluralization (1 second vs 3 seconds) is important for professionalism and TTS clarity. Placing the `aria-live` region as a separate visually hidden DOM element, initialized early, provides a better a11y experience.
+**Action:** When implementing or modifying dynamic redirect countdowns, add a visually hidden `aria-live` region and ensure the text is properly pluralized and set correctly before triggering the timeout loop.
