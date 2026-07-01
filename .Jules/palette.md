@@ -1,0 +1,3 @@
+## 2024-07-01 - Accessible Redirect Countdown
+**Learning:** Dynamic redirect countdowns (e.g., "Redirecting in 3s...") can leave screen reader users completely unaware of impending navigation if not explicitly announced. Simply updating visual text is insufficient for accessibility.
+**Action:** Always implement a dedicated, visually hidden `aria-live="polite"` region (using `style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;"`) to simultaneously announce countdown text changes. Additionally, use properly pluralized words ("seconds" vs "s") for a clearer screen reader announcement.
