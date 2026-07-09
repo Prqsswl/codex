@@ -1,0 +1,3 @@
+## 2026-07-09 - Added Screen Reader Announcements to Redirect Countdown
+**Learning:** Found an accessibility issue where dynamic redirect countdowns were visually updating but not announcing the updates to screen readers. Implementing an `aria-live` announcer that initializes its text exactly aligned with the visual text ensures it captures the first screen reader announcement and prevents any artificial delays. We also improved the UX by correctly pluralizing the "seconds" string.
+**Action:** Always add an `aria-live` region properly initialized using the `aria-atomic` tag and proper CSS style for hidden accessibility regions when dealing with countdown redirects to make them screen-reader friendly.
