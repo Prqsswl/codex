@@ -1,0 +1,3 @@
+## 2024-07-10 - Improved screen reader experience for redirect countdown
+**Learning:** For dynamic redirect countdowns, use an `aria-live` region to announce the countdown to screen readers. Pluralize correctly (e.g., "1 second" vs "3 seconds") and update the initial static HTML text to match the dynamic JavaScript text format so the initial screen reader announcement is correct and avoids artificial delays. Place the ARIA live region on a dedicated, visually hidden DOM element.
+**Action:** When adding or modifying countdowns, include an `aria-live="polite"` region using visually hidden inline styles, ensure proper grammatical pluralization of text, and initialize the screen reader content simultaneously with the visual text to maintain accurate announcements.
