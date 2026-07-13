@@ -1,0 +1,3 @@
+## 2024-07-13 - Improve Accessibility and UX for Redirect Countdown
+**Learning:** Redirect countdowns implemented with visual text updates and abbreviated units ('3s') fail to provide accurate and polite screen reader announcements. Using pluralization and a visually hidden `aria-live` region with `aria-live="polite"` improves the experience significantly.
+**Action:** When implementing or fixing dynamic countdowns, ensure text pluralization is handled correctly, initial hardcoded text matches the JS output, and updates are announced to screen readers via an `aria-live` region without artificial delays.
