@@ -1,0 +1,3 @@
+## 2024-05-23 - Accessible Redirect Countdowns
+**Learning:** Dynamic text like "Redirecting in 3s..." fails to provide good screen reader context when updated frequently, and "3s" is read inconsistently. Using a dedicated visually hidden `aria-live="polite"` region ensures correct announcements, while keeping visual text marked with `aria-hidden="true"` prevents duplicate or jarring announcements.
+**Action:** For countdowns, always implement a visually hidden ARIA live announcer, use full words (e.g., "seconds") with proper pluralization, and synchronize the hardcoded HTML with the JavaScript state to prevent initial announcement mismatches.
