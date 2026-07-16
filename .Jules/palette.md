@@ -1,0 +1,3 @@
+## 2024-07-16 - Accessible Countdown Redirects
+**Learning:** When displaying dynamic countdowns (e.g. "Redirecting in 3 seconds…"), use proper pluralization instead of generic abbreviations (like '3s...'). Also, dynamically showing `aria-live` regions or updating text nodes via JavaScript needs a static container setup in HTML to announce reliably. Setting the announcer text inside the JS update loop avoids artificial delays.
+**Action:** Always initialize proper a11y announcer setup and dynamic pluralization before triggering a timeout/countdown loop to ensure the first iteration is correctly read.
