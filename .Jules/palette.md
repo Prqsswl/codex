@@ -1,0 +1,3 @@
+## 2024-07-17 - Accessible Redirect Countdowns
+**Learning:** Redirect countdowns implemented with visual abbreviation (e.g., "3s...") are poorly read by screen readers. Furthermore, dynamically updating visible text often doesn't proactively announce changes unless an `aria-live` region is present.
+**Action:** When implementing countdowns, add an explicit screen reader announcer with `aria-live="polite"` and grammatically pluralized text (e.g., "3 seconds", "1 second"). Set `aria-hidden="true"` on the visual abbreviation text to prevent redundant or broken screen reader announcements. Use visually hidden styles without adding new custom CSS classes.
