@@ -149,7 +149,7 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3 seconds...</div>
+                <div class="redirect-text" aria-hidden="true">Redirecting in 3 seconds...</div>
               </div>
             </div>
           </div>
@@ -182,6 +182,7 @@
             const timeText = countdown === 1 ? '1 second' : countdown + ' seconds';
             const text = 'Redirecting in ' + timeText + '...';
             message.textContent = text;
+            message.setAttribute('aria-hidden', 'true');
             if (srMessage) srMessage.textContent = text;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
