@@ -1,0 +1,3 @@
+## 2026-07-19 - Accessible Redirect Countdowns
+**Learning:** For dynamic redirect countdowns, visually hidden aria-live regions should be updated in sync with the visual countdown text, and abbreviations like 's' should be expanded to full words like 'seconds' for screen readers. The aria-live region should be present in the initial DOM with polite announcements to avoid missing the first announcement or interrupting the user aggressively.
+**Action:** Always use an absolute positioned 1x1px visually hidden element for aria-live announcements and avoid inventing new custom CSS classes for screen-reader only elements. Ensure initial hardcoded text matches the JS logic.
