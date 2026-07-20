@@ -1,0 +1,3 @@
+## 2026-07-20 - Accessible Countdown Redirect
+**Learning:** When using dynamic countdowns for redirects, using aria-live on the visible text directly can cause screen reader interruption issues or missed announcements if it updates too frequently. Using an invisible aria-live announcer element while hiding the visible text from screen readers provides a better experience. Pluralization of the time unit also improves professionalism.
+**Action:** Always implement a dedicated screen reader announcer element (`aria-live="polite" aria-atomic="true"`) for countdowns and explicitly handle pluralization for time units.
