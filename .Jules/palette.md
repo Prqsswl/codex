@@ -1,0 +1,3 @@
+## 2024-07-22 - [Enhance Countdown Screen Reader Announcement]
+**Learning:** For frequent updates like a per-second redirect countdown, an `aria-live='polite'` region combined with `aria-hidden='true'` on the visual countdown text ensures the screen reader announces updates without aggressively interrupting itself or the user, while grammatical pluralization ('second' vs 'seconds') provides a more natural audio experience.
+**Action:** When adding screen reader support to dynamic text updates, use a dedicated, visually hidden `aria-live` element instead of trying to make the visual element speak, and dynamically adjust grammar for quantities.
