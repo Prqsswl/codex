@@ -1,0 +1,3 @@
+## 2025-01-20 - Accessible Dynamic Countdowns
+**Learning:** Screen readers often miss initial dynamic text updates if the aria-live region isn't permanently present in the DOM or if the countdown text isn't synchronized with it on page load. Additionally, abbreviations like "3s" are not read as smoothly as full words ("3 seconds") and lack proper pluralization handling ("1 seconds").
+**Action:** For all future redirect countdowns, place the aria-live region on a dedicated visually hidden (.sr-only) DOM element present from load, use full words with pluralization handling, and synchronize the visual and accessible text updates immediately upon initialization before the loop starts.
