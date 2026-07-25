@@ -1,0 +1,3 @@
+## 2024-07-25 - [Accessibility: Live region for redirect countdown]
+**Learning:** When creating a dynamic redirect countdown that updates frequently (e.g. per second), it is best practice to place the `aria-live` region on a dedicated visually hidden (`sr-only`) DOM element rather than toggling display on the container, and use `aria-live="polite"` over `"assertive"` to prevent screen reader interruptions.
+**Action:** Implemented a separate `sr-only` element for screen readers in `success.html` and synced text updates to both visual and screen-reader elements. Pluralized the text to avoid poor UX grammar (e.g., '1 second' instead of '1 seconds').
