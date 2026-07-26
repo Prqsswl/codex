@@ -1,0 +1,3 @@
+## 2024-05-23 - Accessible Redirect Countdowns
+**Learning:** For dynamic redirect countdowns on standalone pages like the login success screen, using an assertive or generic text update isn't always announced reliably. Using an off-screen `.sr-only` div with `aria-live="polite"` and `aria-atomic="true"` ensures the countdown is read out cleanly without artificially interrupting users. Also, pluralizing time units ('second' vs 'seconds') makes the text much more natural for screen readers compared to just 's'.
+**Action:** Always pair visual countdowns with an `aria-live` hidden element and spell out abbreviations (like 'seconds') with correct pluralization for better accessibility.
