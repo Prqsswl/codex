@@ -1,0 +1,3 @@
+## 2024-05-14 - Accessible Redirect Countdown
+**Learning:** Screen readers often struggle with dynamic text that updates rapidly (like a per-second countdown) when it's just visually updated text, especially if abbreviated like "3s". Artificial delays or hiding the countdown container can cause them to miss the initial announcement.
+**Action:** Always implement a dedicated, visually hidden `aria-live="polite"` element that updates in sync with the visual countdown. Use full words (e.g., "3 seconds", "1 second") instead of abbreviations ("3s") for correct grammar and accurate auditory pronunciation. Ensure the visual text is marked with `aria-hidden="true"` to prevent redundant dual-announcements.
