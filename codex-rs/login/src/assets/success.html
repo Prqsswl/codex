@@ -137,6 +137,7 @@
           </div>
           <div class="title">Signed in to Codex</div>
         </div>
+        <div style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;" aria-live="polite" aria-atomic="true" id="sr-countdown"></div>
         <div class="close-box" style="display: none;">
           <div class="setup-description">You may now close this page</div>
         </div>
@@ -148,7 +149,7 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text">Redirecting in 3 seconds…</div>
               </div>
             </div>
           </div>
@@ -176,9 +177,13 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
+          const srCountdown = document.getElementById('sr-countdown');
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const timeText = countdown === 1 ? '1 second' : countdown + ' seconds';
+            const displayText = 'Redirecting in ' + timeText + '…';
+            message.textContent = displayText;
+            if (srCountdown) srCountdown.textContent = displayText;
+
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {

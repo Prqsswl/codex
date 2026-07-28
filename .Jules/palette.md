@@ -1,0 +1,3 @@
+## 2024-05-14 - Accessible Countdown Timer Pattern
+**Learning:** Dynamic text changes inside a single element (like a countdown timer e.g. "3s...", "2s...") might not be properly announced by screen readers if the element doesn't have an aria-live region. Using generic abbreviations ("s") instead of full words ("seconds") and lacking proper pluralization ("1 seconds") provides a poor experience.
+**Action:** When implementing countdowns, add an explicit, visually hidden `aria-live="polite"` element that mirrors the visual text. Always use full words for time units and implement proper pluralization to ensure the spoken and read text is clear and professional.
