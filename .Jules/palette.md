@@ -1,0 +1,3 @@
+## 2025-03-09 - Accessible Redirect Countdown
+**Learning:** Redirect countdowns (e.g., "Redirecting in 3s...") can be visually obvious but completely silent to screen reader users if they don't use `aria-live`. Also, using abbreviation 's' might be read weirdly depending on the screen reader, so expanding to "seconds" (and pluralizing properly) provides better screen reader experience, along with a dedicated `aria-live` region to track updates seamlessly.
+**Action:** Always add an `aria-live="polite"` region for dynamic text updates like countdowns, and spell out unit names (like "second"/"seconds" instead of "s") for clarity. Update initial state and JS dynamic state to match.
