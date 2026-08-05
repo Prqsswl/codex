@@ -1,0 +1,3 @@
+## 2024-08-05 - Accessible Redirect Countdowns
+**Learning:** Using `aria-live` regions on dynamically changing elements like countdowns (e.g. "Redirecting in 3s...") can be confusing if grammar isn't perfect, and the initial state must be properly announced. It is best practice to use a dedicated, visually hidden screen reader element with `aria-live="polite"` to avoid interrupting the screen reader, and to ensure grammar matches pluralization (e.g., 3 seconds, 1 second).
+**Action:** When updating dynamic countdowns, add a `.sr-only` visually hidden element with `aria-live="polite"` and update it alongside the visual text, making sure to use full words and correct pluralization for better accessibility.

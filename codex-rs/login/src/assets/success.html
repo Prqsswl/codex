@@ -126,9 +126,21 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
     </style>
   </head>
   <body>
+    <div id="sr-countdown" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -148,7 +160,7 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text">Redirecting in 3 seconds…</div>
               </div>
             </div>
           </div>
@@ -175,10 +187,13 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const srCountdown = document.getElementById('sr-countdown');
           let countdown = 3;
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const timeUnit = countdown === 1 ? 'second' : 'seconds';
+            const text = 'Redirecting in ' + countdown + ' ' + timeUnit + '…';
+            message.textContent = text;
+            srCountdown.textContent = text;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {
