@@ -5,6 +5,17 @@
     <title>Sign into Codex</title>
     <link rel="icon" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32"%3E%3Cpath stroke="%23000" stroke-linecap="round" stroke-width="2.484" d="M22.356 19.797H17.17M9.662 12.29l1.979 3.576a.511.511 0 0 1-.005.504l-1.974 3.409M30.758 16c0 8.15-6.607 14.758-14.758 14.758-8.15 0-14.758-6.607-14.758-14.758C1.242 7.85 7.85 1.242 16 1.242c8.15 0 14.758 6.608 14.758 14.758Z"/%3E%3C/svg%3E' type="image/svg+xml">
     <style>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
       .container {
         margin: auto;
         height: 100%;
@@ -129,6 +140,7 @@
     </style>
   </head>
   <body>
+    <div id="aria-live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
     <div class="container">
       <div class="inner-container">
         <div class="content">
@@ -148,7 +160,7 @@
             </div>
             <div class="redirect-box">
               <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
+                <div class="redirect-text" aria-hidden="true">Redirecting in 3 seconds...</div>
               </div>
             </div>
           </div>
@@ -175,10 +187,13 @@
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
+          const announcer = document.getElementById('aria-live-announcer');
           let countdown = 3;
           function tick() {
-            message.textContent =
-              'Redirecting in ' + countdown + 's…';
+            const unit = countdown === 1 ? 'second' : 'seconds';
+            const text = 'Redirecting in ' + countdown + ' ' + unit + '...';
+            message.textContent = text;
+            announcer.textContent = text;
             if (countdown === 0) {
               window.location.replace(redirectUrl);
             } else {

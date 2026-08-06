@@ -1,0 +1,3 @@
+## 2024-08-06 - Accessible dynamic redirects
+**Learning:** Screen readers perform best when dynamic redirect countdowns use a persistent, visually-hidden `aria-live="polite"` DOM element, rather than trying to read the visually shifting container directly. Pluralization of units ("seconds" vs "second") also provides a much more polished screen reader experience than abbreviated units ("s").
+**Action:** When implementing or updating countdowns, ensure a dedicated `aria-live-announcer` div is present and that time units are properly pluralized. Hide the visual text from screen readers with `aria-hidden="true"` to prevent redundant reading.
