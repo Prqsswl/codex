@@ -1,0 +1,3 @@
+## 2024-06-25 - Make redirect countdown screen reader accessible
+**Learning:** Fast-updating visual countdowns (like "3s...", "2s...") are problematic for screen readers. Using abbreviations like "s" can be read poorly, and visually updating text rapidly without `aria-live` means screen reader users miss the context of the wait.
+**Action:** Always implement a visually hidden `aria-live="polite"` region for dynamic status updates. Hide the visual-only fast-updating text with `aria-hidden="true"`, spell out units fully ("seconds" instead of "s") for better pronunciation, and handle grammar pluralization ("1 second" vs "3 seconds") in the live announcement.
