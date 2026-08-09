@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessible Redirect Countdowns
+**Learning:** When implementing a dynamic redirect countdown (e.g., "Redirecting in 3s..."), simply updating text content visually causes poor screen reader experiences. Changing abbreviations like "3s" to "3 seconds" and ensuring correct pluralization ("1 second") makes announcements much clearer. Using an explicitly created `.sr-only` element with `aria-live="polite"` and `aria-atomic="true"` guarantees the screen reader announces the updates properly while hiding the original text via `aria-hidden="true"`.
+**Action:** For dynamic countdowns, hide visual updates from screen readers and feed clean, unabbreviated, correctly pluralized text strings into an explicit `.sr-only` ARIA live region.
