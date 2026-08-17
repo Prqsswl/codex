@@ -1,0 +1,3 @@
+## 2025-03-03 - Grammar pluralization for dynamic text
+**Learning:** Using abbreviations like "3s" can sometimes feel impersonal or visually abrupt in UI announcements. When expanding to full words like "3 seconds", it's critical to dynamically handle pluralization (e.g., "1 second" vs "2 seconds") to maintain grammatical correctness and a polished user experience.
+**Action:** Always implement pluralization logic (e.g., `countdown === 1 ? 'second' : 'seconds'`) when generating dynamic temporal text in the UI, and ensure the initial static HTML state matches the dynamic logic for screen reader accuracy.
