@@ -1,0 +1,3 @@
+## 2024-08-18 - Pluralization and ARIA Live for Countdowns
+**Learning:** Screen readers often announce abbreviations like '3s' confusingly (e.g., 'three es'). Additionally, dynamic text updates like countdowns must have `aria-live="polite"` for screen readers to announce changes, and the text must use grammatically correct pluralization for a polished experience.
+**Action:** Always spell out time units ('seconds' instead of 's') with correct pluralization (e.g., '1 second' vs '3 seconds') and use `aria-live="polite"` on dynamic countdown containers to ensure screen readers announce the updates correctly.
