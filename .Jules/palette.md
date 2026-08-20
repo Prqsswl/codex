@@ -1,0 +1,3 @@
+## 2025-02-12 - Accessibility improvement for countdown text
+**Learning:** Hardcoded initial countdown text in HTML ('Redirecting in 3s...') and its corresponding dynamic JavaScript updates often lack `aria-live` regions and clear pluralization. Screen readers might miss these dynamic countdowns or read '3s' awkwardly compared to '3 seconds'.
+**Action:** Always add `aria-live="polite"` to dynamically updating countdown containers and ensure JS logic explicitly pluralizes time units (e.g., '1 second' vs '3 seconds') rather than using abbreviations, updating both the initial HTML state and the JS update logic in tandem.
