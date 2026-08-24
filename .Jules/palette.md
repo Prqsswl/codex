@@ -1,0 +1,3 @@
+## 2024-08-24 - Dynamic Text Initial State Consistency
+**Learning:** When modifying dynamic text generation in JavaScript (such as changing abbreviations to full words in a countdown like '3s' to '3 seconds'), ensure you also update the corresponding hardcoded initial text in the static HTML file to match. This prevents a mismatch between the initial HTML state and the subsequent JavaScript updates, ensuring accurate initial screen reader announcements and avoiding confusing visual flashes.
+**Action:** Always search the HTML file for occurrences of the text being dynamically updated and change the initial hardcoded instances to match the new format.
