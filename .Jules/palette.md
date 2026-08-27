@@ -1,0 +1,3 @@
+## 2024-05-14 - Improve screen reader context for countdown message
+**Learning:** Found a dynamically updated countdown text which was previously hardcoded in the HTML as "3s...", but dynamically updated to '3s...'. It lacked pluralization (3 seconds...) and an `aria-live` attribute to notify screen readers of the dynamic update. This teaches us that dynamically updated messages, especially status notifications like countdowns, need explicit ARIA tags (`aria-live="polite"`) and natural phrasing (e.g. "seconds") for screen readers to properly interpret the dynamic change.
+**Action:** Always ensure dynamic notification text includes `aria-live` attributes and natural text (not abbreviations like 's') to accommodate screen readers properly.
