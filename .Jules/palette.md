@@ -1,0 +1,3 @@
+## 2024-09-07 - Improved Accessibility of Redirect Countdown
+**Learning:** Found that the auto-redirect countdown in `codex-rs/login/src/assets/success.html` used a `<div>` element masquerading as a button and lacked screen reader announcements for the ticking countdown. Users reliant on screen readers would not know when the redirect was happening, and the fake button was not keyboard accessible or semantically correct as a link.
+**Action:** Always convert fake buttons that act as navigation into semantic `<a>` tags with `href` attributes, and ensure dynamically updating text (like countdowns) has `aria-live="polite"` so screen readers announce the changes.
