@@ -180,7 +180,7 @@
           const redirectUrl = redirectUrlObj.toString();
           const message = document.querySelector('.redirect-text');
           const redirectLink = document.querySelector('.redirect-button');
-          redirectLink.href = redirectUrl;
+          if (redirectLink) { redirectLink.href = redirectUrl; }
           let countdown = 3;
           function tick() {
             message.textContent =
