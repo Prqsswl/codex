@@ -1,0 +1,3 @@
+## 2024-05-18 - Semantic HTML for Redirect Button
+**Learning:** Found a <div> being used as a redirect button, which limits keyboard accessibility and semantic meaning. Transforming it into an <a> tag ensures users can focus on it and screen readers will announce it as a link/button, with an explicit aria-label for context.
+**Action:** Always prefer semantic HTML elements like <a> or <button> over <div> for interactive components. Make sure to update associated CSS when converting elements to prevent styling regressions (e.g., links typically gain text-decoration and default colors, so explicit text-decoration: none and hover/focus styles are needed).
