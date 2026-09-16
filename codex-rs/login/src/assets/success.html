@@ -104,6 +104,16 @@
         align-items: center;
         gap: 4px;
         display: flex;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+      }
+      .redirect-button:hover,
+      .redirect-button:focus-visible {
+        background-color: var(--interactive-bg-primary-hover, #262626);
+      }
+      .redirect-button:focus-visible {
+        outline: 2px solid var(--interactive-bg-primary-default, #0D0D0D);
+        outline-offset: 2px;
       }
       .close-button,
       .redirect-text {
@@ -147,9 +157,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a href="#" class="redirect-button" aria-label="Redirect to setup now">
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -174,6 +184,8 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
+          const redirectButton = document.querySelector('.redirect-button');
+          if (redirectButton) redirectButton.href = redirectUrl;
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
