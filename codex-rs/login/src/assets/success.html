@@ -126,6 +126,48 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+
+      .redirect-button {
+        cursor: pointer;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+      }
+      .redirect-button:hover, .redirect-button:focus-visible {
+        background-color: #333;
+      }
+      .redirect-button:focus-visible {
+        outline: 2px solid #000;
+        outline-offset: 2px;
+      }
+      .spinner {
+        animation: rotate 2s linear infinite;
+        width: 16px;
+        height: 16px;
+      }
+      .spinner .path {
+        stroke: white;
+        stroke-linecap: round;
+        animation: dash 1.5s ease-in-out infinite;
+      }
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes dash {
+        0% {
+          stroke-dasharray: 1, 150;
+          stroke-dashoffset: 0;
+        }
+        50% {
+          stroke-dasharray: 90, 150;
+          stroke-dashoffset: -35;
+        }
+        100% {
+          stroke-dasharray: 90, 150;
+          stroke-dashoffset: -124;
+        }
+      }
     </style>
   </head>
   <body>
@@ -147,9 +189,12 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+              <a href="#" id="redirect-link" role="button" aria-label="Redirecting to setup" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                </svg>
                 <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -174,6 +219,11 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
+          const redirectLink = document.getElementById('redirect-link');
+          if (redirectLink) {
+            redirectLink.href = redirectUrl;
+          }
+
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
