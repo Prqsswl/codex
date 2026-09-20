@@ -1,0 +1,3 @@
+## 2026-09-20 - [Make login success page more accessible]
+**Learning:** When making non-semantic elements like div accessible, it is not enough to just convert it to a semantic tag like \`a\`. We must consider its visual appearance when focused, so adding a focus ring is required. Also, timer components like "Redirecting in X seconds" need \`aria-live\` to inform screen reader users of dynamic updates.
+**Action:** When updating a custom 'button' element (made from a div) into a semantic anchor (\`<a>\`) tag, ensure a CSS \`:focus-visible\` rule is added to maintain keyboard navigation visibility. Also, use \`aria-live="polite"\` on regions that update dynamically like countdowns to ensure screen reader visibility.
