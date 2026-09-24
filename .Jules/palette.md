@@ -1,0 +1,3 @@
+## 2024-05-18 - Added focus states to success.html buttons
+**Learning:** Found that the default login success/redirect buttons (`.redirect-button`, `.close-button`) in `codex-rs/login/src/assets/success.html` lacked keyboard focus indicators, making them difficult for keyboard users to identify. Additionally, a semantic anchor `<a>` tag was missing for a redirect action.
+**Action:** Replaced the redirect `<div>` with an `<a>` tag, populated the `href` via JavaScript for proper link semantics, added `text-decoration: none;` to preserve styling, and introduced a `.focus-visible` outline for interactive elements. Always verify focus styles on custom button classes.
