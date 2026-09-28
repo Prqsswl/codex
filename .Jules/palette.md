@@ -1,0 +1,3 @@
+## 2024-05-18 - Improve Semantic HTML and Accessibility in Login Success Page
+**Learning:** Default un-styled non-semantic HTML tags don't convey context effectively, especially for screen readers. In standard login success pages, ensuring tags are semantic (`<h1>`, `<h2>`) and elements with live updates have `aria-live` regions helps improve the a11y experience for screen readers and makes the visual layout inherently structured.
+**Action:** Always check the semantics of textual elements, and for dynamically updated elements like a redirect counter, make sure they have `aria-live` to correctly announce themselves.
