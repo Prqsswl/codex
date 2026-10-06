@@ -1,0 +1,3 @@
+## 2024-10-06 - Semantic HTML for Redirect Button
+**Learning:** Found a pseudo-button made from `<div>` inside `success.html` used for redirecting the user. Non-semantic elements are less accessible because screen readers and keyboard navigation (Tab) don't naturally treat them as links unless additional ARIA attributes and tabindex are carefully managed. In this case, it was acting as a link, yet lacking semantic meaning.
+**Action:** Always prefer native semantic elements like `<a>` for navigation over `<div>` with click handlers. Ensure to reset default browser link styles (like color and text-decoration) when converting styled divs into links.
