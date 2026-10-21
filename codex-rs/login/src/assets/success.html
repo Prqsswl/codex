@@ -126,6 +126,11 @@
         box-sizing: border-box;
         background-color: rgb(255, 255, 255);
       }
+
+      .redirect-button:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+      }
     </style>
   </head>
   <body>
@@ -147,9 +152,9 @@
               <div class="setup-description">Add a payment method to use your organization.</div>
             </div>
             <div class="redirect-box">
-              <div data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button">
-                <div class="redirect-text">Redirecting in 3s...</div>
-              </div>
+              <a id="redirect-link" href="#" data-hasendicon="false" data-hasstarticon="false" data-ishovered="false" data-isinactive="false" data-ispressed="false" data-size="large" data-type="primary" class="redirect-button" style="text-decoration: none;">
+                <div class="redirect-text" aria-live="polite" aria-atomic="true">Redirecting in 3s...</div>
+              </a>
             </div>
           </div>
         </div>
@@ -174,6 +179,8 @@
           redirectUrlObj.searchParams.set('with_org', orgId);
           redirectUrlObj.searchParams.set('project_id', projectId);
           const redirectUrl = redirectUrlObj.toString();
+          const redirectLink = document.getElementById('redirect-link');
+          if (redirectLink) redirectLink.href = redirectUrl;
           const message = document.querySelector('.redirect-text');
           let countdown = 3;
           function tick() {
